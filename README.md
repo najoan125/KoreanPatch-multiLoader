@@ -1,32 +1,52 @@
-# MultiLoader Template
+# Korean Patch
 
-This project provides a Gradle project template that can compile Minecraft mods for multiple modloaders using a common project for the sources. This project does not require any third party libraries or dependencies. If you have any questions or want to discuss the project, please join our [Discord](https://discord.myceliummod.network).
+## 이 모드는 어떤 모드인가요?
 
-## Getting Started
+Korean Patch는 마인크래프트에서 한글 채팅을 더 원활하게 사용할 수 있도록 하는 Fabric 모드입니다.
 
-### IntelliJ IDEA
-This guide will show how to import the MultiLoader Template into IntelliJ IDEA. The setup process is roughly equivalent to setting up the modloaders independently and should be very familiar to anyone who has worked with their MDKs.
+![indicator](https://wsrv.nl/?url=https%3A%2F%2Fww1.apcl.kro.kr%2Ffile%2Funknown%2520%25281%2529.png&n=-1)
 
-1. Clone or download this repository to your computer.
-2. Configure the project by setting the properties in the `gradle.properties` file. You will also need to change the `rootProject.name`  property in `settings.gradle`, this should match the folder name of your project, or else IDEA may complain.
-3. Open the template's root folder as a new project in IDEA. This is the folder that contains this README.md file and the gradlew executable.
-4. If your default JVM/JDK is not Java 21 you will encounter an error when opening the project. This error is fixed by going to `File > Settings > Build, Execution, Deployment > Build Tools > Gradle > Gradle JVM` and changing the value to a valid Java 21 JVM. You will also need to set the Project SDK to Java 21. This can be done by going to `File > Project Structure > Project SDK`. Once both have been set open the Gradle tab in IDEA and click the refresh button to reload the project.
-5. Open your Run/Debug Configurations. Under the `Application` category there should now be options to run Fabric and NeoForge projects. Select one of the client options and try to run it.
-6. Assuming you were able to run the game in step 5 your workspace should now be set up.
+## 다운로드
 
-### Eclipse
-While it is possible to use this template in Eclipse it is not recommended. During the development of this template multiple critical bugs and quirks related to Eclipse were found at nearly every level of the required build tools. While we continue to work with these tools to report and resolve issues support for projects like these are not there yet. For now Eclipse is considered unsupported by this project. The development cycle for build tools is notoriously slow so there are no ETAs available.
+- [Korean Chat Patch 다운로드 (Modrinth)](https://modrinth.com/mod/korean-chat-patch)
 
-## Development Guide
-When using this template the majority of your mod should be developed in the `common` project. The `common` project is compiled against the vanilla game and is used to hold code that is shared between the different loader-specific versions of your mod. The `common` project has no knowledge or access to ModLoader specific code, apis, or concepts. Code that requires something from a specific loader must be done through the project that is specific to that loader, such as the `fabric` or `neoforge` projects.
+  > 종속성(Fabric Loader만 해당):
+  >
+  > [Fabric-API (필수)](https://modrinth.com/mod/fabric-api)
+  >
+  > [ModMenu (선택)](https://modrinth.com/mod/modmenu)
 
-Loader specific projects such as the `fabric` and `neoforge` project are used to load the `common` project into the game. These projects also define code that is specific to that loader. Loader specific projects can access all the code in the `common` project. It is important to remember that the `common` project can not access code from loader specific projects.
+## 플랫폼별 한/영 변환 방법
 
-## Removing Platforms and Loaders
-While this template has support for many modloaders, new loaders may appear in the future, and existing loaders may become less relevant.
+플랫폼별 변환 키를 눌러 한국어/영어 모드 변경이 가능합니다.
 
-Removing loader specific projects is as easy as deleting the folder, and removing the `include("projectname")` line from the `settings.gradle` file.
-For example if you wanted to remove support for `forge` you would follow the following steps:
+| 플랫폼 (OS)               | 언어 변환 키             | IME 변환 키           |
+|------------------------|---------------------|--------------------|
+| Windows                | `한/영`[^Windows_Key] | `Left-Control + I` |
+| Mac[^Other_Platform]   | `Left-Control`      | `Left-Control + I` |
+| Linux[^Other_Platform] | `Left-Control`      | `Left-Control + I` |
 
-1. Delete the subproject folder. For example, delete `MultiLoader-Template/forge`.
-2. Remove the project from `settings.gradle`. For example, remove `include("forge")`. 
+(언어 변환 키와 IME 변환 키는 키바인딩 설정에서 변경할 수 있습니다.)
+
+## 문제
+
+이 모드를 사용하는 데 문제가 있다면 [Issues](https://github.com/najoan125/fabric-koreanchat/issues)에 작성해주세요.
+
+## 후원
+
+- [Github 후원](https://github.com/sponsors/najoan125)
+
+- [Patreon 후원](https://patreon.com/Najoan)
+
+## References
+
+- https://github.com/sokcuri/NaraeChat
+
+- https://www.curseforge.com/minecraft/mc-mods/koreanchat
+
+## License
+
+[GNU LGPL v3.0](https://github.com/najoan125/fabric-koreanchat/blob/1.21/LICENSE)
+
+[^Windows_Key]: Right-Alt key
+[^Other_Platform]: 정상적으로 작동하지 않을 수 있습니다.
