@@ -1,0 +1,10 @@
+{
+    "key.categories.koreanpatch": "Korean Patch",
+    "key.koreanpatch.toggle_langtype": "Toggle Language Type (English/Korean)",
+    "key.koreanpatch.toggle_ime": "Toggle IME (Left Ctrl +)",
+
+    "koreanpatch.langtype.english": "En",
+    "koreanpatch.langtype.korean": "Ko",
+
+    "modmenu.descriptionTranslation.koreanpatch": "It allows you to input Hangul naturally, and the Hangul input state does not interfere with other keys."
+}

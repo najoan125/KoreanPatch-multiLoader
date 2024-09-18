@@ -1,0 +1,10 @@
+{
+    "key.categories.koreanpatch": "Korean Patch",
+    "key.koreanpatch.toggle_langtype": "언어 타입 전환 (영문/한글)",
+    "key.koreanpatch.toggle_ime": "IME 전환 (왼쪽 Ctrl +)",
+
+    "koreanpatch.langtype.english": "영문",
+    "koreanpatch.langtype.korean": "한글",
+
+    "modmenu.descriptionTranslation.koreanpatch": "자연스럽게 한글을 입력할 수 있으며, 한글 입력 상태가 다른 키를 방해하지 않습니다."
+}
