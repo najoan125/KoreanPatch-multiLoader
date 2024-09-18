@@ -10,12 +10,6 @@ Korean Patch는 마인크래프트에서 한글 채팅을 더 원활하게 사�
 
 - [Korean Chat Patch 다운로드 (Modrinth)](https://modrinth.com/mod/korean-chat-patch)
 
-  > 종속성(Fabric Loader만 해당):
-  >
-  > [Fabric-API (필수)](https://modrinth.com/mod/fabric-api)
-  >
-  > [ModMenu (선택)](https://modrinth.com/mod/modmenu)
-
 ## 플랫폼별 한/영 변환 방법
 
 플랫폼별 변환 키를 눌러 한국어/영어 모드 변경이 가능합니다.
