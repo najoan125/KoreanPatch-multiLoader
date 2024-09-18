@@ -28,8 +28,19 @@ dependencies {
         officialMojangMappings()
         parchment("org.parchmentmc.data:parchment-${parchment_minecraft}:${parchment_version}@zip")
     }
+
     modImplementation "net.fabricmc:fabric-loader:${fabric_loader_version}"
-    modImplementation "net.fabricmc.fabric-api:fabric-api:${fabric_version}"
+
+    def addEmbeddedFabricModule = { name ->
+        def module = fabricApi.module(name, fabric_version)
+        modImplementation module
+        include module
+    }
+    addEmbeddedFabricModule "fabric-api-base"
+    addEmbeddedFabricModule "fabric-key-binding-api-v1"
+    addEmbeddedFabricModule "fabric-lifecycle-events-v1"
+    addEmbeddedFabricModule "fabric-resource-loader-v0"
+    addEmbeddedFabricModule "fabric-screen-api-v1"
 
     modCompileOnly "com.terraformersmc:modmenu:${project.modmenu_version}"
 	modCompileOnly "maven.modrinth:command-block-ide:${project.command_block_ide_version}"
