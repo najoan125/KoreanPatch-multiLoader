@@ -1,6 +1,6 @@
 package com.hyfata.najoan.koreanpatch.platform;
 
-import com.hyfata.najoan.koreanpatch.Constants;
+import com.hyfata.najoan.koreanpatch.client.Constants;
 import com.hyfata.najoan.koreanpatch.platform.services.IPlatformHelper;
 
 import java.util.ServiceLoader;

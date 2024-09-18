@@ -1,5 +1,7 @@
 package com.hyfata.najoan.koreanpatch;
 
+import com.hyfata.najoan.koreanpatch.client.Constants;
+import com.hyfata.najoan.koreanpatch.client.KoreanPatchClient;
 import net.minecraftforge.fml.common.Mod;
 
 @Mod(Constants.MOD_ID)
@@ -13,7 +15,7 @@ public class ExampleMod {
 
         // Use Forge to bootstrap the Common mod.
         Constants.LOG.info("Hello Forge world!");
-        CommonClass.init();
+        KoreanPatchClient.init();
 
     }
 }

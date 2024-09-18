@@ -1,6 +1,8 @@
 package com.hyfata.najoan.koreanpatch;
 
 
+import com.hyfata.najoan.koreanpatch.client.Constants;
+import com.hyfata.najoan.koreanpatch.client.KoreanPatchClient;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.common.Mod;
 
@@ -15,7 +17,7 @@ public class ExampleMod {
 
         // Use NeoForge to bootstrap the Common mod.
         Constants.LOG.info("Hello NeoForge world!");
-        CommonClass.init();
+        KoreanPatchClient.init();
 
     }
 }
