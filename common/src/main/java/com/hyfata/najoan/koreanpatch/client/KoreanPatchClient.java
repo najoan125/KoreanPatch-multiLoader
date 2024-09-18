@@ -9,7 +9,7 @@ public class KoreanPatchClient {
     public static boolean bypassInjection = false;
 
     public static void init() {
-        if (Services.PLATFORM.isModLoaded("koreanpatch")) {
+        if (Services.PLATFORM.isModLoaded(Constants.MOD_ID)) {
             InputManager.applyController(InputController.newController());
             Constants.LOG.info("Korean Patch Loaded");
         }
