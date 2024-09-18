@@ -7,16 +7,19 @@
     "authors": [
         "${mod_author}"
     ],
+    "contributors": ["${credits}"],
     "contact": {
-        "homepage": "https://fabricmc.net/",
-        "sources": "https://github.com/FabricMC/fabric-example-mod"
+        "homepage": "https://modrinth.com/mod/korean-chat-patch",
+        "sources": "https://github.com/najoan125/KoreanPatch-multiLoader",
+        "issues": "https://github.com/najoan125/KoreanPatch-multiLoader/issues"
     },
     "license": "${license}",
-    "icon": "${mod_id}.png",
-    "environment": "*",
+    "icon": "assets/koreanpatch/icon.png",
+    "environment": "client",
+    "accessWidener": "koreanpatch.accesswidener",
     "entrypoints": {
-        "main": [
-          "com.hyfata.najoan.koreanpatch.ExampleMod"
+        "client": [
+            "com.hyfata.najoan.koreanpatch.client.KoreanPatchFabric"
         ]
     },
     "mixins": [
@@ -26,11 +29,20 @@
     "depends": {
         "fabricloader": ">=${fabric_loader_version}",
         "fabric-api": "*",
-        "minecraft": "${minecraft_version}",
-        "java": ">=${java_version}"
+        "minecraft": ">=${minecraft_version}",
+        "java": ">=${java_version}",
+        "fabric-key-binding-api-v1": "*"
     },
     "suggests": {
         "another-mod": "*"
+    },
+    "custom": {
+        "modmenu": {
+            "links": {
+                "modmenu.modrinth": "https://modrinth.com/mod/korean-chat-patch",
+                "modmenu.donate": "https://github.com/sponsors/najoan125",
+                "modmenu.patreon": "https://patreon.com/Najoan"
+            }
+        }
     }
 }
-  

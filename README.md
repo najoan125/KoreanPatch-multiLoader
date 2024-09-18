@@ -2,7 +2,7 @@
 
 ## 이 모드는 어떤 모드인가요?
 
-Korean Patch는 마인크래프트에서 한글 채팅을 더 원활하게 사용할 수 있도록 하는 Fabric 모드입니다.
+Korean Patch는 마인크래프트에서 한글 채팅을 더 원활하게 사용할 수 있도록 하는 클라이언트 사이드 모드입니다.
 
 ![indicator](https://wsrv.nl/?url=https%3A%2F%2Fww1.apcl.kro.kr%2Ffile%2Funknown%2520%25281%2529.png&n=-1)
 
@@ -23,14 +23,14 @@ Korean Patch는 마인크래프트에서 한글 채팅을 더 원활하게 사�
 | 플랫폼 (OS)               | 언어 변환 키             | IME 변환 키           |
 |------------------------|---------------------|--------------------|
 | Windows                | `한/영`[^Windows_Key] | `Left-Control + I` |
-| Mac[^Other_Platform]   | `Left-Control`      | `Left-Control + I` |
-| Linux[^Other_Platform] | `Left-Control`      | `Left-Control + I` |
+| Mac[^Other_Platform]   | `Left-Control`      | `Not Supported`    |
+| Linux[^Other_Platform] | `Left-Control`      | `Not Supported`    |
 
 (언어 변환 키와 IME 변환 키는 키바인딩 설정에서 변경할 수 있습니다.)
 
 ## 문제
 
-이 모드를 사용하는 데 문제가 있다면 [Issues](https://github.com/najoan125/fabric-koreanchat/issues)에 작성해주세요.
+이 모드를 사용하는 데 문제가 있다면 [Issues](https://github.com/najoan125/KoreanPatch-multiLoader/issues)에 작성해주세요.
 
 ## 후원
 
@@ -40,13 +40,15 @@ Korean Patch는 마인크래프트에서 한글 채팅을 더 원활하게 사�
 
 ## References
 
+- https://github.com/najoan125/fabric-koreanchat
+
 - https://github.com/sokcuri/NaraeChat
 
 - https://www.curseforge.com/minecraft/mc-mods/koreanchat
 
 ## License
 
-[GNU LGPL v3.0](https://github.com/najoan125/fabric-koreanchat/blob/1.21/LICENSE)
+[GNU LGPL v3.0](https://github.com/najoan125/KoreanPatch-multiLoader/blob/1.21/LICENSE)
 
 [^Windows_Key]: Right-Alt key
 [^Other_Platform]: 정상적으로 작동하지 않을 수 있습니다.

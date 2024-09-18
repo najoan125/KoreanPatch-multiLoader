@@ -1,16 +1,17 @@
 package com.hyfata.najoan.koreanpatch.util;
 
+import com.hyfata.najoan.koreanpatch.mixin.accessor.EditBoxAccessor;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.network.chat.Component;
 
-public class TextFieldWidgetUtil {
+public class EditBoxUtil {
     private static final Minecraft client = Minecraft.getInstance();
 
     public static float getCursorX(EditBox textField) {
-        TextFieldWidgetAccessor accessor = (TextFieldWidgetAccessor) textField;
-        int firstCharacterIndex = accessor.getFirstCharacterIndex();
-        int selectionStart = accessor.getSelectionStart();
+        EditBoxAccessor accessor = (EditBoxAccessor) textField;
+        int firstCharacterIndex = accessor.getDisplayPos();
+        int selectionStart = accessor.getCursorPos();
 
         float cursorX = textField.getX() + client.font.getSplitter().stringWidth(textField.getValue().substring(firstCharacterIndex, selectionStart));
         float endX = textField.getX() + textField.getWidth() - 1.2f * Indicator.getIndicatorWidth();
