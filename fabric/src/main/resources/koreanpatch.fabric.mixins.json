@@ -8,8 +8,7 @@
   "client": [
     "MixinTitleScreen",
 
-    "KeyboardHandlerMixin",
-
+    "KeyboardHandlerFabricMixin",
     "mods.bettercommand.AbstractBetterCommandBlockScreenMixin",
     "mods.bettercommand.MultiLineEditBoxMixin",
     "mods.commandblockide.MultilineEditBoxMixin",
