@@ -2,6 +2,8 @@ modLoader = "javafml"
 loaderVersion = "${neoforge_loader_version_range}"
 license = "${license}"
 
+issueTrackerURL = "https://github.com/najoan125/KoreanPatch-multiLoader/issues"
+
 [[mods]]
 modId = "${mod_id}"
 
@@ -9,14 +11,19 @@ displayName = "${mod_name}"
 
 version = "${version}"
 
-logoFile="assets/koreanpatch/icon.png"
+logoFile = "assets/koreanpatch/icon.png"
 
 authors = "${mod_author}"
-credits="${credits}"
+credits = """
+
+    Contributors: ${credits}"""
 
 description = '''
 ${description}
 '''
+
+modUrl = "https://modrinth.com/mod/korean-chat-patch"
+displayURL = "https://modrinth.com/mod/korean-chat-patch"
 
 [[mixins]]
 config = "${mod_id}.mixins.json"
@@ -25,18 +32,18 @@ config = "${mod_id}.mixins.json"
 config = "${mod_id}.neoforge.mixins.json"
 
 [[accessTransformers]]
-file="META-INF/accesstransformer.cfg"
+file = "META-INF/accesstransformer.cfg"
 
-[[dependencies.${mod_id}]] #optional
-modId = "neoforge" #mandatory
-type="required" #mandatory (Can be one of "required", "optional", "incompatible" or "discouraged")
-versionRange = "[${neoforge_version},)" #mandatory
+[[dependencies.${mod_id}]]
+modId = "neoforge"
+type = "required" #mandatory (Can be one of "required", "optional", "incompatible" or "discouraged")
+versionRange = "[${neoforge_version},)"
 ordering = "NONE" # The order that this dependency should load in relation to your mod, required to be either 'BEFORE' or 'AFTER' if the dependency is not mandatory
 side = "CLIENT" # Side this dependency is applied on - 'BOTH', 'CLIENT' or 'SERVER'
 
 [[dependencies.${mod_id}]]
 modId = "minecraft"
-type="required" #mandatory (Can be one of "required", "optional", "incompatible" or "discouraged")
+type = "required"
 versionRange = "${minecraft_version_range}"
 ordering = "NONE"
 side = "CLIENT"
