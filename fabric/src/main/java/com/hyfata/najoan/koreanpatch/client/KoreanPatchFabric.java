@@ -9,20 +9,9 @@ public class KoreanPatchFabric implements ClientModInitializer {
 
     @Override
     public void onInitializeClient() {
-        
-        // This method is invoked by the Fabric mod loader when it is ready
-        // to load your mod. You can access Fabric and Common code in this
-        // project.
-
-        // Use Fabric to bootstrap the Common mod.
-        Constants.LOG.info("Hello Fabric world!");
-//        KoreanPatchClient.init();
-
-        registerEvents(); // temp
-        KeyBindsFabric.register();
+        registerEvents();
     }
 
-    // temp
     public void registerEvents() {
         ClientLifecycleEvents.CLIENT_STARTED.register(EventListenerFabric::onClientStarted);
         ScreenEvents.AFTER_INIT.register(EventListenerFabric::afterScreenChange);

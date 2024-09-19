@@ -1,6 +1,5 @@
 package com.hyfata.najoan.koreanpatch.client;
 
-import com.hyfata.najoan.koreanpatch.plugin.InputController;
 import com.hyfata.najoan.koreanpatch.plugin.InputManager;
 import com.hyfata.najoan.koreanpatch.util.ReflectionFieldChecker;
 import net.minecraft.client.Minecraft;
@@ -17,7 +16,7 @@ public class EventListenerFabric {
     private static ArrayList<Class<?>> patchedScreenClazz = new ArrayList<>();
 
     protected static void onClientStarted(Minecraft client) {
-        InputManager.applyController(InputController.newController());
+        KoreanPatchClient.init();
 
         String[] patchedScreens = {
                 "arm32x.minecraft.commandblockide.client.gui.screen.CommandIDEScreen"

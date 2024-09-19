@@ -10,6 +10,7 @@ public class KoreanPatchClient {
 
     public static void init() {
         if (Services.PLATFORM.isModLoaded(Constants.MOD_ID)) {
+            KeyBinds.register();
             InputManager.applyController(InputController.newController());
             Constants.LOG.info("Korean Patch Loaded");
         }

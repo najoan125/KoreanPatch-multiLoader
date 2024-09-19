@@ -6,9 +6,6 @@
   "compatibilityLevel": "JAVA_21",
   "mixins": [],
   "client": [
-    "MixinTitleScreen",
-
-    "KeyboardHandlerFabricMixin",
     "mods.bettercommand.AbstractBetterCommandBlockScreenMixin",
     "mods.bettercommand.MultiLineEditBoxMixin",
     "mods.commandblockide.MultilineEditBoxMixin",

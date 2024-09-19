@@ -26,33 +26,32 @@ public class CreateWorldScreenMixin extends Screen {
         super(title);
     }
 
-    // TODO: 여기에 오버플로우 에러가 남.
-//    @Shadow
-//    private TabNavigationBar tabNavigationBar;
-//
-//    @Unique
-//    AnimationUtil animationUtil = new AnimationUtil();
-//
-//    @Inject(at = {@At(value = "RETURN")}, method = {"render"})
-//    private void addCustomLabel(GuiGraphics context, int mouseX, int mouseY, float delta, CallbackInfo ci) {
-//        TabNavigationBarInvoker tabInvoker = (TabNavigationBarInvoker) tabNavigationBar;
-//        Tab currentTab = tabInvoker.getTabs().get(tabInvoker.currentTabIndex());
-//
-//        if (currentTab instanceof CreateWorldScreen.GameTab) {
-//            KoreanPatchClient.bypassInjection = false;
-//            CreateWorldScreenGameTabAccessor gameTabAccessor = (CreateWorldScreenGameTabAccessor) currentTab;
-//            EditBox worldNameField = gameTabAccessor.getNameEdit();
-//            Component text = Component.translatable("selectWorld.enterName");
-//
-//            float x = EditBoxUtil.getCursorXWithText(worldNameField, text, worldNameField.getX()) + 4;
-//            float y = EditBoxUtil.calculateIndicatorY(worldNameField);
-//
-//            animationUtil.init(x - 4, 0);
-//            animationUtil.calculateAnimation(x, 0);
-//
-//            Indicator.showIndicator(context, animationUtil.getResultX(), y);
-//        } else {
-//            KoreanPatchClient.bypassInjection = true;
-//        }
-//    }
+    @Shadow
+    private TabNavigationBar tabNavigationBar;
+
+    @Unique
+    AnimationUtil animationUtil = new AnimationUtil();
+
+    @Inject(at = {@At(value = "RETURN")}, method = {"render"})
+    private void addCustomLabel(GuiGraphics context, int mouseX, int mouseY, float delta, CallbackInfo ci) {
+        TabNavigationBarInvoker tabInvoker = (TabNavigationBarInvoker) tabNavigationBar;
+        Tab currentTab = tabInvoker.getTabManager().getCurrentTab();
+
+        if (currentTab instanceof CreateWorldScreen.GameTab) {
+            KoreanPatchClient.bypassInjection = false;
+            CreateWorldScreenGameTabAccessor gameTabAccessor = (CreateWorldScreenGameTabAccessor) currentTab;
+            EditBox worldNameField = gameTabAccessor.getNameEdit();
+            Component text = Component.translatable("selectWorld.enterName");
+
+            float x = EditBoxUtil.getCursorXWithText(worldNameField, text, worldNameField.getX()) + 4;
+            float y = EditBoxUtil.calculateIndicatorY(worldNameField);
+
+            animationUtil.init(x - 4, 0);
+            animationUtil.calculateAnimation(x, 0);
+
+            Indicator.showIndicator(context, animationUtil.getResultX(), y);
+        } else {
+            KoreanPatchClient.bypassInjection = true;
+        }
+    }
 }

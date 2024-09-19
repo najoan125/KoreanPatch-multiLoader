@@ -1,12 +1,12 @@
 package com.hyfata.najoan.koreanpatch.client;
 
+import com.hyfata.najoan.koreanpatch.util.KeyMappingUtil;
 import com.mojang.blaze3d.platform.InputConstants;
 import com.sun.jna.Platform;
-import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.minecraft.client.KeyMapping;
 import org.lwjgl.glfw.GLFW;
 
-public class KeyBindsFabric {
+public class KeyBinds {
     private static KeyMapping langBinding, imeBinding;
 
     public static void register() {
@@ -17,14 +17,14 @@ public class KeyBindsFabric {
             keycode = GLFW.GLFW_KEY_LEFT_CONTROL;
         }
 
-        langBinding = KeyBindingHelper.registerKeyBinding(new KeyMapping(
+        langBinding = KeyMappingUtil.registerKeyMapping(new KeyMapping(
                 "key.koreanpatch.toggle_langtype",
                 InputConstants.Type.KEYSYM,
                 keycode,
                 "key.categories.koreanpatch"
         ));
 
-        imeBinding = KeyBindingHelper.registerKeyBinding(new KeyMapping(
+        imeBinding = KeyMappingUtil.registerKeyMapping(new KeyMapping(
                 "key.koreanpatch.toggle_ime",
                 InputConstants.Type.KEYSYM,
                 GLFW.GLFW_KEY_I,

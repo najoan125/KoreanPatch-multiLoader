@@ -1,6 +1,6 @@
 package com.hyfata.najoan.koreanpatch.mixin;
 
-import com.hyfata.najoan.koreanpatch.client.KeyBindsFabric;
+import com.hyfata.najoan.koreanpatch.client.KeyBinds;
 import com.hyfata.najoan.koreanpatch.client.KoreanPatchClient;
 import com.hyfata.najoan.koreanpatch.plugin.InputManager;
 import com.hyfata.najoan.koreanpatch.util.language.LanguageUtil;
@@ -14,7 +14,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(KeyboardHandler.class)
-public class KeyboardHandlerFabricMixin {
+public class KeyboardHandlerMixin {
     @Shadow
     @Final
     private Minecraft minecraft;
@@ -22,9 +22,9 @@ public class KeyboardHandlerFabricMixin {
     @Inject(method = "keyPress", at = @At("HEAD"))
     private void onInput(long window, int keyCode, int scanCode, int action, int modifiers, CallbackInfo ci) {
         if (window == minecraft.getWindow().getWindow() && action == 1 && minecraft.screen != null && !KoreanPatchClient.bypassInjection) {
-            if (KeyBindsFabric.getImeBinding().matches(keyCode, scanCode) && modifiers == 2) {
+            if (KeyBinds.getImeBinding().matches(keyCode, scanCode) && modifiers == 2) {
                 InputManager.getController().toggleFocus();
-            } else if (KeyBindsFabric.getLangBinding().matches(keyCode, scanCode) && !KoreanPatchClient.IME) {
+            } else if (KeyBinds.getLangBinding().matches(keyCode, scanCode) && !KoreanPatchClient.IME) {
                 LanguageUtil.toggleCurrentType();
             }
         }
