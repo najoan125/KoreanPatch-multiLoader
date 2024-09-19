@@ -2,8 +2,8 @@ package com.hyfata.najoan.koreanpatch.mixin;
 
 import com.hyfata.najoan.koreanpatch.client.KoreanPatchClient;
 import com.hyfata.najoan.koreanpatch.util.language.LanguageUtil;
-import com.hyfata.najoan.koreanpatch.util.mixin.textfieldwidget.IEditBoxAccessor;
-import com.hyfata.najoan.koreanpatch.util.mixin.textfieldwidget.EditBoxHandler;
+import com.hyfata.najoan.koreanpatch.util.mixin.editbox.IEditBoxAccessor;
+import com.hyfata.najoan.koreanpatch.util.mixin.editbox.EditBoxHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.EditBox;
 import org.lwjgl.glfw.GLFW;

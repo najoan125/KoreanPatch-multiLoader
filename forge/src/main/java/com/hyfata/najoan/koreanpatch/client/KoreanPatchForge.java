@@ -1,6 +1,7 @@
 package com.hyfata.najoan.koreanpatch.client;
 
 import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModContainer;
@@ -18,18 +19,24 @@ public class KoreanPatchForge {
 
     private KoreanPatchForge(IEventBus bus, ModContainer container) {
         KoreanPatchClient.init();
-
-        KeyBindsForge.register();
         bus.addListener(this::registerKeys);
+
+        registerEvents(bus);
     }
 
     private void init(IEventBus bus, ModContainer container) {
         new KoreanPatchForge(bus, container);
     }
 
+    public static void registerEvents(IEventBus bus) {
+        bus.addListener(EventListenerForge::onClientStarted);
+        MinecraftForge.EVENT_BUS.addListener(EventListenerForge::onClientTick);
+        MinecraftForge.EVENT_BUS.addListener(EventListenerForge::afterScreenChange);
+    }
+
     @SubscribeEvent
     public void registerKeys(RegisterKeyMappingsEvent event) {
-        event.register(KeyBindsForge.getImeBinding());
-        event.register(KeyBindsForge.getLangBinding());
+        event.register(KeyBinds.getImeBinding());
+        event.register(KeyBinds.getLangBinding());
 	}
 }
