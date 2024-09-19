@@ -9,6 +9,7 @@ public class KoreanPatchFabric implements ClientModInitializer {
 
     @Override
     public void onInitializeClient() {
+        KoreanPatchClient.init();
         registerEvents();
     }
 

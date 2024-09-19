@@ -15,10 +15,6 @@ public class KeyMappingUtil {
     private static final List<KeyMapping> MODDED_KEY_BINDINGS = new ReferenceArrayList<>();
 
     public static KeyMapping registerKeyMapping(KeyMapping binding) {
-        if (Minecraft.getInstance().options != null) {
-            throw new IllegalStateException("GameOptions has already been initialised");
-        }
-
         for (KeyMapping existingKeyBindings : MODDED_KEY_BINDINGS) {
             if (existingKeyBindings == binding) {
                 throw new IllegalArgumentException("Attempted to register a key binding twice: " + binding.getTranslatedKeyMessage());
@@ -29,6 +25,7 @@ public class KeyMappingUtil {
 
         // This will do nothing if the category already exists.
         addCategory(binding.getCategory());
+
         OptionsAccessor accessor = (OptionsAccessor) Minecraft.getInstance().options;
         accessor.setKeyMappings(ArrayUtils.add(accessor.getKeyMappings(), binding));
         MODDED_KEY_BINDINGS.add(binding);

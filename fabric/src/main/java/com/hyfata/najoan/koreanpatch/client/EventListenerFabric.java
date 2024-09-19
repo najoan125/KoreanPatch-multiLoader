@@ -16,7 +16,7 @@ public class EventListenerFabric {
     private static ArrayList<Class<?>> patchedScreenClazz = new ArrayList<>();
 
     protected static void onClientStarted(Minecraft client) {
-        KoreanPatchClient.init();
+        KoreanPatchClient.clientStarted();
 
         String[] patchedScreens = {
                 "arm32x.minecraft.commandblockide.client.gui.screen.CommandIDEScreen"
