@@ -4,7 +4,8 @@ plugins {
 }
 
 base {
-    archivesName = "${mod_id}-${project.name}-${minecraft_version}"
+    archivesName = "${mod_id}-${project.name}"
+    version = createVersionString()
 }
 
 java {
@@ -120,4 +121,31 @@ publishing {
             url System.getenv('local_maven_url')
         }
     }
+}
+
+def createVersionString() {
+    def builder = new StringBuilder()
+
+    // TODO: create github workflow publishing build script (add `run: ./gradlew build -Dbuild.release=true` in release-build-script)
+    def isReleaseBuild = true // System.getProperty("build.release") != null
+    def buildId = System.getenv("GITHUB_RUN_NUMBER")
+
+    builder.append("mc").append(minecraft_version)
+
+    if (isReleaseBuild) {
+        builder.append("-").append(mod_version)
+    } else {
+        builder.append("-").append(mod_version)
+        builder.append("-snapshot")
+    }
+
+    if (!isReleaseBuild) {
+        if (buildId) {
+            builder.append("-build.${buildId}")
+        } else {
+            builder.append("-local")
+        }
+    }
+
+    return builder.toString()
 }
