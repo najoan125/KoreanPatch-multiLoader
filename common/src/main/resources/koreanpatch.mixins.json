@@ -8,6 +8,7 @@
   "client": [
     "EditBoxMixin",
     "KeyboardHandlerMixin",
+    "OptionsMixin",
     "TextFieldHelperMixin",
     "accessor.BookEditScreenDisplayCacheAccessor",
     "accessor.CommandSuggestionsAccessor",
