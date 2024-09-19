@@ -1,4 +1,4 @@
-package com.hyfata.najoan.koreanpatch.util.mixin.textfieldwidget;
+package com.hyfata.najoan.koreanpatch.util.mixin.editbox;
 
 import com.hyfata.najoan.koreanpatch.keyboard.KeyboardLayout;
 import com.hyfata.najoan.koreanpatch.mixin.accessor.CreativeModeInventoryScreenInvoker;
