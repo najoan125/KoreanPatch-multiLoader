@@ -38,12 +38,11 @@ jobs:
         uses: Kir-Antipov/mc-publish@v3.3
         with:
           modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
+          curseforge-token: ${{ secrets.CURSEFORGE_TOKEN }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
           files: forge/build/libs/!(*-@(dev|sources|all|javadoc)).jar
-          # TODO: 버전 설정
-          # TODO: version을 사용하지 않을 경우 모드의 버전을 가져오나, 모드의 버전을 1.6.3-mc1.21과 같은 형태로 작성하여 mc1.21-1.6.3과 일치하지 않음
-          version: temp
           modrinth-id: qyulnpBL
+          curseforge-id: temp
           modrinth-featured: false
           version-type: release
           loaders: forge
@@ -52,10 +51,11 @@ jobs:
         uses: Kir-Antipov/mc-publish@v3.3
         with:
           modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
+          curseforge-token: ${{ secrets.CURSEFORGE_TOKEN }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
           files: neoforge/build/libs/!(*-@(dev|sources|all|javadoc)).jar
-          version: temp # TODO: 버전 설정
           modrinth-id: qyulnpBL
+          curseforge-id: temp
           modrinth-featured: false
           version-type: release
           loaders: neoforge
@@ -64,10 +64,11 @@ jobs:
         uses: Kir-Antipov/mc-publish@v3.3
         with:
           modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
+          curseforge-token: ${{ secrets.CURSEFORGE_TOKEN }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
           files: fabric/build/libs/!(*-@(dev|sources|all|javadoc)).jar
-          version: temp # TODO: 버전 설정
           modrinth-id: qyulnpBL
+          curseforge-id: temp
           modrinth-featured: false
           version-type: release
           loaders: fabric quilt
