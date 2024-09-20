@@ -1,6 +1,7 @@
 package com.hyfata.najoan.koreanpatch.mixin.indicator;
 
 import com.hyfata.najoan.koreanpatch.handler.Indicator;
+import com.hyfata.najoan.koreanpatch.platform.Services;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.Screen;
@@ -25,10 +26,13 @@ public class CreativeModeInventoryScreenMixin extends Screen {
     @Unique
     boolean koreanPatch$search = false;
 
+    @Unique
+    int koreanPatch$modifier = 19;
+
     @Inject(method = {"render"}, at = @At(value = "TAIL", shift = At.Shift.BY, by = -3))
     private void addCustomLabel(GuiGraphics context, int mouseX, int mouseY, float delta, CallbackInfo ci) {
         if (koreanPatch$search) {
-            int x = searchBox.getX() + searchBox.getWidth() + 19;
+            int x = searchBox.getX() + searchBox.getWidth() + koreanPatch$modifier;
             int y = searchBox.getY() + searchBox.getHeight() / 2;
 
             Indicator.showCenteredIndicator(context, x, y);
@@ -38,5 +42,8 @@ public class CreativeModeInventoryScreenMixin extends Screen {
     @Inject(at = {@At(value = "HEAD")}, method = {"selectTab"})
     private void check(CreativeModeTab group, CallbackInfo callbackInfo) {
         koreanPatch$search = group.getType() == CreativeModeTab.Type.SEARCH;
+        if (!Services.PLATFORM.getPlatformName().equals("Fabric")) {
+            koreanPatch$modifier = 10;
+        }
     }
 }
