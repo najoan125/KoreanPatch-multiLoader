@@ -5,7 +5,7 @@ plugins {
 
 base {
     archivesName = "${mod_id}-${project.name}"
-    version = createVersionString()
+//    version = createVersionString()
 }
 
 java {
