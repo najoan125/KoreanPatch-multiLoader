@@ -1,0 +1,73 @@
+# This workflow will build a Java project with Brachyra
+# For more information see: docs/development/brachyura.md
+
+name: build-release
+
+on:
+  release:
+    types:
+      - published
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Java 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+
+      - name: Make gradle wrapper executable
+        run: chmod +x ./gradlew
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v3
+        with:
+          cache-read-only: true
+
+      - name: Run build with Gradle Wrapper
+        run: ./gradlew build -Dbuild.release=true
+
+      # https://github.com/Kir-Antipov/mc-publish
+      - name: Upload artifacts to Modrinth and GitHub for Forge
+        uses: Kir-Antipov/mc-publish@v3.3
+        with:
+          modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          files: forge/build/libs/!(*-@(dev|sources|all)).jar
+          # TODO: 버전 설정
+          # TODO: version을 사용하지 않을 경우 모드의 버전을 가져오나, 모드의 버전을 1.6.3-mc1.21과 같은 형태로 작성하여 mc1.21-1.6.3과 일치하지 않음
+          version: temp
+          modrinth-id: qyulnpBL
+          modrinth-featured: false
+          version-type: release
+          loaders: forge
+
+      - name: Upload artifacts to Modrinth and GitHub for NeoForge
+        uses: Kir-Antipov/mc-publish@v3.3
+        with:
+          modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          files: neoforge/build/libs/!(*-@(dev|sources|all)).jar
+          version: temp # TODO: 버전 설정
+          modrinth-id: qyulnpBL
+          modrinth-featured: false
+          version-type: release
+          loaders: neoforge
+
+      - name: Upload artifacts to Modrinth and GitHub for Fabric & Quilt
+        uses: Kir-Antipov/mc-publish@v3.3
+        with:
+          modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          files: fabric/build/libs/!(*-@(dev|sources|all)).jar
+          version: temp # TODO: 버전 설정
+          modrinth-id: qyulnpBL
+          modrinth-featured: false
+          version-type: release
+          loaders: fabric quilt
