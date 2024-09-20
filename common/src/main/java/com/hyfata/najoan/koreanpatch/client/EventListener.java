@@ -8,20 +8,14 @@ import net.minecraft.client.gui.font.TextFieldHelper;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.JigsawBlockEditScreen;
 import net.minecraft.client.gui.screens.inventory.StructureBlockEditScreen;
-import net.minecraftforge.client.event.ScreenEvent;
-import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
-@Mod.EventBusSubscriber(modid = Constants.MOD_ID)
-public class EventListenerForge {
+public class EventListener {
     private static ArrayList<Class<?>> patchedScreenClazz = new ArrayList<>();
 
-    protected static void onClientStarted(FMLClientSetupEvent event) {
+    public static void onClientStarted() {
         KoreanPatchClient.clientStarted();
 
         String[] patchedScreens = {
@@ -30,10 +24,8 @@ public class EventListenerForge {
         patchedScreenClazz = getExistingClasses(patchedScreens);
     }
 
-    @SubscribeEvent
-    protected static void afterScreenChange(ScreenEvent.Init.Post event) {
+    public static void afterScreenChange(Screen screen) {
         Minecraft client = Minecraft.getInstance();
-        Screen screen = event.getScreen();
 
         if (client.screen != null) {
             // injection bypass screens
@@ -62,6 +54,15 @@ public class EventListenerForge {
         }
     }
 
+    public static void onClientTick() {
+        Minecraft client = Minecraft.getInstance();
+        if (InputManager.getController() == null) return;
+
+        if (client.screen == null) {
+            InputManager.getController().setFocus(false);
+        }
+    }
+
     private static ArrayList<Class<?>> getExistingClasses(String[] clazz) {
         ArrayList<Class<?>> result = new ArrayList<>();
         for (String className : clazz) {
@@ -71,15 +72,5 @@ public class EventListenerForge {
             } catch (ClassNotFoundException ignored) {}
         }
         return result;
-    }
-
-    @SubscribeEvent
-    protected static void onClientTick(TickEvent.ClientTickEvent event) {
-        Minecraft client = Minecraft.getInstance();
-        if (InputManager.getController() == null) return;
-
-        if (client.screen == null) {
-            InputManager.getController().setFocus(false);
-        }
     }
 }

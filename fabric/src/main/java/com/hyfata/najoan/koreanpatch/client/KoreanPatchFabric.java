@@ -14,8 +14,8 @@ public class KoreanPatchFabric implements ClientModInitializer {
     }
 
     public void registerEvents() {
-        ClientLifecycleEvents.CLIENT_STARTED.register(EventListenerFabric::onClientStarted);
-        ScreenEvents.AFTER_INIT.register(EventListenerFabric::afterScreenChange);
-        ClientTickEvents.END_CLIENT_TICK.register(EventListenerFabric::onClientTick);
+        ClientLifecycleEvents.CLIENT_STARTED.register(client -> EventListener.onClientStarted());
+        ScreenEvents.AFTER_INIT.register((client, screen, scaledWidth, scaledHeight) -> EventListener.afterScreenChange(screen));
+        ClientTickEvents.END_CLIENT_TICK.register(client -> EventListener.onClientTick());
     }
 }

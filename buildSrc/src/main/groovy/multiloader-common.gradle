@@ -97,8 +97,8 @@ processResources {
             'description'                  : project.description,
             'neoforge_version'             : neoforge_version,
             'neoforge_loader_version_range': neoforge_loader_version_range,
-            "forge_version": forge_version,
-            "forge_loader_version_range": forge_loader_version_range,
+            "forge_version"                : forge_version,
+            "forge_loader_version_range"   : forge_loader_version_range,
             'credits'                      : credits,
             'java_version'                 : java_version
     ]
@@ -126,18 +126,16 @@ publishing {
 def createVersionString() {
     def builder = new StringBuilder()
 
-    // TODO: create github workflow publishing build script (add `run: ./gradlew build -Dbuild.release=true` in release-build-script)
-    def isReleaseBuild = true // System.getProperty("build.release") != null
+    def isReleaseBuild = System.getProperty("build.release") != null
     def buildId = System.getenv("GITHUB_RUN_NUMBER")
 
-    builder.append("mc").append(minecraft_version)
+    builder.append(mod_version)
 
-    if (isReleaseBuild) {
-        builder.append("-").append(mod_version)
-    } else {
-        builder.append("-").append(mod_version)
+    if (!isReleaseBuild) {
         builder.append("-snapshot")
     }
+
+    builder.append("-mc").append(minecraft_version)
 
     if (!isReleaseBuild) {
         if (buildId) {
