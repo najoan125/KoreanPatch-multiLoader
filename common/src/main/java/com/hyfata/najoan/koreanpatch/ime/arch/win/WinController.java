@@ -1,8 +1,8 @@
-package com.hyfata.najoan.koreanpatch.arch.win;
+package com.hyfata.najoan.koreanpatch.ime.arch.win;
 
 import com.hyfata.najoan.koreanpatch.client.Constants;
 import com.hyfata.najoan.koreanpatch.client.KoreanPatchClient;
-import com.hyfata.najoan.koreanpatch.plugin.InputController;
+import com.hyfata.najoan.koreanpatch.ime.controller.InputController;
 import net.minecraft.client.Minecraft;
 
 public class WinController implements InputController {

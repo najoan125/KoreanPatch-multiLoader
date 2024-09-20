@@ -1,8 +1,8 @@
 package com.hyfata.najoan.koreanpatch.mixin.indicator;
 
-import com.hyfata.najoan.koreanpatch.util.EditBoxUtil;
+import com.hyfata.najoan.koreanpatch.util.minecraft.EditBoxUtil;
 import com.hyfata.najoan.koreanpatch.util.animation.AnimationUtil;
-import com.hyfata.najoan.koreanpatch.util.Indicator;
+import com.hyfata.najoan.koreanpatch.handler.Indicator;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.EditServerScreen;
@@ -37,7 +37,7 @@ public class EditServerScreenMixin extends Screen {
     private static Component IP_LABEL;
 
     @Unique
-    private final AnimationUtil animationUtil = new AnimationUtil();
+    private final AnimationUtil koreanPatch$animationUtil = new AnimationUtil();
 
     @Inject(at = {@At(value = "TAIL")}, method = {"render"})
     private void addCustomLabel(GuiGraphics context, int mouseX, int mouseY, float delta, CallbackInfo ci) {
@@ -55,10 +55,10 @@ public class EditServerScreenMixin extends Screen {
             return;
         }
 
-        animationUtil.init(x - 4, 0);
-        animationUtil.calculateAnimation(x, 0);
+        koreanPatch$animationUtil.init(x - 4, 0);
+        koreanPatch$animationUtil.calculateAnimation(x, 0);
 
         context.pose().translate(0.0F, 0.0F, 200.0F);
-        Indicator.showIndicator(context, animationUtil.getResultX() + 4, y);
+        Indicator.showIndicator(context, koreanPatch$animationUtil.getResultX() + 4, y);
     }
 }

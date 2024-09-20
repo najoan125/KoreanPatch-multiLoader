@@ -1,4 +1,4 @@
-package com.hyfata.najoan.koreanpatch.plugin;
+package com.hyfata.najoan.koreanpatch.ime.controller;
 
 public class InputManager {
     private static InputController controller;

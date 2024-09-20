@@ -1,11 +1,12 @@
-package com.hyfata.najoan.koreanpatch.util.mixin.selectionmanager;
+package com.hyfata.najoan.koreanpatch.handler.mixin.textfieldhelper;
 
-import com.hyfata.najoan.koreanpatch.keyboard.KeyboardLayout;
+import com.hyfata.najoan.koreanpatch.handler.mixin.IMixinCommon;
+import com.hyfata.najoan.koreanpatch.handler.mixin.MixinCommonHandler;
+import com.hyfata.najoan.koreanpatch.util.keyboard.KeyboardLayout;
 import com.hyfata.najoan.koreanpatch.util.language.HangulProcessor;
 import com.hyfata.najoan.koreanpatch.util.language.HangulUtil;
 import com.hyfata.najoan.koreanpatch.util.language.LanguageUtil;
-import com.hyfata.najoan.koreanpatch.util.mixin.IMixinCommon;
-import com.hyfata.najoan.koreanpatch.util.mixin.MixinCommonHandler;
+import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.client.Minecraft;
 import org.lwjgl.glfw.GLFW;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -13,17 +14,17 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.Objects;
 
-public class SelectionManagerHandler implements IMixinCommon {
-    private final ISelectionManagerAccessor accessor;
+public class TextFieldHelperHandler implements IMixinCommon {
+    private final ITextFieldHelperAccessor accessor;
     private final Minecraft client = Minecraft.getInstance();
 
-    public SelectionManagerHandler(ISelectionManagerAccessor accessor) {
+    public TextFieldHelperHandler(ITextFieldHelperAccessor accessor) {
         this.accessor = accessor;
     }
 
     @Override
     public void modifyText(char ch) {
-        int cursorPosition = accessor.fabric_koreanchat$getCursor();
+        int cursorPosition = accessor.koreanPatch$getCursor();
         char[] arr = this.getText().toCharArray();
         if (cursorPosition > 0 && cursorPosition <= arr.length) {
             arr[cursorPosition - 1] = ch;
@@ -33,25 +34,21 @@ public class SelectionManagerHandler implements IMixinCommon {
 
     @Override
     public int getCursor() {
-        return accessor.fabric_koreanchat$getCursor();
+        return accessor.koreanPatch$getCursor();
     }
 
     @Override
     public void writeText(String str) {
-        accessor.fabric_koreanchat$runInsert(this.getText(), str);
+        accessor.koreanPatch$runInsert(this.getText(), str);
     }
 
     public boolean onBackspaceKeyPressed() {
         return MixinCommonHandler.onBackspaceKeyPressed(this, getCursor(), this.getText());
     }
 
-    private boolean isKeyPressed(long handle, int code) {
-        return GLFW.glfwGetKey(handle, code) == 1;
-    }
-
     public int getModifiers() {
-        boolean shift = isKeyPressed(client.getWindow().getWindow(), GLFW.GLFW_KEY_LEFT_SHIFT) ||
-                isKeyPressed(client.getWindow().getWindow(), GLFW.GLFW_KEY_RIGHT_SHIFT);
+        boolean shift = InputConstants.isKeyDown(client.getWindow().getWindow(), GLFW.GLFW_KEY_LEFT_SHIFT) ||
+                InputConstants.isKeyDown(client.getWindow().getWindow(), GLFW.GLFW_KEY_RIGHT_SHIFT);
         if (shift) {
             return 1;
         }
@@ -59,17 +56,17 @@ public class SelectionManagerHandler implements IMixinCommon {
     }
 
     public String getText() {
-        return accessor.fabric_koreanchat$getStringGetter().get();
+        return accessor.koreanPatch$getStringGetter().get();
     }
 
     public void setText(String str) {
-        if (accessor.fabric_koreanchat$getStringFilter().test(str)) {
-            accessor.fabric_koreanchat$getStringSetter().accept(str);
+        if (accessor.koreanPatch$getStringFilter().test(str)) {
+            accessor.koreanPatch$getStringSetter().accept(str);
         }
     }
 
     public boolean onHangulCharTyped(int keyCode, int modifiers) {
-        return MixinCommonHandler.onHangulCharTyped(this, keyCode, modifiers, this.getText(), accessor.fabric_koreanchat$selectedText(accessor.fabric_koreanchat$getStringGetter().get()).isEmpty());
+        return MixinCommonHandler.onHangulCharTyped(this, keyCode, modifiers, this.getText(), accessor.koreanPatch$selectedText(accessor.koreanPatch$getStringGetter().get()).isEmpty());
     }
 
     public void insertChar(char chr, CallbackInfoReturnable<Boolean> cir) {

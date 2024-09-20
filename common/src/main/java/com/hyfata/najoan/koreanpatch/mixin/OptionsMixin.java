@@ -1,7 +1,7 @@
 package com.hyfata.najoan.koreanpatch.mixin;
 
 import com.hyfata.najoan.koreanpatch.mixin.accessor.OptionsAccessor;
-import com.hyfata.najoan.koreanpatch.util.KeyMappingUtil;
+import com.hyfata.najoan.koreanpatch.util.minecraft.KeyMappingUtil;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Options;
 import org.apache.commons.lang3.ArrayUtils;

@@ -1,4 +1,4 @@
-package com.hyfata.najoan.koreanpatch.util;
+package com.hyfata.najoan.koreanpatch.util.minecraft;
 
 import com.hyfata.najoan.koreanpatch.mixin.accessor.KeyMappingAccessor;
 import it.unimi.dsi.fastutil.objects.ReferenceArrayList;
@@ -26,17 +26,16 @@ public class KeyMappingUtil {
         return KeyMappingAccessor.getCategoryMap();
     }
 
-    public static boolean addCategory(String categoryTranslationKey) {
+    public static void addCategory(String categoryTranslationKey) {
         Map<String, Integer> map = getCategoryMap();
 
         if (map.containsKey(categoryTranslationKey)) {
-            return false;
+            return;
         }
 
         Optional<Integer> largest = map.values().stream().max(Integer::compareTo);
         int largestInt = largest.orElse(0);
         map.put(categoryTranslationKey, largestInt + 1);
         System.out.println(map.toString());
-        return true;
     }
 }

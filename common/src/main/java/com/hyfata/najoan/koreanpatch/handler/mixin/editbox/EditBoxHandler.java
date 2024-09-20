@@ -1,11 +1,11 @@
-package com.hyfata.najoan.koreanpatch.util.mixin.editbox;
+package com.hyfata.najoan.koreanpatch.handler.mixin.editbox;
 
-import com.hyfata.najoan.koreanpatch.keyboard.KeyboardLayout;
+import com.hyfata.najoan.koreanpatch.handler.mixin.MixinCommonHandler;
+import com.hyfata.najoan.koreanpatch.util.keyboard.KeyboardLayout;
 import com.hyfata.najoan.koreanpatch.mixin.accessor.CreativeModeInventoryScreenInvoker;
 import com.hyfata.najoan.koreanpatch.util.language.HangulProcessor;
 import com.hyfata.najoan.koreanpatch.util.language.HangulUtil;
-import com.hyfata.najoan.koreanpatch.util.mixin.IMixinCommon;
-import com.hyfata.najoan.koreanpatch.util.mixin.MixinCommonHandler;
+import com.hyfata.najoan.koreanpatch.handler.mixin.IMixinCommon;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.inventory.CreativeModeInventoryScreen;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
@@ -26,13 +26,13 @@ public class EditBoxHandler implements IMixinCommon {
     public void writeText(String str) {
         accessor.insertText(str);
         sendTextChanged(str);
-        accessor.fabric_koreanchat$changed(accessor.getValue());
+        accessor.koreanPatch$changed(accessor.getValue());
         updateScreen();
     }
 
     private void sendTextChanged(String str) {
-        if (accessor.fabric_koreanchat$getChangedListener() != null) {
-            accessor.fabric_koreanchat$getChangedListener().accept(str);
+        if (accessor.koreanPatch$getChangedListener() != null) {
+            accessor.koreanPatch$getChangedListener().accept(str);
         }
     }
 

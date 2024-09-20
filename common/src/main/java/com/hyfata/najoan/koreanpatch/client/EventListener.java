@@ -1,11 +1,10 @@
 package com.hyfata.najoan.koreanpatch.client;
 
-import com.hyfata.najoan.koreanpatch.plugin.InputManager;
+import com.hyfata.najoan.koreanpatch.ime.controller.InputManager;
 import com.hyfata.najoan.koreanpatch.util.ReflectionFieldChecker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.font.TextFieldHelper;
-import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.JigsawBlockEditScreen;
 import net.minecraft.client.gui.screens.inventory.StructureBlockEditScreen;
 
@@ -24,7 +23,7 @@ public class EventListener {
         patchedScreenClazz = getExistingClasses(patchedScreens);
     }
 
-    public static void afterScreenChange(Screen screen) {
+    public static void afterScreenChange() {
         Minecraft client = Minecraft.getInstance();
 
         if (client.screen != null) {

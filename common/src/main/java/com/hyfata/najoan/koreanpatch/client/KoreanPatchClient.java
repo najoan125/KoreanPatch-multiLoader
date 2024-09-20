@@ -1,8 +1,8 @@
 package com.hyfata.najoan.koreanpatch.client;
 
 import com.hyfata.najoan.koreanpatch.platform.Services;
-import com.hyfata.najoan.koreanpatch.plugin.InputController;
-import com.hyfata.najoan.koreanpatch.plugin.InputManager;
+import com.hyfata.najoan.koreanpatch.ime.controller.InputController;
+import com.hyfata.najoan.koreanpatch.ime.controller.InputManager;
 
 public class KoreanPatchClient {
     public static boolean IME = false;

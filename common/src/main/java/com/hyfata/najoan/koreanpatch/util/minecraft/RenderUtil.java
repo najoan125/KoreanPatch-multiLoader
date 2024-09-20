@@ -1,4 +1,4 @@
-package com.hyfata.najoan.koreanpatch.util;
+package com.hyfata.najoan.koreanpatch.util.minecraft;
 
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.Minecraft;

@@ -1,7 +1,7 @@
 package com.hyfata.najoan.koreanpatch.util.language;
 
-import com.hyfata.najoan.koreanpatch.keyboard.KeyboardLayout;
-import com.hyfata.najoan.koreanpatch.keyboard.QwertyLayout;
+import com.hyfata.najoan.koreanpatch.util.keyboard.KeyboardLayout;
+import com.hyfata.najoan.koreanpatch.util.keyboard.QwertyLayout;
 
 public class HangulUtil {
     public static char getFixedHangulChar(int modifiers, char org, char hangul) {

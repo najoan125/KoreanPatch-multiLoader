@@ -1,6 +1,6 @@
-package com.hyfata.najoan.koreanpatch.util.mixin;
+package com.hyfata.najoan.koreanpatch.handler.mixin;
 
-import com.hyfata.najoan.koreanpatch.keyboard.KeyboardLayout;
+import com.hyfata.najoan.koreanpatch.util.keyboard.KeyboardLayout;
 import com.hyfata.najoan.koreanpatch.util.language.HangulProcessor;
 import com.hyfata.najoan.koreanpatch.util.language.HangulUtil;
 

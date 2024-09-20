@@ -2,7 +2,7 @@ package com.hyfata.najoan.koreanpatch.mixin.mods.commandblockide.indicator;
 
 import arm32x.minecraft.commandblockide.client.gui.MultilineTextFieldWidget;
 import arm32x.minecraft.commandblockide.client.gui.editor.CommandEditor;
-import com.hyfata.najoan.koreanpatch.util.Indicator;
+import com.hyfata.najoan.koreanpatch.handler.Indicator;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;

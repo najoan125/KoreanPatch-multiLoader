@@ -1,7 +1,7 @@
 package com.hyfata.najoan.koreanpatch.mixin.mods.modmenu;
 
-import com.hyfata.najoan.koreanpatch.util.EditBoxUtil;
-import com.hyfata.najoan.koreanpatch.util.Indicator;
+import com.hyfata.najoan.koreanpatch.util.minecraft.EditBoxUtil;
+import com.hyfata.najoan.koreanpatch.handler.Indicator;
 import com.hyfata.najoan.koreanpatch.util.animation.AnimationUtil;
 import com.terraformersmc.modmenu.gui.ModsScreen;
 import net.minecraft.client.gui.GuiGraphics;

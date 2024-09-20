@@ -2,8 +2,8 @@ package com.hyfata.najoan.koreanpatch.mixin;
 
 import com.hyfata.najoan.koreanpatch.client.KoreanPatchClient;
 import com.hyfata.najoan.koreanpatch.util.language.LanguageUtil;
-import com.hyfata.najoan.koreanpatch.util.mixin.editbox.IEditBoxAccessor;
-import com.hyfata.najoan.koreanpatch.util.mixin.editbox.EditBoxHandler;
+import com.hyfata.najoan.koreanpatch.handler.mixin.editbox.IEditBoxAccessor;
+import com.hyfata.najoan.koreanpatch.handler.mixin.editbox.EditBoxHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.EditBox;
 import org.lwjgl.glfw.GLFW;
@@ -21,7 +21,7 @@ public abstract class EditBoxMixin implements IEditBoxAccessor {
     @Shadow
     private Consumer<String> responder;
     @Unique
-    private final Minecraft client = Minecraft.getInstance();
+    private final Minecraft koreanPatch$client = Minecraft.getInstance();
 
     @Shadow
     public abstract int getCursorPosition();
@@ -39,7 +39,7 @@ public abstract class EditBoxMixin implements IEditBoxAccessor {
     public abstract void insertText(String var1);
 
     @Shadow
-    public abstract boolean isEditable();
+    protected abstract boolean isEditable();
 
     @Shadow
     protected abstract void onValueChange(String var1);
@@ -54,23 +54,23 @@ public abstract class EditBoxMixin implements IEditBoxAccessor {
     public abstract String getHighlighted();
 
     @Override
-    public Consumer<String> fabric_koreanchat$getChangedListener() {
+    public Consumer<String> koreanPatch$getChangedListener() {
         return this.responder;
     }
 
     @Override
-    public void fabric_koreanchat$changed(String var1) {
+    public void koreanPatch$changed(String var1) {
         onValueChange(var1);
     }
 
     @Unique
-    private final EditBoxHandler handler = new EditBoxHandler(this);
+    private final EditBoxHandler koreanPatch$handler = new EditBoxHandler(this);
 
     @Inject(at = {@At(value = "HEAD")}, method = {"charTyped(CI)Z"}, cancellable = true)
     public void charTyped(char chr, int modifiers, CallbackInfoReturnable<Boolean> cir) {
-        if (this.client.screen != null && !KoreanPatchClient.bypassInjection &&
+        if (this.koreanPatch$client.screen != null && !KoreanPatchClient.bypassInjection &&
                 LanguageUtil.isKorean() && this.isEditable() && Character.charCount(chr) == 1) {
-            handler.typedTextField(chr, modifiers, cir);
+            koreanPatch$handler.typedTextField(chr, modifiers, cir);
         }
     }
 
@@ -79,7 +79,7 @@ public abstract class EditBoxMixin implements IEditBoxAccessor {
         Minecraft client = Minecraft.getInstance();
         if (client.screen != null && !KoreanPatchClient.bypassInjection) {
             if (keyCode == GLFW.GLFW_KEY_BACKSPACE) {
-                if (handler.onBackspaceKeyPressed()) {
+                if (koreanPatch$handler.onBackspaceKeyPressed()) {
                     callbackInfo.setReturnValue(Boolean.TRUE);
                 }
             }

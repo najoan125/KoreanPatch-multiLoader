@@ -1,4 +1,4 @@
-package com.hyfata.najoan.koreanpatch.arch.win;
+package com.hyfata.najoan.koreanpatch.ime.arch.win;
 
 import com.hyfata.najoan.koreanpatch.util.LibraryUtil;
 import com.sun.jna.*;

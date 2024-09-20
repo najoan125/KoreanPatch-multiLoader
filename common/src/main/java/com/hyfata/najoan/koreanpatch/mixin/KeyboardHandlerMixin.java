@@ -2,7 +2,7 @@ package com.hyfata.najoan.koreanpatch.mixin;
 
 import com.hyfata.najoan.koreanpatch.client.KeyBinds;
 import com.hyfata.najoan.koreanpatch.client.KoreanPatchClient;
-import com.hyfata.najoan.koreanpatch.plugin.InputManager;
+import com.hyfata.najoan.koreanpatch.ime.controller.InputManager;
 import com.hyfata.najoan.koreanpatch.util.language.LanguageUtil;
 import net.minecraft.client.KeyboardHandler;
 import net.minecraft.client.Minecraft;

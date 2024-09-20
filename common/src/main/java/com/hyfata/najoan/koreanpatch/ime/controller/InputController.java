@@ -1,6 +1,6 @@
-package com.hyfata.najoan.koreanpatch.plugin;
+package com.hyfata.najoan.koreanpatch.ime.controller;
 
-import com.hyfata.najoan.koreanpatch.arch.win.WinController;
+import com.hyfata.najoan.koreanpatch.ime.arch.win.WinController;
 import org.lwjgl.glfw.GLFW;
 
 public interface InputController {

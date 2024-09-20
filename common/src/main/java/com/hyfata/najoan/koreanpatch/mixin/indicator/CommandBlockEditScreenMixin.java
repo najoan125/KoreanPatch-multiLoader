@@ -1,8 +1,8 @@
 package com.hyfata.najoan.koreanpatch.mixin.indicator;
 
-import com.hyfata.najoan.koreanpatch.util.EditBoxUtil;
+import com.hyfata.najoan.koreanpatch.util.minecraft.EditBoxUtil;
 import com.hyfata.najoan.koreanpatch.util.animation.AnimationUtil;
-import com.hyfata.najoan.koreanpatch.util.Indicator;
+import com.hyfata.najoan.koreanpatch.handler.Indicator;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.Screen;
@@ -23,7 +23,7 @@ public class CommandBlockEditScreenMixin extends Screen {
 
     @Shadow @Final private static Component COMMAND_LABEL;
     @Unique
-    AnimationUtil animationUtil = new AnimationUtil();
+    AnimationUtil koreanPatch$animationUtil = new AnimationUtil();
 
     protected CommandBlockEditScreenMixin(Component title) {
         super(title);
@@ -35,9 +35,9 @@ public class CommandBlockEditScreenMixin extends Screen {
         float x = EditBoxUtil.getCursorXWithText(commandEdit, COMMAND_LABEL, textX) + 4;
         float y = EditBoxUtil.calculateIndicatorY(commandEdit);
 
-        animationUtil.init(x - 4, 0);
-        animationUtil.calculateAnimation(x, 0);
+        koreanPatch$animationUtil.init(x - 4, 0);
+        koreanPatch$animationUtil.calculateAnimation(x, 0);
 
-        Indicator.showIndicator(context, animationUtil.getResultX(), y);
+        Indicator.showIndicator(context, koreanPatch$animationUtil.getResultX(), y);
     }
 }

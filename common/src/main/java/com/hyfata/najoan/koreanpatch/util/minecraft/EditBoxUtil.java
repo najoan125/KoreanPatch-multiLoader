@@ -1,5 +1,6 @@
-package com.hyfata.najoan.koreanpatch.util;
+package com.hyfata.najoan.koreanpatch.util.minecraft;
 
+import com.hyfata.najoan.koreanpatch.handler.Indicator;
 import com.hyfata.najoan.koreanpatch.mixin.accessor.EditBoxAccessor;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.EditBox;

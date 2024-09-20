@@ -1,6 +1,6 @@
 package com.hyfata.najoan.koreanpatch.client;
 
-import com.hyfata.najoan.koreanpatch.util.KeyMappingUtil;
+import com.hyfata.najoan.koreanpatch.util.minecraft.KeyMappingUtil;
 import com.mojang.blaze3d.platform.InputConstants;
 import com.sun.jna.Platform;
 import net.minecraft.client.KeyMapping;

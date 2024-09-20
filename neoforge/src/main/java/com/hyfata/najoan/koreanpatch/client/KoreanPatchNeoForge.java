@@ -40,7 +40,7 @@ public class KoreanPatchNeoForge {
 
     @SubscribeEvent
     public static void afterScreenChange(ScreenEvent.Init.Post event) {
-        EventListener.afterScreenChange(event.getScreen());
+        EventListener.afterScreenChange();
     }
 
     @SubscribeEvent

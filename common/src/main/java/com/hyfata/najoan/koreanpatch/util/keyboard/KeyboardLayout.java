@@ -1,4 +1,4 @@
-package com.hyfata.najoan.koreanpatch.keyboard;
+package com.hyfata.najoan.koreanpatch.util.keyboard;
 
 import com.google.common.base.Splitter;
 
