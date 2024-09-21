@@ -53,12 +53,11 @@ jobs:
         run: ./gradlew build -Dbuild.release=true
 
       # https://github.com/Kir-Antipov/mc-publish
-      - name: Upload artifacts to Modrinth/CurseForge and GitHub for Forge
+      - name: Upload artifacts to Modrinth/CurseForge for Forge
         uses: Kir-Antipov/mc-publish@v3.3
         with:
           modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
           curseforge-token: ${{ secrets.CURSEFORGE_TOKEN }}
-          github-token: ${{ secrets.GITHUB_TOKEN }}
           files: forge/build/libs/!(*-@(dev|sources|all|javadoc)).jar
           modrinth-id: qyulnpBL
           curseforge-id: 657742
@@ -70,12 +69,11 @@ jobs:
           game-versions: ${{ steps.properties.outputs.minecraft_version_range }}
           loaders: forge
 
-      - name: Upload artifacts to Modrinth/CurseForge and GitHub for NeoForge
+      - name: Upload artifacts to Modrinth/CurseForge for NeoForge
         uses: Kir-Antipov/mc-publish@v3.3
         with:
           modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
           curseforge-token: ${{ secrets.CURSEFORGE_TOKEN }}
-          github-token: ${{ secrets.GITHUB_TOKEN }}
           files: neoforge/build/libs/!(*-@(dev|sources|all|javadoc)).jar
           modrinth-id: qyulnpBL
           curseforge-id: 657742
@@ -87,12 +85,11 @@ jobs:
           game-versions: ${{ steps.properties.outputs.minecraft_version_range }}
           loaders: neoforge
 
-      - name: Upload artifacts to Modrinth/CurseForge and GitHub for Fabric & Quilt
+      - name: Upload artifacts to Modrinth/CurseForge for Fabric & Quilt
         uses: Kir-Antipov/mc-publish@v3.3
         with:
           modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
           curseforge-token: ${{ secrets.CURSEFORGE_TOKEN }}
-          github-token: ${{ secrets.GITHUB_TOKEN }}
           files: fabric/build/libs/!(*-@(dev|sources|all|javadoc)).jar
           modrinth-id: qyulnpBL
           curseforge-id: 657742
@@ -103,3 +100,16 @@ jobs:
           version-type: ${{ inputs.version-type }}
           game-versions: ${{ steps.properties.outputs.minecraft_version_range }}
           loaders: fabric quilt
+
+      - name: Upload artifacts to GitHub
+        uses: Kir-Antipov/mc-publish@v3.3
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          files: |
+            fabric/build/libs/!(*-@(dev|sources|all|javadoc)).jar
+            neoforge/build/libs/!(*-@(dev|sources|all|javadoc)).jar
+            forge/build/libs/!(*-@(dev|sources|all|javadoc)).jar
+          name: Korean Chat Patch ${{ steps.properties.outputs.mod_version }} for Minecraft ${{ steps.properties.outputs.minecraft_version }} # release title
+          version: mc${{ steps.properties.outputs.minecraft_version }}-${{ steps.properties.outputs.mod_version }} # create tag
+          changelog: ${{ inputs.changelog }} # release desc.
+          version-type: ${{ inputs.version-type }} # release or pre-release
