@@ -6,16 +6,6 @@ name: build-release
 on:
   workflow_dispatch:
     inputs:
-      name:
-        required: true
-        type: string
-        default: 'Korean Chat Patch '
-        description: '퍼블리싱 제목: `Korean Chat Patch 1.7.0`과 같은 형태로 작성'
-      version:
-        required: true
-        type: string
-        default: 'mc'
-        description: '퍼블리싱 버전: `mc1.21-1.7.0`과 같은 형태로 작성'
       version-type:
         required: true
         type: choice
@@ -52,6 +42,13 @@ jobs:
         with:
           cache-read-only: true
 
+      - name: read-properties-action
+        uses: BrycensRanch/read-properties-action@v1.0.4
+        id: properties
+        with:
+          file: gradle.properties
+          all: true
+
       - name: Run build with Gradle Wrapper
         run: ./gradlew build -Dbuild.release=true
 
@@ -66,10 +63,11 @@ jobs:
           modrinth-id: qyulnpBL
           curseforge-id: 657742
           modrinth-featured: false
-          name: ${{ inputs.name }} for Forge
-          version: ${{ inputs.version }}-forge
+          name: ${{ steps.properties.outputs.mod_version }} for Forge
+          version: mc${{ steps.properties.outputs.minecraft_version }}-${{ steps.properties.outputs.mod_version }}-forge
           changelog: ${{ inputs.changelog }}
           version-type: ${{ inputs.version-type }}
+          game-versions: ${{ steps.properties.outputs.minecraft_version_range }}
           loaders: forge
 
       - name: Upload artifacts to Modrinth/CurseForge and GitHub for NeoForge
@@ -82,10 +80,11 @@ jobs:
           modrinth-id: qyulnpBL
           curseforge-id: 657742
           modrinth-featured: false
-          name: ${{ inputs.name }} for NeoForge
-          version: ${{ inputs.version }}-neoforge
+          name: ${{ steps.properties.outputs.mod_version }} for NeoForge
+          version: mc${{ steps.properties.outputs.minecraft_version }}-${{ steps.properties.outputs.mod_version }}-neoforge
           changelog: ${{ inputs.changelog }}
           version-type: ${{ inputs.version-type }}
+          game-versions: ${{ steps.properties.outputs.minecraft_version_range }}
           loaders: neoforge
 
       - name: Upload artifacts to Modrinth/CurseForge and GitHub for Fabric & Quilt
@@ -98,8 +97,9 @@ jobs:
           modrinth-id: qyulnpBL
           curseforge-id: 657742
           modrinth-featured: false
-          name: ${{ inputs.name }} for Fabric
-          version: ${{ inputs.version }}-fabric
+          name: ${{ steps.properties.outputs.mod_version }} for Fabric
+          version: mc${{ steps.properties.outputs.minecraft_version }}-${{ steps.properties.outputs.mod_version }}-fabric
           changelog: ${{ inputs.changelog }}
           version-type: ${{ inputs.version-type }}
+          game-versions: ${{ steps.properties.outputs.minecraft_version_range }}
           loaders: fabric quilt
