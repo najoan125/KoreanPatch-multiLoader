@@ -135,7 +135,7 @@ def createVersionString() {
         builder.append("-snapshot")
     }
 
-    builder.append("-mc").append(minecraft_version)
+    builder.append("+mc").append(minecraft_version)
 
     if (!isReleaseBuild) {
         if (buildId) {
