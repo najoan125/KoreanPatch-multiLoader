@@ -18,7 +18,8 @@ public class EventListener {
         KoreanPatchClient.clientStarted();
 
         String[] patchedScreens = {
-                "arm32x.minecraft.commandblockide.client.gui.screen.CommandIDEScreen"
+                "arm32x.minecraft.commandblockide.client.gui.screen.CommandIDEScreen",
+                "net.minecraft.client.gui.screens.options.controls.KeyBindsScreen"
         };
         patchedScreenClazz = getExistingClasses(patchedScreens);
     }
