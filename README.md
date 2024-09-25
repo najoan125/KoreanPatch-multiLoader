@@ -8,7 +8,8 @@ Korean Patch는 마인크래프트에서 한글 채팅을 더 원활하게 사�
 
 ## 다운로드
 
-- [Korean Chat Patch 다운로드 (Modrinth)](https://modrinth.com/mod/korean-chat-patch)
+- [Modrinth에서 다운로드](https://modrinth.com/mod/korean-chat-patch)
+- [CurseForge에서 다운로드](https://www.curseforge.com/minecraft/mc-mods/korean-patch-fabric)
 
 ## 플랫폼별 한/영 변환 방법
 
