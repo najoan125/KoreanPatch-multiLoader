@@ -8,6 +8,10 @@ repositories {
 		name = "Terraformers"
 		url = "https://maven.terraformersmc.com/"
 	}
+    maven {
+        url "https://maven.nucleoid.xyz/"
+        name "Nucleoid"
+    }
 
 	exclusiveContent {
 		forRepository {
