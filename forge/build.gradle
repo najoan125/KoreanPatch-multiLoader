@@ -80,6 +80,14 @@ publishing {
     }
 }
 
+jar {
+    manifest {
+        attributes([
+                "MixinConfigs": "${mod_id}.forge.mixins.json,${mod_id}.mixins.json"
+        ])
+    }
+}
+
 sourceSets.each {
     def dir = layout.buildDirectory.dir("sourcesSets/$it.name")
     it.output.resourcesDir = dir
