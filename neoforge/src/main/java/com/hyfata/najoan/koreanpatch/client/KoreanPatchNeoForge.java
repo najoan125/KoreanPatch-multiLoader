@@ -1,5 +1,6 @@
 package com.hyfata.najoan.koreanpatch.client;
 
+import net.minecraft.client.KeyMapping;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModContainer;
@@ -28,8 +29,9 @@ public class KoreanPatchNeoForge {
 
     @SubscribeEvent
     public void registerKeys(RegisterKeyMappingsEvent event) {
-        event.register(KeyBinds.getImeBinding());
-        event.register(KeyBinds.getLangBinding());
+        for (KeyMapping key : KeyBinds.getKeyMappings()) {
+            event.register(key);
+        }
 	}
 
     @SubscribeEvent
