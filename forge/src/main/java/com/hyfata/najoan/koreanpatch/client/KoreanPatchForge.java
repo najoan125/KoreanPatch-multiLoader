@@ -7,8 +7,6 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.ModContainer;
-import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 
@@ -17,19 +15,14 @@ public class KoreanPatchForge {
 
     public KoreanPatchForge() {
         IEventBus bus = Mod.EventBusSubscriber.Bus.MOD.bus().get();
-        ModContainer container = ModLoadingContext.get().getActiveContainer();
-        init(bus, container);
+        new KoreanPatchForge(bus);
     }
 
-    private KoreanPatchForge(IEventBus bus, ModContainer container) {
+    private KoreanPatchForge(IEventBus bus) {
         KoreanPatchClient.init();
         bus.addListener(this::registerKeys);
 
         registerEvents(bus);
-    }
-
-    private void init(IEventBus bus, ModContainer container) {
-        new KoreanPatchForge(bus, container);
     }
 
     public static void registerEvents(IEventBus bus) {
@@ -57,8 +50,6 @@ public class KoreanPatchForge {
 
     @SubscribeEvent
     public static void onClientTick(TickEvent.ClientTickEvent event) {
-        if (event.phase == TickEvent.Phase.END) {
-            EventListener.onClientTick();
-        }
+        EventListener.onClientTick();
     }
 }
