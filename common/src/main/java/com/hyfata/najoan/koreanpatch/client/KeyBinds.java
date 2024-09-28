@@ -1,13 +1,14 @@
 package com.hyfata.najoan.koreanpatch.client;
 
-import com.hyfata.najoan.koreanpatch.util.minecraft.KeyMappingUtil;
 import com.mojang.blaze3d.platform.InputConstants;
 import com.sun.jna.Platform;
 import net.minecraft.client.KeyMapping;
 import org.lwjgl.glfw.GLFW;
 
+import java.util.ArrayList;
+
 public class KeyBinds {
-    private static KeyMapping langBinding, imeBinding;
+    private static final ArrayList<KeyMapping> keyMappings = new ArrayList<>();
 
     public static void register() {
         int keycode;
@@ -17,14 +18,16 @@ public class KeyBinds {
             keycode = GLFW.GLFW_KEY_LEFT_CONTROL;
         }
 
-        langBinding = KeyMappingUtil.registerKeyMapping(new KeyMapping(
+        // 0: lang binding
+        keyMappings.add(new KeyMapping(
                 "key.koreanpatch.toggle_langtype",
                 InputConstants.Type.KEYSYM,
                 keycode,
                 "key.categories.koreanpatch"
         ));
 
-        imeBinding = KeyMappingUtil.registerKeyMapping(new KeyMapping(
+        // 1: ime binding
+        keyMappings.add(new KeyMapping(
                 "key.koreanpatch.toggle_ime",
                 InputConstants.Type.KEYSYM,
                 GLFW.GLFW_KEY_I,
@@ -32,11 +35,15 @@ public class KeyBinds {
         ));
     }
 
+    public static ArrayList<KeyMapping> getKeyMappings() {
+        return keyMappings;
+    }
+
     public static KeyMapping getLangBinding() {
-        return langBinding;
+        return keyMappings.getFirst();
     }
 
     public static KeyMapping getImeBinding() {
-        return imeBinding;
+        return keyMappings.get(1);
     }
 }
