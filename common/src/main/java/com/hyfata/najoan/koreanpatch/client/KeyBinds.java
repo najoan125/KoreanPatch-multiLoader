@@ -40,7 +40,7 @@ public class KeyBinds {
     }
 
     public static KeyMapping getLangBinding() {
-        return keyMappings.getFirst();
+        return keyMappings.get(0);
     }
 
     public static KeyMapping getImeBinding() {
