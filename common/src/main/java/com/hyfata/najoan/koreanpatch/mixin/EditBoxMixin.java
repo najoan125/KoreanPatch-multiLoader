@@ -1,9 +1,9 @@
 package com.hyfata.najoan.koreanpatch.mixin;
 
 import com.hyfata.najoan.koreanpatch.client.KoreanPatchClient;
+import com.hyfata.najoan.koreanpatch.mixin.accessor.EditBoxAccessor;
 import com.hyfata.najoan.koreanpatch.util.language.LanguageUtil;
-import com.hyfata.najoan.koreanpatch.handler.mixin.editbox.IEditBoxAccessor;
-import com.hyfata.najoan.koreanpatch.handler.mixin.editbox.EditBoxHandler;
+import com.hyfata.najoan.koreanpatch.handler.mixin.EditBoxHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.EditBox;
 import org.lwjgl.glfw.GLFW;
@@ -14,57 +14,16 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import java.util.function.Consumer;
-
 @Mixin(value = {EditBox.class})
-public abstract class EditBoxMixin implements IEditBoxAccessor {
-    @Shadow
-    private Consumer<String> responder;
-    @Unique
-    private final Minecraft koreanPatch$client = Minecraft.getInstance();
-
-    @Shadow
-    public abstract int getCursorPosition();
-
-    @Shadow
-    public abstract void moveCursorTo(int var1, boolean shift);
-
-    @Shadow
-    public abstract void deleteChars(int var1);
-
-    @Shadow
-    public abstract String getValue();
-
-    @Shadow
-    public abstract void insertText(String var1);
-
+public abstract class EditBoxMixin {
     @Shadow
     protected abstract boolean isEditable();
 
-    @Shadow
-    protected abstract void onValueChange(String var1);
-
-    @Shadow
-    public abstract void setValue(String var1);
-
-    @Shadow
-    public abstract boolean canConsumeInput();
-
-    @Shadow
-    public abstract String getHighlighted();
-
-    @Override
-    public Consumer<String> koreanPatch$getChangedListener() {
-        return this.responder;
-    }
-
-    @Override
-    public void koreanPatch$changed(String var1) {
-        onValueChange(var1);
-    }
+    @Unique
+    private final Minecraft koreanPatch$client = Minecraft.getInstance();
 
     @Unique
-    private final EditBoxHandler koreanPatch$handler = new EditBoxHandler(this);
+    private final EditBoxHandler koreanPatch$handler = new EditBoxHandler((EditBoxAccessor) this);
 
     @Inject(at = {@At(value = "HEAD")}, method = {"charTyped(CI)Z"}, cancellable = true)
     public void charTyped(char chr, int modifiers, CallbackInfoReturnable<Boolean> cir) {

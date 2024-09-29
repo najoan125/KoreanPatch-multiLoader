@@ -1,17 +1,11 @@
 package com.hyfata.najoan.koreanpatch.mixin;
 
-import java.util.function.Consumer;
-import java.util.function.Predicate;
-import java.util.function.Supplier;
-
 import com.hyfata.najoan.koreanpatch.client.KoreanPatchClient;
-import com.hyfata.najoan.koreanpatch.handler.mixin.textfieldhelper.ITextFieldHelperAccessor;
-import com.hyfata.najoan.koreanpatch.handler.mixin.textfieldhelper.TextFieldHelperHandler;
+import com.hyfata.najoan.koreanpatch.handler.mixin.TextFieldHelperHandler;
+import com.hyfata.najoan.koreanpatch.mixin.accessor.TextFieldHelperAccessor;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.font.TextFieldHelper;
-import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -19,57 +13,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(value = {TextFieldHelper.class})
-public abstract class TextFieldHelperMixin implements ITextFieldHelperAccessor {
-    @Shadow
-    private int selectionPos;
-    @Shadow
-    @Final
-    private Supplier<String> getMessageFn;
-    @Shadow
-    @Final
-    private Predicate<String> stringValidator;
-    @Shadow
-    @Final
-    private Consumer<String> setMessageFn;
-
-    @Shadow
-    protected abstract String getSelected(String string);
-
-    @Shadow
-    protected abstract void insertText(String string, String insertion);
-
+public abstract class TextFieldHelperMixin {
     @Unique
-    private final TextFieldHelperHandler koreanPatch$handler = new TextFieldHelperHandler(this);
-
-    @Override
-    public int koreanPatch$getCursor() {
-        return this.selectionPos;
-    }
-
-    @Override
-    public Supplier<String> koreanPatch$getStringGetter() {
-        return this.getMessageFn;
-    }
-
-    @Override
-    public Predicate<String> koreanPatch$getStringFilter() {
-        return this.stringValidator;
-    }
-
-    @Override
-    public Consumer<String> koreanPatch$getStringSetter() {
-        return this.setMessageFn;
-    }
-
-    @Override
-    public String koreanPatch$selectedText(String string) {
-        return getSelected(string);
-    }
-
-    @Override
-    public void koreanPatch$runInsert(String string, String insertion) {
-        insertText(string, insertion);
-    }
+    private final TextFieldHelperHandler koreanPatch$handler = new TextFieldHelperHandler((TextFieldHelperAccessor) this);
 
     @Inject(at = {@At(value = "HEAD")}, method = {"charTyped(C)Z"}, cancellable = true)
     public void insertChar(char chr, CallbackInfoReturnable<Boolean> cir) {

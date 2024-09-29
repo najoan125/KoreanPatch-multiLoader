@@ -12,7 +12,7 @@ public class EditBoxUtil {
     public static float getCursorX(EditBox textField) {
         EditBoxAccessor accessor = (EditBoxAccessor) textField;
         int firstCharacterIndex = accessor.getDisplayPos();
-        int selectionStart = accessor.getCursorPos();
+        int selectionStart = accessor.invokeGetCursorPosition();
 
         float cursorX = textField.getX() + client.font.getSplitter().stringWidth(textField.getValue().substring(firstCharacterIndex, selectionStart));
         float endX = textField.getX() + textField.getWidth() - 1.2f * Indicator.getIndicatorWidth();

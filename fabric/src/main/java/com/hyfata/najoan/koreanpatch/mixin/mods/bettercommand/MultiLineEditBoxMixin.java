@@ -2,9 +2,9 @@ package com.hyfata.najoan.koreanpatch.mixin.mods.bettercommand;
 
 import bettercommandblockui.main.ui.MultiLineTextFieldWidget;
 import com.hyfata.najoan.koreanpatch.client.KoreanPatchClient;
+import com.hyfata.najoan.koreanpatch.mixin.accessor.EditBoxAccessor;
 import com.hyfata.najoan.koreanpatch.util.language.LanguageUtil;
-import com.hyfata.najoan.koreanpatch.handler.mixin.editbox.IEditBoxAccessor;
-import com.hyfata.najoan.koreanpatch.handler.mixin.editbox.EditBoxHandler;
+import com.hyfata.najoan.koreanpatch.handler.mixin.EditBoxHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.components.EditBox;
@@ -17,13 +17,13 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(MultiLineTextFieldWidget.class)
-public abstract class MultiLineEditBoxMixin extends EditBox implements IEditBoxAccessor {
+public abstract class MultiLineEditBoxMixin extends EditBox {
     public MultiLineEditBoxMixin(Font textRenderer, int width, int height, Component text) {
         super(textRenderer, width, height, text);
     }
 
     @Unique
-    private final EditBoxHandler handler = new EditBoxHandler(this);
+    private final EditBoxHandler handler = new EditBoxHandler((EditBoxAccessor) this);
 
     @Inject(method = "charTyped", at = @At("HEAD"), cancellable = true)
     private void charTyped(char chr, int modifiers, CallbackInfoReturnable<Boolean> cir) {
