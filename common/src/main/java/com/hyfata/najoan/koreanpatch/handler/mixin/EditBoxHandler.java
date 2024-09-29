@@ -21,19 +21,19 @@ public class EditBoxHandler implements IMixinCommon {
 
     @Override
     public int getCursor() {
-        return accessor.getCursorPos();
+        return accessor.invokeGetCursorPosition();
     }
 
     public void writeText(String str) {
         accessor.invokeInsertText(str);
         sendTextChanged(str);
-        accessor.invokeChanged(accessor.getValue());
+        accessor.invokeChanged(accessor.invokeGetValue());
         updateScreen();
     }
 
     private void sendTextChanged(String str) {
-        if (accessor.getChangedListener() != null) {
-            accessor.getChangedListener().accept(str);
+        if (accessor.getResponder() != null) {
+            accessor.getResponder().accept(str);
         }
     }
 
@@ -41,13 +41,13 @@ public class EditBoxHandler implements IMixinCommon {
         if (this.client.screen == null) {
             return;
         }
-        if (this.client.screen instanceof CreativeModeInventoryScreen && !accessor.getValue().isEmpty()) {
+        if (this.client.screen instanceof CreativeModeInventoryScreen && !accessor.invokeGetValue().isEmpty()) {
             ((CreativeModeInventoryScreenInvoker) this.client.screen).updateCreativeSearch();
         }
     }
 
     public void modifyText(char ch) {
-        int cursorPosition = accessor.getCursorPos();
+        int cursorPosition = accessor.invokeGetCursorPosition();
         accessor.invokeMoveCursorTo(cursorPosition - 1, false);
         accessor.invokeDeleteChars(1);
         this.writeText(String.valueOf(Character.toChars(ch)));
@@ -59,12 +59,12 @@ public class EditBoxHandler implements IMixinCommon {
             return false;
         }
 
-        int cursorPosition = accessor.getCursorPos();
-        return MixinCommonHandler.onBackspaceKeyPressed(this, cursorPosition, accessor.getValue());
+        int cursorPosition = accessor.invokeGetCursorPosition();
+        return MixinCommonHandler.onBackspaceKeyPressed(this, cursorPosition, accessor.invokeGetValue());
     }
 
     public boolean onHangulCharTyped(int keyCode, int modifiers) {
-        return MixinCommonHandler.onHangulCharTyped(this, keyCode, modifiers, accessor.getValue(), accessor.invokeGetHighlighted().isEmpty());
+        return MixinCommonHandler.onHangulCharTyped(this, keyCode, modifiers, accessor.invokeGetValue(), accessor.invokeGetHighlighted().isEmpty());
     }
 
     public void typedTextField(char chr, int modifiers, CallbackInfoReturnable<Boolean> cir) {

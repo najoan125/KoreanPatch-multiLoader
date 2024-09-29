@@ -13,13 +13,13 @@ public interface EditBoxAccessor {
     int getDisplayPos();
 
     @Accessor
-    int getCursorPos();
+    Consumer<String> getResponder();
 
-    @Accessor
-    String getValue();
+    @Invoker("getCursorPosition")
+    int invokeGetCursorPosition();
 
-    @Accessor("responder")
-    Consumer<String> getChangedListener();
+    @Invoker("getValue")
+    String invokeGetValue();
 
     @Invoker("moveCursorTo")
     void invokeMoveCursorTo(int pDelta, boolean pSelect);
