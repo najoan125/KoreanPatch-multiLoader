@@ -1,38 +1,39 @@
-package com.hyfata.najoan.koreanpatch.handler.mixin.editbox;
+package com.hyfata.najoan.koreanpatch.handler.mixin;
 
-import com.hyfata.najoan.koreanpatch.handler.mixin.MixinCommonHandler;
+import com.hyfata.najoan.koreanpatch.handler.mixin.common.IMixinCommon;
+import com.hyfata.najoan.koreanpatch.handler.mixin.common.MixinCommonHandler;
+import com.hyfata.najoan.koreanpatch.mixin.accessor.EditBoxAccessor;
 import com.hyfata.najoan.koreanpatch.util.keyboard.KeyboardLayout;
 import com.hyfata.najoan.koreanpatch.mixin.accessor.CreativeModeInventoryScreenInvoker;
 import com.hyfata.najoan.koreanpatch.util.language.HangulProcessor;
 import com.hyfata.najoan.koreanpatch.util.language.HangulUtil;
-import com.hyfata.najoan.koreanpatch.handler.mixin.IMixinCommon;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.inventory.CreativeModeInventoryScreen;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 public class EditBoxHandler implements IMixinCommon {
-    private final IEditBoxAccessor accessor;
+    private final EditBoxAccessor accessor;
     private final Minecraft client = Minecraft.getInstance();
 
-    public EditBoxHandler(IEditBoxAccessor accessor) {
+    public EditBoxHandler(EditBoxAccessor accessor) {
         this.accessor = accessor;
     }
 
     @Override
     public int getCursor() {
-        return accessor.getCursorPosition();
+        return accessor.invokeGetCursorPosition();
     }
 
     public void writeText(String str) {
-        accessor.insertText(str);
+        accessor.invokeInsertText(str);
         sendTextChanged(str);
-        accessor.koreanPatch$changed(accessor.getValue());
+        accessor.invokeChanged(accessor.invokeGetValue());
         updateScreen();
     }
 
     private void sendTextChanged(String str) {
-        if (accessor.koreanPatch$getChangedListener() != null) {
-            accessor.koreanPatch$getChangedListener().accept(str);
+        if (accessor.getResponder() != null) {
+            accessor.getResponder().accept(str);
         }
     }
 
@@ -40,30 +41,30 @@ public class EditBoxHandler implements IMixinCommon {
         if (this.client.screen == null) {
             return;
         }
-        if (this.client.screen instanceof CreativeModeInventoryScreen && !accessor.getValue().isEmpty()) {
+        if (this.client.screen instanceof CreativeModeInventoryScreen && !accessor.invokeGetValue().isEmpty()) {
             ((CreativeModeInventoryScreenInvoker) this.client.screen).updateCreativeSearch();
         }
     }
 
     public void modifyText(char ch) {
-        int cursorPosition = accessor.getCursorPosition();
-        accessor.moveCursorTo(cursorPosition - 1, false);
-        accessor.deleteChars(1);
+        int cursorPosition = accessor.invokeGetCursorPosition();
+        accessor.invokeMoveCursorTo(cursorPosition - 1, false);
+        accessor.invokeDeleteChars(1);
         this.writeText(String.valueOf(Character.toChars(ch)));
     }
 
 
     public boolean onBackspaceKeyPressed() {
-        if (!accessor.getHighlighted().isEmpty()) {
+        if (!accessor.invokeGetHighlighted().isEmpty()) {
             return false;
         }
 
-        int cursorPosition = accessor.getCursorPosition();
-        return MixinCommonHandler.onBackspaceKeyPressed(this, cursorPosition, accessor.getValue());
+        int cursorPosition = accessor.invokeGetCursorPosition();
+        return MixinCommonHandler.onBackspaceKeyPressed(this, cursorPosition, accessor.invokeGetValue());
     }
 
     public boolean onHangulCharTyped(int keyCode, int modifiers) {
-        return MixinCommonHandler.onHangulCharTyped(this, keyCode, modifiers, accessor.getValue(), accessor.getHighlighted().isEmpty());
+        return MixinCommonHandler.onHangulCharTyped(this, keyCode, modifiers, accessor.invokeGetValue(), accessor.invokeGetHighlighted().isEmpty());
     }
 
     public void typedTextField(char chr, int modifiers, CallbackInfoReturnable<Boolean> cir) {
@@ -73,7 +74,7 @@ public class EditBoxHandler implements IMixinCommon {
             return;
         }
 
-        if (accessor.canConsumeInput()) {
+        if (accessor.invokeCanConsumeInput()) {
             cir.setReturnValue(Boolean.TRUE);
         } else {
             cir.setReturnValue(Boolean.FALSE);
