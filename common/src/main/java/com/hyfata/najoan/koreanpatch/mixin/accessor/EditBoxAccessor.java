@@ -9,39 +9,33 @@ import java.util.function.Consumer;
 
 @Mixin(EditBox.class)
 public interface EditBoxAccessor {
-    @Accessor("displayPos")
+    @Accessor
     int getDisplayPos();
 
-    @Accessor("cursorPos")
+    @Accessor
     int getCursorPos();
+
+    @Accessor
+    String getValue();
 
     @Accessor("responder")
     Consumer<String> getChangedListener();
 
-    @Invoker("getCursorPosition")
-    int getCursorPosition();
-
     @Invoker("moveCursorTo")
-    void moveCursorTo(int var1, boolean shift);
+    void invokeMoveCursorTo(int pDelta, boolean pSelect);
 
     @Invoker("deleteChars")
-    void deleteChars(int var1);
-
-    @Invoker("getValue")
-    String getValue();
+    void invokeDeleteChars(int var1);
 
     @Invoker("insertText")
-    void insertText(String var1);
+    void invokeInsertText(String var1);
 
     @Invoker("onValueChange")
-    void changed(String var1);
-
-    @Invoker("setValue")
-    void setValue(String var1);
+    void invokeChanged(String var1);
 
     @Invoker("canConsumeInput")
-    boolean canConsumeInput();
+    boolean invokeCanConsumeInput();
 
     @Invoker("getHighlighted")
-    String getHighlighted();
+    String invokeGetHighlighted();
 }

@@ -21,13 +21,13 @@ public class EditBoxHandler implements IMixinCommon {
 
     @Override
     public int getCursor() {
-        return accessor.getCursorPosition();
+        return accessor.getCursorPos();
     }
 
     public void writeText(String str) {
-        accessor.insertText(str);
+        accessor.invokeInsertText(str);
         sendTextChanged(str);
-        accessor.changed(accessor.getValue());
+        accessor.invokeChanged(accessor.getValue());
         updateScreen();
     }
 
@@ -47,24 +47,24 @@ public class EditBoxHandler implements IMixinCommon {
     }
 
     public void modifyText(char ch) {
-        int cursorPosition = accessor.getCursorPosition();
-        accessor.moveCursorTo(cursorPosition - 1, false);
-        accessor.deleteChars(1);
+        int cursorPosition = accessor.getCursorPos();
+        accessor.invokeMoveCursorTo(cursorPosition - 1, false);
+        accessor.invokeDeleteChars(1);
         this.writeText(String.valueOf(Character.toChars(ch)));
     }
 
 
     public boolean onBackspaceKeyPressed() {
-        if (!accessor.getHighlighted().isEmpty()) {
+        if (!accessor.invokeGetHighlighted().isEmpty()) {
             return false;
         }
 
-        int cursorPosition = accessor.getCursorPosition();
+        int cursorPosition = accessor.getCursorPos();
         return MixinCommonHandler.onBackspaceKeyPressed(this, cursorPosition, accessor.getValue());
     }
 
     public boolean onHangulCharTyped(int keyCode, int modifiers) {
-        return MixinCommonHandler.onHangulCharTyped(this, keyCode, modifiers, accessor.getValue(), accessor.getHighlighted().isEmpty());
+        return MixinCommonHandler.onHangulCharTyped(this, keyCode, modifiers, accessor.getValue(), accessor.invokeGetHighlighted().isEmpty());
     }
 
     public void typedTextField(char chr, int modifiers, CallbackInfoReturnable<Boolean> cir) {
@@ -74,7 +74,7 @@ public class EditBoxHandler implements IMixinCommon {
             return;
         }
 
-        if (accessor.canConsumeInput()) {
+        if (accessor.invokeCanConsumeInput()) {
             cir.setReturnValue(Boolean.TRUE);
         } else {
             cir.setReturnValue(Boolean.FALSE);
