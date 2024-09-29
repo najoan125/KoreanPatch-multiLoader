@@ -1,7 +1,8 @@
-package com.hyfata.najoan.koreanpatch.handler.mixin.textfieldhelper;
+package com.hyfata.najoan.koreanpatch.handler.mixin;
 
-import com.hyfata.najoan.koreanpatch.handler.mixin.IMixinCommon;
-import com.hyfata.najoan.koreanpatch.handler.mixin.MixinCommonHandler;
+import com.hyfata.najoan.koreanpatch.handler.mixin.common.IMixinCommon;
+import com.hyfata.najoan.koreanpatch.handler.mixin.common.MixinCommonHandler;
+import com.hyfata.najoan.koreanpatch.mixin.accessor.TextFieldHelperAccessor;
 import com.hyfata.najoan.koreanpatch.util.keyboard.KeyboardLayout;
 import com.hyfata.najoan.koreanpatch.util.language.HangulProcessor;
 import com.hyfata.najoan.koreanpatch.util.language.HangulUtil;
@@ -15,16 +16,16 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import java.util.Objects;
 
 public class TextFieldHelperHandler implements IMixinCommon {
-    private final ITextFieldHelperAccessor accessor;
+    private final TextFieldHelperAccessor accessor;
     private final Minecraft client = Minecraft.getInstance();
 
-    public TextFieldHelperHandler(ITextFieldHelperAccessor accessor) {
+    public TextFieldHelperHandler(TextFieldHelperAccessor accessor) {
         this.accessor = accessor;
     }
 
     @Override
     public void modifyText(char ch) {
-        int cursorPosition = accessor.koreanPatch$getCursor();
+        int cursorPosition = accessor.getCursor();
         char[] arr = this.getText().toCharArray();
         if (cursorPosition > 0 && cursorPosition <= arr.length) {
             arr[cursorPosition - 1] = ch;
@@ -34,12 +35,12 @@ public class TextFieldHelperHandler implements IMixinCommon {
 
     @Override
     public int getCursor() {
-        return accessor.koreanPatch$getCursor();
+        return accessor.getCursor();
     }
 
     @Override
     public void writeText(String str) {
-        accessor.koreanPatch$runInsert(this.getText(), str);
+        accessor.runInsert(this.getText(), str);
     }
 
     public boolean onBackspaceKeyPressed() {
@@ -56,17 +57,17 @@ public class TextFieldHelperHandler implements IMixinCommon {
     }
 
     public String getText() {
-        return accessor.koreanPatch$getStringGetter().get();
+        return accessor.getStringGetter().get();
     }
 
     public void setText(String str) {
-        if (accessor.koreanPatch$getStringFilter().test(str)) {
-            accessor.koreanPatch$getStringSetter().accept(str);
+        if (accessor.getStringFilter().test(str)) {
+            accessor.getStringSetter().accept(str);
         }
     }
 
     public boolean onHangulCharTyped(int keyCode, int modifiers) {
-        return MixinCommonHandler.onHangulCharTyped(this, keyCode, modifiers, this.getText(), accessor.koreanPatch$selectedText(accessor.koreanPatch$getStringGetter().get()).isEmpty());
+        return MixinCommonHandler.onHangulCharTyped(this, keyCode, modifiers, this.getText(), accessor.selectedText(accessor.getStringGetter().get()).isEmpty());
     }
 
     public void insertChar(char chr, CallbackInfoReturnable<Boolean> cir) {

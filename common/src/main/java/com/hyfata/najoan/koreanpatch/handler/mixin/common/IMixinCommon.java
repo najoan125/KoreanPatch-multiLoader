@@ -1,4 +1,4 @@
-package com.hyfata.najoan.koreanpatch.handler.mixin;
+package com.hyfata.najoan.koreanpatch.handler.mixin.common;
 
 public interface IMixinCommon {
     void modifyText(char ch);

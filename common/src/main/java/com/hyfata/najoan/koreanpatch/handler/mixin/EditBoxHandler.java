@@ -1,20 +1,21 @@
-package com.hyfata.najoan.koreanpatch.handler.mixin.editbox;
+package com.hyfata.najoan.koreanpatch.handler.mixin;
 
-import com.hyfata.najoan.koreanpatch.handler.mixin.MixinCommonHandler;
+import com.hyfata.najoan.koreanpatch.handler.mixin.common.IMixinCommon;
+import com.hyfata.najoan.koreanpatch.handler.mixin.common.MixinCommonHandler;
+import com.hyfata.najoan.koreanpatch.mixin.accessor.EditBoxAccessor;
 import com.hyfata.najoan.koreanpatch.util.keyboard.KeyboardLayout;
 import com.hyfata.najoan.koreanpatch.mixin.accessor.CreativeModeInventoryScreenInvoker;
 import com.hyfata.najoan.koreanpatch.util.language.HangulProcessor;
 import com.hyfata.najoan.koreanpatch.util.language.HangulUtil;
-import com.hyfata.najoan.koreanpatch.handler.mixin.IMixinCommon;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.inventory.CreativeModeInventoryScreen;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 public class EditBoxHandler implements IMixinCommon {
-    private final IEditBoxAccessor accessor;
+    private final EditBoxAccessor accessor;
     private final Minecraft client = Minecraft.getInstance();
 
-    public EditBoxHandler(IEditBoxAccessor accessor) {
+    public EditBoxHandler(EditBoxAccessor accessor) {
         this.accessor = accessor;
     }
 
@@ -26,13 +27,13 @@ public class EditBoxHandler implements IMixinCommon {
     public void writeText(String str) {
         accessor.insertText(str);
         sendTextChanged(str);
-        accessor.koreanPatch$changed(accessor.getValue());
+        accessor.changed(accessor.getValue());
         updateScreen();
     }
 
     private void sendTextChanged(String str) {
-        if (accessor.koreanPatch$getChangedListener() != null) {
-            accessor.koreanPatch$getChangedListener().accept(str);
+        if (accessor.getChangedListener() != null) {
+            accessor.getChangedListener().accept(str);
         }
     }
 
