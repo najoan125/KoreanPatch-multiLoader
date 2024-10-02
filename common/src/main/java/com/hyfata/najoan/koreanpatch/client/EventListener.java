@@ -19,7 +19,7 @@ public class EventListener {
 
         String[] patchedScreens = {
                 "arm32x.minecraft.commandblockide.client.gui.screen.CommandIDEScreen",
-                "net.minecraft.client.gui.screens.options.controls.KeyBindsScreen"
+                "net.minecraft.client.gui.screens.controls.KeyBindsScreen"
         };
         patchedScreenClazz = getExistingClasses(patchedScreens);
     }
