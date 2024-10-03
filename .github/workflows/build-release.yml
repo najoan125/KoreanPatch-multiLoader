@@ -69,22 +69,6 @@ jobs:
           game-versions: ${{ steps.properties.outputs.minecraft_version_range }}
           loaders: forge
 
-      - name: Upload artifacts to Modrinth/CurseForge for NeoForge
-        uses: Kir-Antipov/mc-publish@v3.3
-        with:
-          modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
-          curseforge-token: ${{ secrets.CURSEFORGE_TOKEN }}
-          files: neoforge/build/libs/!(*-@(dev|sources|all|javadoc)).jar
-          modrinth-id: qyulnpBL
-          curseforge-id: 657742
-          modrinth-featured: false
-          name: ${{ steps.properties.outputs.mod_version }} for NeoForge
-          version: mc${{ steps.properties.outputs.minecraft_version }}-${{ steps.properties.outputs.mod_version }}-neoforge
-          changelog: ${{ inputs.changelog }}
-          version-type: ${{ inputs.version-type }}
-          game-versions: ${{ steps.properties.outputs.minecraft_version_range }}
-          loaders: neoforge
-
       - name: Upload artifacts to Modrinth/CurseForge for Fabric & Quilt
         uses: Kir-Antipov/mc-publish@v3.3
         with:
@@ -98,5 +82,5 @@ jobs:
           version: mc${{ steps.properties.outputs.minecraft_version }}-${{ steps.properties.outputs.mod_version }}-fabric
           changelog: ${{ inputs.changelog }}
           version-type: ${{ inputs.version-type }}
-          game-versions: ${{ steps.properties.outputs.minecraft_version_range }}
+          game-versions: ${{ steps.properties.outputs.fabric_version_range }}
           loaders: fabric quilt
