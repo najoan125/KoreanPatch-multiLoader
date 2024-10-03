@@ -22,7 +22,7 @@ public interface EditBoxAccessor {
     String invokeGetValue();
 
     @Invoker("moveCursorTo")
-    void invokeMoveCursorTo(int pDelta, boolean pSelect);
+    void invokeMoveCursorTo(int pDelta);
 
     @Invoker("deleteChars")
     void invokeDeleteChars(int var1);

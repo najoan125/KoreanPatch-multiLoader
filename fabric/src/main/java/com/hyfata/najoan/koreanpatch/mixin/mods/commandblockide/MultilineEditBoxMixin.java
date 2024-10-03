@@ -17,8 +17,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(MultilineTextFieldWidget.class)
 public abstract class MultilineEditBoxMixin extends EditBox {
-    public MultilineEditBoxMixin(Font textRenderer, int width, int height, Component text) {
-        super(textRenderer, width, height, text);
+    public MultilineEditBoxMixin(Font font, int x, int y, int width, int height, Component message) {
+        super(font, x, y, width, height, message);
     }
 
     @Unique

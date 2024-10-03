@@ -17,18 +17,6 @@ pluginManagement {
         exclusiveContent {
             forRepository {
                 maven {
-                    name = 'NeoForge'
-                    url = uri("https://maven.neoforged.net/releases")
-                }
-            }
-            filter {
-                includeGroupAndSubgroups("net.neoforged")
-                includeGroup("codechicken")
-            }
-        }
-        exclusiveContent {
-            forRepository {
-                maven {
                     name = 'Sponge'
                     url = uri('https://repo.spongepowered.org/repository/maven-public')
                 }
@@ -70,5 +58,4 @@ plugins {
 rootProject.name = 'KoreanPatch-multiLoader'
 include('common')
 include('fabric')
-include('neoforge')
 include('forge')

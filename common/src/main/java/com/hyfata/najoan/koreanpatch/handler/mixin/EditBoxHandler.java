@@ -48,7 +48,7 @@ public class EditBoxHandler implements IMixinCommon {
 
     public void modifyText(char ch) {
         int cursorPosition = accessor.invokeGetCursorPosition();
-        accessor.invokeMoveCursorTo(cursorPosition - 1, false);
+        accessor.invokeMoveCursorTo(cursorPosition - 1);
         accessor.invokeDeleteChars(1);
         this.writeText(String.valueOf(Character.toChars(ch)));
     }
