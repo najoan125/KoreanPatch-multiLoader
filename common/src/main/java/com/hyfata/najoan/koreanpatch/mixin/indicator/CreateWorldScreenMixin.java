@@ -1,15 +1,11 @@
 package com.hyfata.najoan.koreanpatch.mixin.indicator;
 
 import com.hyfata.najoan.koreanpatch.client.KoreanPatchClient;
-import com.hyfata.najoan.koreanpatch.mixin.accessor.CreateWorldScreenGameTabAccessor;
-import com.hyfata.najoan.koreanpatch.mixin.accessor.TabNavigationBarAccessor;
 import com.hyfata.najoan.koreanpatch.util.minecraft.EditBoxUtil;
 import com.hyfata.najoan.koreanpatch.util.animation.AnimationUtil;
 import com.hyfata.najoan.koreanpatch.handler.Indicator;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.gui.components.EditBox;
-import net.minecraft.client.gui.components.tabs.Tab;
-import net.minecraft.client.gui.components.tabs.TabNavigationBar;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.worldselection.CreateWorldScreen;
 import net.minecraft.network.chat.Component;
@@ -27,24 +23,22 @@ public class CreateWorldScreenMixin extends Screen {
     }
 
     @Shadow
-    private TabNavigationBar tabNavigationBar;
+    private EditBox nameEdit;
+
+    @Shadow
+    private boolean worldGenSettingsVisible;
 
     @Unique
     AnimationUtil koreanPatch$animationUtil = new AnimationUtil();
 
     @Inject(at = {@At(value = "RETURN")}, method = {"render"})
     private void addCustomLabel(PoseStack context, int mouseX, int mouseY, float delta, CallbackInfo ci) {
-        TabNavigationBarAccessor tabInvoker = (TabNavigationBarAccessor) tabNavigationBar;
-        Tab currentTab = tabInvoker.getTabManager().getCurrentTab();
-
-        if (currentTab instanceof CreateWorldScreen.GameTab) {
+        if (!worldGenSettingsVisible) {
             KoreanPatchClient.bypassInjection = false;
-            CreateWorldScreenGameTabAccessor gameTabAccessor = (CreateWorldScreenGameTabAccessor) currentTab;
-            EditBox worldNameField = gameTabAccessor.getNameEdit();
             Component text = Component.translatable("selectWorld.enterName");
 
-            float x = EditBoxUtil.getCursorXWithText(worldNameField, text, worldNameField.getX()) + 4;
-            float y = EditBoxUtil.calculateIndicatorY(worldNameField);
+            float x = EditBoxUtil.getCursorXWithText(nameEdit, text, nameEdit.getX()) + 4;
+            float y = EditBoxUtil.calculateIndicatorY(nameEdit);
 
             koreanPatch$animationUtil.init(x - 4, 0);
             koreanPatch$animationUtil.calculateAnimation(x, 0);
