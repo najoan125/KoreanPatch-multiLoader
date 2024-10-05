@@ -37,7 +37,7 @@ public class CreateWorldScreenMixin extends Screen {
             KoreanPatchClient.bypassInjection = false;
             Component text = Component.translatable("selectWorld.enterName");
 
-            float x = EditBoxUtil.getCursorXWithText(nameEdit, text, nameEdit.getX()) + 4;
+            float x = EditBoxUtil.getCursorXWithText(nameEdit, text, nameEdit.x) + 4;
             float y = EditBoxUtil.calculateIndicatorY(nameEdit);
 
             koreanPatch$animationUtil.init(x - 4, 0);

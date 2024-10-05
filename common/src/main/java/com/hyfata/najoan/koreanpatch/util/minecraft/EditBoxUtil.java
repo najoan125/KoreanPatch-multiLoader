@@ -14,14 +14,14 @@ public class EditBoxUtil {
         int firstCharacterIndex = accessor.getDisplayPos();
         int selectionStart = accessor.invokeGetCursorPosition();
 
-        float cursorX = textField.getX() + client.font.getSplitter().stringWidth(textField.getValue().substring(firstCharacterIndex, selectionStart));
-        float endX = textField.getX() + textField.getWidth() - 1.2f * Indicator.getIndicatorWidth();
+        float cursorX = textField.x + client.font.getSplitter().stringWidth(textField.getValue().substring(firstCharacterIndex, selectionStart));
+        float endX = textField.x + textField.getWidth() - 1.2f * Indicator.getIndicatorWidth();
 
         return Math.min(cursorX, endX);
     }
 
     public static float calculateIndicatorY(EditBox textField) {
-        return textField.getY() - Indicator.getIndicatorHeight() / 1.5f;
+        return textField.y - Indicator.getIndicatorHeight() / 1.5f;
     }
 
     public static float getCursorXWithText(EditBox textField, Component text, int x) {

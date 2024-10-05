@@ -8,7 +8,6 @@
   "client": [
     "mods.bettercommand.AbstractBetterCommandBlockScreenMixin",
     "mods.bettercommand.MultiLineEditBoxMixin",
-    "mods.commandblockide.MultilineEditBoxMixin",
     "mods.commandblockide.indicator.CommandBlockEditorMixin",
     "mods.commandblockide.indicator.CommandEditorMixin",
     "mods.modmenu.ModMenuScreenMixin"

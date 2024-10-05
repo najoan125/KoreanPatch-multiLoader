@@ -17,8 +17,8 @@ public class AbstractBetterCommandBlockScreenMixin {
 
     @Inject(method = "render", at = @At("TAIL"))
     public void render(PoseStack context, int mouseX, int mouseY, float delta, CallbackInfo ci) {
-        int x = (int) (consoleCommandTextField.getX() - Indicator.getIndicatorWidth() - 10);
-        int y = consoleCommandTextField.getY();
+        int x = (int) (consoleCommandTextField.x - Indicator.getIndicatorWidth() - 10);
+        int y = consoleCommandTextField.y;
 
         Indicator.showIndicator(context, x, y);
     }

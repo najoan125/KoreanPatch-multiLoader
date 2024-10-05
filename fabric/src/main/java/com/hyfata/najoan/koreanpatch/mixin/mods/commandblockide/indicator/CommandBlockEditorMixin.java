@@ -25,7 +25,7 @@ public abstract class CommandBlockEditorMixin extends CommandEditor {
 
     @Inject(method = "renderCommandField", at = @At("HEAD"))
     private void renderCommandField(PoseStack context, int mouseX, int mouseY, float delta, CallbackInfo ci) {
-        lastOutputField.setX(this.commandField.getX());
+        lastOutputField.setX(this.commandField.x);
         lastOutputField.setWidth(this.commandField.getWidth());
     }
 }

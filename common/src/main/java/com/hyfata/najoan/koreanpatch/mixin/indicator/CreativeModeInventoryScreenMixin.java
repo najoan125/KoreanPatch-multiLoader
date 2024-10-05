@@ -32,8 +32,8 @@ public class CreativeModeInventoryScreenMixin extends Screen {
     @Inject(method = {"render"}, at = @At(value = "TAIL", shift = At.Shift.BY, by = -3))
     private void addCustomLabel(PoseStack context, int mouseX, int mouseY, float delta, CallbackInfo ci) {
         if (koreanPatch$search) {
-            int x = searchBox.getX() + searchBox.getWidth() + koreanPatch$modifier;
-            int y = searchBox.getY() + searchBox.getHeight() / 2;
+            int x = searchBox.x + searchBox.getWidth() + koreanPatch$modifier;
+            int y = searchBox.y + searchBox.getHeight() / 2;
 
             Indicator.showCenteredIndicator(context, x, y);
         }
@@ -41,7 +41,7 @@ public class CreativeModeInventoryScreenMixin extends Screen {
 
     @Inject(at = {@At(value = "HEAD")}, method = {"selectTab"})
     private void check(CreativeModeTab group, CallbackInfo callbackInfo) {
-        koreanPatch$search = group.getType() == CreativeModeTab.Type.SEARCH;
+        koreanPatch$search = group == CreativeModeTab.TAB_SEARCH;
         if (!Services.PLATFORM.getPlatformName().equals("Fabric")) {
             koreanPatch$modifier = 10;
         }
