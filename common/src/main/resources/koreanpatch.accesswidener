@@ -1,5 +1,4 @@
 accessWidener v1 named
 accessible class net/minecraft/client/gui/screens/inventory/BookEditScreen$DisplayCache
 accessible class net/minecraft/client/gui/screens/inventory/BookEditScreen$Pos2i
-accessible class net/minecraft/client/gui/screens/worldselection/CreateWorldScreen$GameTab
 accessible method net/minecraft/client/gui/components/EditBox isEditable ()Z
