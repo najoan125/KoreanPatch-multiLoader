@@ -6,7 +6,7 @@ import com.hyfata.najoan.koreanpatch.mixin.accessor.TabNavigationBarAccessor;
 import com.hyfata.najoan.koreanpatch.util.minecraft.EditBoxUtil;
 import com.hyfata.najoan.koreanpatch.util.animation.AnimationUtil;
 import com.hyfata.najoan.koreanpatch.handler.Indicator;
-import net.minecraft.client.gui.GuiGraphics;
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.components.tabs.Tab;
 import net.minecraft.client.gui.components.tabs.TabNavigationBar;
@@ -33,7 +33,7 @@ public class CreateWorldScreenMixin extends Screen {
     AnimationUtil koreanPatch$animationUtil = new AnimationUtil();
 
     @Inject(at = {@At(value = "RETURN")}, method = {"render"})
-    private void addCustomLabel(GuiGraphics context, int mouseX, int mouseY, float delta, CallbackInfo ci) {
+    private void addCustomLabel(PoseStack context, int mouseX, int mouseY, float delta, CallbackInfo ci) {
         TabNavigationBarAccessor tabInvoker = (TabNavigationBarAccessor) tabNavigationBar;
         Tab currentTab = tabInvoker.getTabManager().getCurrentTab();
 

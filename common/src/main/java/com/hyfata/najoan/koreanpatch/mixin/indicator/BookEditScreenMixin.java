@@ -3,7 +3,7 @@ package com.hyfata.najoan.koreanpatch.mixin.indicator;
 import com.hyfata.najoan.koreanpatch.mixin.accessor.BookEditScreenDisplayCacheAccessor;
 import com.hyfata.najoan.koreanpatch.util.animation.AnimationUtil;
 import com.hyfata.najoan.koreanpatch.handler.Indicator;
-import net.minecraft.client.gui.GuiGraphics;
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.BookEditScreen;
 import net.minecraft.network.chat.Component;
@@ -31,7 +31,7 @@ public abstract class BookEditScreenMixin extends Screen {
     AnimationUtil koreanPatch$animationUtil = new AnimationUtil();
 
     @Inject(at = {@At(value = "RETURN")}, method = {"render"})
-    private void addCustomLabel(GuiGraphics context, int mouseX, int mouseY, float delta, CallbackInfo ci) {
+    private void addCustomLabel(PoseStack context, int mouseX, int mouseY, float delta, CallbackInfo ci) {
         float x = (this.width - 192) / 2f; // int i = (this.width - 192) / 2; in render() method
         float y;
         if (isSigning) {

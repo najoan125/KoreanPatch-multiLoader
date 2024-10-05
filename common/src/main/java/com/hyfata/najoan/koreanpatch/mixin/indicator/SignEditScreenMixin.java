@@ -2,10 +2,11 @@ package com.hyfata.najoan.koreanpatch.mixin.indicator;
 
 import com.hyfata.najoan.koreanpatch.util.animation.AnimationUtil;
 import com.hyfata.najoan.koreanpatch.handler.Indicator;
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.AbstractSignEditScreen;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.block.entity.SignBlockEntity;
 import org.spongepowered.asm.mixin.Final;
@@ -23,7 +24,7 @@ public abstract class SignEditScreenMixin extends Screen {
 
     @Shadow
     @Final
-    private SignBlockEntity sign;
+    protected SignBlockEntity sign;
 
     @Unique
     public final Minecraft koreanPatch$client = Minecraft.getInstance();
@@ -36,7 +37,7 @@ public abstract class SignEditScreenMixin extends Screen {
     }
 
     @Inject(at = {@At(value = "TAIL")}, method = {"renderSignText"})
-    public void addCustomLabel(GuiGraphics context, CallbackInfo ci) {
+    public void addCustomLabel(PoseStack context, MultiBufferSource.BufferSource source, CallbackInfo ci) {
         float x = -(sign.getMaxTextLineWidth() / 2f) - Indicator.getIndicatorWidth() / 2 - 5;
         int l = 4 * sign.getTextLineHeight() / 2;
         float y = line * sign.getTextLineHeight() - l + koreanPatch$client.font.lineHeight / 2f;

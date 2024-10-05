@@ -1,7 +1,7 @@
 package com.hyfata.najoan.koreanpatch.mixin.indicator;
 
 import com.hyfata.najoan.koreanpatch.handler.Indicator;
-import net.minecraft.client.gui.GuiGraphics;
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.AnvilScreen;
@@ -23,7 +23,7 @@ public class AnvilScreenMixin extends Screen {
     }
 
     @Inject(at = {@At(value = "TAIL")}, method = {"renderFg"})
-    private void customLabel(GuiGraphics context, int mouseX, int mouseY, float delta, CallbackInfo ci) {
+    private void customLabel(PoseStack context, int mouseX, int mouseY, float delta, CallbackInfo ci) {
         float x = name.getX() + name.getWidth() - Indicator.getIndicatorWidth();
         float y = name.getY() - Indicator.getIndicatorHeight() - 6;
 

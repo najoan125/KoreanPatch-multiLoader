@@ -2,7 +2,7 @@ package com.hyfata.najoan.koreanpatch.mixin.mods.bettercommand;
 
 import bettercommandblockui.main.ui.screen.AbstractBetterCommandBlockScreen;
 import com.hyfata.najoan.koreanpatch.handler.Indicator;
-import net.minecraft.client.gui.GuiGraphics;
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.gui.components.EditBox;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -16,7 +16,7 @@ public class AbstractBetterCommandBlockScreenMixin {
     protected EditBox consoleCommandTextField;
 
     @Inject(method = "render", at = @At("TAIL"))
-    public void render(GuiGraphics context, int mouseX, int mouseY, float delta, CallbackInfo ci) {
+    public void render(PoseStack context, int mouseX, int mouseY, float delta, CallbackInfo ci) {
         int x = (int) (consoleCommandTextField.getX() - Indicator.getIndicatorWidth() - 10);
         int y = consoleCommandTextField.getY();
 

@@ -3,9 +3,9 @@ package com.hyfata.najoan.koreanpatch.mixin.mods.commandblockide.indicator;
 import arm32x.minecraft.commandblockide.client.gui.MultilineTextFieldWidget;
 import arm32x.minecraft.commandblockide.client.gui.editor.CommandEditor;
 import com.hyfata.najoan.koreanpatch.handler.Indicator;
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -41,7 +41,7 @@ public abstract class CommandEditorMixin {
     }
 
     @Inject(at = @At(value = "HEAD"), method = "render")
-    public void renderHead(GuiGraphics context, int mouseX, int mouseY, float delta, CallbackInfo ci) {
+    public void renderHead(PoseStack context, int mouseX, int mouseY, float delta, CallbackInfo ci) {
         if (this.orgX != 0)
             commandField.setX((int) (this.orgX + Indicator.getIndicatorWidth() + margin));
         if (this.width != 0 && Minecraft.getInstance().screen != null) {
@@ -51,8 +51,8 @@ public abstract class CommandEditorMixin {
         }
     }
 
-    @Inject(at = @At(value = "INVOKE", target = "Larm32x/minecraft/commandblockide/client/gui/Container;render(Lnet/minecraft/client/gui/GuiGraphics;IIF)V", shift = At.Shift.BEFORE), method = "render")
-    public void render(GuiGraphics context, int mouseX, int mouseY, float delta, CallbackInfo ci) {
+    @Inject(at = @At(value = "INVOKE", target = "Larm32x/minecraft/commandblockide/client/gui/Container;render(Lcom/mojang/blaze3d/vertex/PoseStack;IIF)V", shift = At.Shift.BEFORE), method = "render")
+    public void render(PoseStack context, int mouseX, int mouseY, float delta, CallbackInfo ci) {
         if (commandField.isFocused() && this.orgX != 0) {
             Indicator.showIndicator(context, (float) this.orgX, (float) (y - Indicator.getIndicatorHeight() / 2 + 7.5));
         }

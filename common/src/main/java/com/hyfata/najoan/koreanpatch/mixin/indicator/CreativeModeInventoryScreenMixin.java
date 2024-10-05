@@ -2,7 +2,7 @@ package com.hyfata.najoan.koreanpatch.mixin.indicator;
 
 import com.hyfata.najoan.koreanpatch.handler.Indicator;
 import com.hyfata.najoan.koreanpatch.platform.Services;
-import net.minecraft.client.gui.GuiGraphics;
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.CreativeModeInventoryScreen;
@@ -30,7 +30,7 @@ public class CreativeModeInventoryScreenMixin extends Screen {
     int koreanPatch$modifier = 19;
 
     @Inject(method = {"render"}, at = @At(value = "TAIL", shift = At.Shift.BY, by = -3))
-    private void addCustomLabel(GuiGraphics context, int mouseX, int mouseY, float delta, CallbackInfo ci) {
+    private void addCustomLabel(PoseStack context, int mouseX, int mouseY, float delta, CallbackInfo ci) {
         if (koreanPatch$search) {
             int x = searchBox.getX() + searchBox.getWidth() + koreanPatch$modifier;
             int y = searchBox.getY() + searchBox.getHeight() / 2;
