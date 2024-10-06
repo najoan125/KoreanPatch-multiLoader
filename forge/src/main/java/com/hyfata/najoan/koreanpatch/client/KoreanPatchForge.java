@@ -1,7 +1,7 @@
 package com.hyfata.najoan.koreanpatch.client;
 
 import net.minecraft.client.KeyMapping;
-import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
+import net.minecraftforge.client.ClientRegistry;
 import net.minecraftforge.client.event.ScreenEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.TickEvent;
@@ -20,7 +20,7 @@ public class KoreanPatchForge {
 
     private KoreanPatchForge(IEventBus bus) {
         KoreanPatchClient.init();
-        bus.addListener(this::registerKeys);
+        registerKeys();
 
         registerEvents(bus);
     }
@@ -31,10 +31,10 @@ public class KoreanPatchForge {
         MinecraftForge.EVENT_BUS.addListener(KoreanPatchForge::afterScreenChange);
     }
 
-    @SubscribeEvent
-    public void registerKeys(RegisterKeyMappingsEvent event) {
+
+    public void registerKeys() {
         for (KeyMapping key : KeyBinds.getKeyMappings()) {
-            event.register(key);
+            ClientRegistry.registerKeyBinding(key);
         }
 	}
 
@@ -44,7 +44,7 @@ public class KoreanPatchForge {
     }
 
     @SubscribeEvent
-    public static void afterScreenChange(ScreenEvent.Init.Post event) {
+    public static void afterScreenChange(ScreenEvent.InitScreenEvent.Post event) {
         EventListener.afterScreenChange();
     }
 

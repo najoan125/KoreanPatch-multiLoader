@@ -14,7 +14,7 @@
         "issues": "https://github.com/najoan125/KoreanPatch-multiLoader/issues"
     },
     "license": "${license}",
-    "icon": "assets/koreanpatch/icon.png",
+    "icon": "icon.png",
     "environment": "client",
     "accessWidener": "koreanpatch.accesswidener",
     "entrypoints": {

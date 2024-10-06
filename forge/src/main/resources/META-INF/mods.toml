@@ -11,7 +11,7 @@ displayName = "${mod_name}"
 
 version = "${version}"
 
-logoFile = "assets/koreanpatch/icon.png"
+logoFile = "icon.png"
 
 authors = "${mod_author}"
 credits = """

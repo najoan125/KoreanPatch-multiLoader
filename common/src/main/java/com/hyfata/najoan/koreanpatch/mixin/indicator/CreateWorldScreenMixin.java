@@ -9,6 +9,7 @@ import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.worldselection.CreateWorldScreen;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -35,7 +36,7 @@ public class CreateWorldScreenMixin extends Screen {
     private void addCustomLabel(PoseStack context, int mouseX, int mouseY, float delta, CallbackInfo ci) {
         if (!worldGenSettingsVisible) {
             KoreanPatchClient.bypassInjection = false;
-            Component text = Component.translatable("selectWorld.enterName");
+            Component text = new TranslatableComponent("selectWorld.enterName");
 
             float x = EditBoxUtil.getCursorXWithText(nameEdit, text, nameEdit.x) + 4;
             float y = EditBoxUtil.calculateIndicatorY(nameEdit);

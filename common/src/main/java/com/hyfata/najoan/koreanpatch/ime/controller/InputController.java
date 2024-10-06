@@ -1,6 +1,7 @@
 package com.hyfata.najoan.koreanpatch.ime.controller;
 
 import com.hyfata.najoan.koreanpatch.ime.arch.win.WinController;
+import com.sun.jna.Platform;
 import org.lwjgl.glfw.GLFW;
 
 public interface InputController {
@@ -8,9 +9,9 @@ public interface InputController {
     void toggleFocus();
 
     static InputController newController() {
-        return switch (GLFW.glfwGetPlatform()) {
-            case GLFW.GLFW_PLATFORM_WIN32 -> new WinController();
-            default -> null;
-        };
+        if (Platform.isWindows()) {
+            return new WinController();
+        }
+        return null;
     }
 }

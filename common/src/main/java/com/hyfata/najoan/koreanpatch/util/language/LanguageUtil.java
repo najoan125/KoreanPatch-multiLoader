@@ -3,6 +3,8 @@ package com.hyfata.najoan.koreanpatch.util.language;
 import com.hyfata.najoan.koreanpatch.client.KoreanPatchClient;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.util.FormattedCharSequence;
 
 public class LanguageUtil {
@@ -11,8 +13,8 @@ public class LanguageUtil {
     private static int currentType = EN;
 
     static Minecraft client = Minecraft.getInstance();
-    static Component KO_TEXT = Component.translatable("koreanpatch.langtype.korean");
-    static Component EN_TEXT = Component.translatable("koreanpatch.langtype.english");
+    static Component KO_TEXT = new TranslatableComponent("koreanpatch.langtype.korean");
+    static Component EN_TEXT = new TranslatableComponent("koreanpatch.langtype.english");
 
     public static int getCurrentType() {
         return currentType;
@@ -36,7 +38,7 @@ public class LanguageUtil {
     
     public static FormattedCharSequence getCurrentText() {
         if (KoreanPatchClient.IME) {
-            return Component.literal("IME").getVisualOrderText();
+            return new TextComponent("IME").getVisualOrderText();
         }
         return switch (currentType) {
             case EN -> EN_TEXT.getVisualOrderText();
