@@ -48,17 +48,6 @@ pluginManagement {
                 includeGroupAndSubgroups('net.minecraftforge')
             }
         }
-        exclusiveContent {
-            forRepository {
-                maven {
-                    name = 'ParchmentMC'
-                    url = uri('https://maven.parchmentmc.org')
-                }
-            }
-            filter {
-                includeGroupAndSubgroups('org.parchmentmc')
-            }
-        }
     }
 }
 
