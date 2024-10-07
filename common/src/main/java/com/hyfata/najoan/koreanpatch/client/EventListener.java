@@ -5,6 +5,7 @@ import com.hyfata.najoan.koreanpatch.util.ReflectionFieldChecker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.font.TextFieldHelper;
+import net.minecraft.client.gui.screens.controls.KeyBindsScreen;
 import net.minecraft.client.gui.screens.inventory.JigsawBlockEditScreen;
 import net.minecraft.client.gui.screens.inventory.StructureBlockEditScreen;
 
@@ -18,10 +19,10 @@ public class EventListener {
         KoreanPatchClient.clientStarted();
 
         String[] patchedScreens = {
-                "arm32x.minecraft.commandblockide.client.gui.screen.CommandIDEScreen",
-                "net.minecraft.client.gui.screens.options.controls.KeyBindsScreen"
+                "arm32x.minecraft.commandblockide.client.gui.screen.CommandIDEScreen"
         };
         patchedScreenClazz = getExistingClasses(patchedScreens);
+        patchedScreenClazz.add(KeyBindsScreen.class);
     }
 
     public static void afterScreenChange() {
