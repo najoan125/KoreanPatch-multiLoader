@@ -5,9 +5,8 @@ import com.hyfata.najoan.koreanpatch.util.ReflectionFieldChecker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.font.TextFieldHelper;
+import net.minecraft.client.gui.screens.inventory.*;
 import net.minecraft.client.gui.screens.controls.KeyBindsScreen;
-import net.minecraft.client.gui.screens.inventory.JigsawBlockEditScreen;
-import net.minecraft.client.gui.screens.inventory.StructureBlockEditScreen;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -18,11 +17,31 @@ public class EventListener {
     public static void onClientStarted() {
         KoreanPatchClient.clientStarted();
 
-        String[] patchedScreens = {
+        String[] imeDisabledScreens = {
                 "arm32x.minecraft.commandblockide.client.gui.screen.CommandIDEScreen"
         };
-        patchedScreenClazz = getExistingClasses(patchedScreens);
-        patchedScreenClazz.add(KeyBindsScreen.class);
+        Class<?>[] imeDisabledClasses = {
+                KeyBindsScreen.class,
+                ContainerScreen.class,
+                InventoryScreen.class,
+                FurnaceScreen.class,
+                CraftingScreen.class,
+                EnchantmentScreen.class,
+                BeaconScreen.class,
+
+                ShulkerBoxScreen.class,
+                SmokerScreen.class,
+                CartographyTableScreen.class,
+                BlastFurnaceScreen.class,
+                SmithingScreen.class,
+                GrindstoneScreen.class,
+                BrewingStandScreen.class,
+                LoomScreen.class,
+                StonecutterScreen.class
+        };
+
+        patchedScreenClazz = getExistingClasses(imeDisabledScreens);
+        patchedScreenClazz.addAll(Arrays.asList(imeDisabledClasses));
     }
 
     public static void afterScreenChange() {
