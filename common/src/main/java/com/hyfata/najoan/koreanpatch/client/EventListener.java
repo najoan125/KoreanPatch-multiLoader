@@ -37,7 +37,8 @@ public class EventListener {
                 GrindstoneScreen.class,
                 BrewingStandScreen.class,
                 LoomScreen.class,
-                StonecutterScreen.class
+                StonecutterScreen.class,
+                MerchantScreen.class
         };
 
         patchedScreenClazz = getExistingClasses(imeDisabledScreens);
