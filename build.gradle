@@ -1,4 +1,4 @@
 plugins {
     // see https://fabricmc.net/develop/ for new versions
-    id 'fabric-loom' version '1.6-SNAPSHOT' apply false
+    id 'fabric-loom' version '0.10-SNAPSHOT' apply false
 }
