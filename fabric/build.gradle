@@ -48,7 +48,6 @@ dependencies {
 
     modCompileOnly "com.terraformersmc:modmenu:${project.modmenu_version}"
 	modCompileOnly "maven.modrinth:command-block-ide:${project.command_block_ide_version}"
-	modCompileOnly "maven.modrinth:bettercommandblockui:${project.better_command_block_ui_version}"
 }
 
 loom {

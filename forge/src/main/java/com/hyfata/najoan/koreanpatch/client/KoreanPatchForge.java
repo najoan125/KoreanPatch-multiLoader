@@ -1,14 +1,14 @@
 package com.hyfata.najoan.koreanpatch.client;
 
 import net.minecraft.client.KeyMapping;
-import net.minecraftforge.client.ClientRegistry;
-import net.minecraftforge.client.event.ScreenEvent;
+import net.minecraftforge.client.event.GuiScreenEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+import net.minecraftforge.fmlclient.registry.ClientRegistry;
 
 @Mod(value = Constants.MOD_ID)
 public class KoreanPatchForge {
@@ -44,7 +44,7 @@ public class KoreanPatchForge {
     }
 
     @SubscribeEvent
-    public static void afterScreenChange(ScreenEvent.InitScreenEvent.Post event) {
+    public static void afterScreenChange(GuiScreenEvent.InitGuiEvent.Post event) {
         EventListener.afterScreenChange();
     }
 

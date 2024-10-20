@@ -1,6 +1,6 @@
 package com.hyfata.najoan.koreanpatch.mixin.mods.commandblockide.indicator;
 
-import arm32x.minecraft.commandblockide.client.gui.editor.CommandEditor;
+import arm32x.minecraft.commandblockide.client.gui.CommandEditor;
 import com.hyfata.najoan.koreanpatch.handler.Indicator;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;

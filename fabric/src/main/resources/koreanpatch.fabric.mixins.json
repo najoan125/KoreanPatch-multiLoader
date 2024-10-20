@@ -6,8 +6,6 @@
   "compatibilityLevel": "JAVA_17",
   "mixins": [],
   "client": [
-    "mods.bettercommand.AbstractBetterCommandBlockScreenMixin",
-    "mods.bettercommand.MultiLineEditBoxMixin",
     "mods.commandblockide.indicator.CommandBlockEditorMixin",
     "mods.commandblockide.indicator.CommandEditorMixin",
     "mods.modmenu.ModMenuScreenMixin"

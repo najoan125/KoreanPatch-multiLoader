@@ -39,16 +39,20 @@ public class RenderUtil {
             y2 = i;
         }
 
+        float var2 = (float)(color >> 24 & 255) / 255.0F;
+        float var3 = (float)(color >> 16 & 255) / 255.0F;
+        float var4 = (float)(color >> 8 & 255) / 255.0F;
+        float var5 = (float)(color & 255) / 255.0F;
         BufferBuilder bufferBuilder = Tesselator.getInstance().getBuilder();
         RenderSystem.enableBlend();
         RenderSystem.disableTexture();
         RenderSystem.defaultBlendFunc();
         RenderSystem.setShader(GameRenderer::getPositionColorShader);
         bufferBuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);
-        bufferBuilder.vertex(matrix, x1, y1, 0f).color(color).endVertex();
-        bufferBuilder.vertex(matrix, x1, y2, 0f).color(color).endVertex();
-        bufferBuilder.vertex(matrix, x2, y2, 0f).color(color).endVertex();
-        bufferBuilder.vertex(matrix, x2, y1, 0f).color(color).endVertex();
+        bufferBuilder.vertex(matrix, x1, y1, 0f).color(var3, var4, var5, var2).endVertex();
+        bufferBuilder.vertex(matrix, x1, y2, 0f).color(var3, var4, var5, var2).endVertex();
+        bufferBuilder.vertex(matrix, x2, y2, 0f).color(var3, var4, var5, var2).endVertex();
+        bufferBuilder.vertex(matrix, x2, y1, 0f).color(var3, var4, var5, var2).endVertex();
         bufferBuilder.end();
         BufferUploader.end(bufferBuilder);
         RenderSystem.enableTexture();

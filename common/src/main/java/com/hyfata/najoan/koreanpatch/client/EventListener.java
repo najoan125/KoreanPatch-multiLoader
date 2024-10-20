@@ -6,7 +6,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.font.TextFieldHelper;
 import net.minecraft.client.gui.screens.inventory.*;
-import net.minecraft.client.gui.screens.controls.KeyBindsScreen;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -21,7 +20,7 @@ public class EventListener {
                 "arm32x.minecraft.commandblockide.client.gui.screen.CommandIDEScreen"
         };
         Class<?>[] imeDisabledClasses = {
-                KeyBindsScreen.class,
+                //KeyBindsScreen.class,
                 ContainerScreen.class,
                 InventoryScreen.class,
                 FurnaceScreen.class,
