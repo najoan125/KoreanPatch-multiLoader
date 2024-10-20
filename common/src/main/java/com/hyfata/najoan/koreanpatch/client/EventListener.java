@@ -5,6 +5,7 @@ import com.hyfata.najoan.koreanpatch.util.ReflectionFieldChecker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.font.TextFieldHelper;
+import net.minecraft.client.gui.screens.controls.ControlsScreen;
 import net.minecraft.client.gui.screens.inventory.*;
 
 import java.util.ArrayList;
@@ -17,10 +18,10 @@ public class EventListener {
         KoreanPatchClient.clientStarted();
 
         String[] imeDisabledScreens = {
-                "arm32x.minecraft.commandblockide.client.gui.screen.CommandIDEScreen"
+                "arm32x.minecraft.commandblockide.client.gui.CommandIDEScreen"
         };
         Class<?>[] imeDisabledClasses = {
-                //KeyBindsScreen.class,
+                ControlsScreen.class,
                 ContainerScreen.class,
                 InventoryScreen.class,
                 FurnaceScreen.class,
@@ -48,6 +49,7 @@ public class EventListener {
         Minecraft client = Minecraft.getInstance();
 
         if (client.screen != null) {
+            Constants.LOG.info(client.screen.toString());
             // injection bypass screens
             Class<?>[] bypassScreens = {JigsawBlockEditScreen.class, StructureBlockEditScreen.class};
             KoreanPatchClient.bypassInjection = Arrays.stream(bypassScreens)
