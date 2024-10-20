@@ -49,7 +49,6 @@ public class EventListener {
         Minecraft client = Minecraft.getInstance();
 
         if (client.screen != null) {
-            Constants.LOG.info(client.screen.toString());
             // injection bypass screens
             Class<?>[] bypassScreens = {JigsawBlockEditScreen.class, StructureBlockEditScreen.class};
             KoreanPatchClient.bypassInjection = Arrays.stream(bypassScreens)
