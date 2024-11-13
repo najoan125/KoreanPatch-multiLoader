@@ -100,16 +100,3 @@ jobs:
           version-type: ${{ inputs.version-type }}
           game-versions: ${{ steps.properties.outputs.minecraft_version_range }}
           loaders: fabric quilt
-
-      - name: Upload artifacts to GitHub
-        uses: Kir-Antipov/mc-publish@v3.3
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          files: |
-            fabric/build/libs/!(*-@(dev|sources|all|javadoc)).jar
-            neoforge/build/libs/!(*-@(dev|sources|all|javadoc)).jar
-            forge/build/libs/!(*-@(dev|sources|all|javadoc)).jar
-          name: Korean Chat Patch ${{ steps.properties.outputs.mod_version }} for Minecraft ${{ steps.properties.outputs.minecraft_version }} # release title
-          version: mc${{ steps.properties.outputs.minecraft_version }}-${{ steps.properties.outputs.mod_version }} # create tag
-          changelog: ${{ inputs.changelog }} # release desc.
-          version-type: ${{ inputs.version-type }} # release or pre-release
