@@ -67,7 +67,11 @@ public class TextFieldHelperHandler implements IMixinCommon {
     }
 
     public boolean onHangulCharTyped(int keyCode, int modifiers) {
-        return MixinCommonHandler.onHangulCharTyped(this, keyCode, modifiers, this.getText(), accessor.selectedText(accessor.getStringGetter().get()).isEmpty());
+        String text = this.getText();
+        if (text.isEmpty()) {
+            return false;
+        }
+        return MixinCommonHandler.onHangulCharTyped(this, keyCode, modifiers, text, accessor.selectedText(text).isEmpty());
     }
 
     public void insertChar(char chr, CallbackInfoReturnable<Boolean> cir) {
@@ -96,17 +100,23 @@ public class TextFieldHelperHandler implements IMixinCommon {
     }
 
     public void insertString(String string, CallbackInfo ci) {
+        boolean colored = false;
+
         for (char chr : string.toCharArray()) {
             if (this.client.screen == null || !LanguageUtil.isKorean()) continue;
             ci.cancel();
-            if (chr == ' ') {
+            if (chr == ' ' || chr == '\n') {
                 this.writeText(String.valueOf(chr));
                 KeyboardLayout.INSTANCE.assemblePosition = HangulProcessor.isHangulCharacter(chr) ? this.getCursor() : -1;
                 continue;
             }
-            if (chr == '\n') {
+            if (chr == '§') {
                 this.writeText(String.valueOf(chr));
-                KeyboardLayout.INSTANCE.assemblePosition = HangulProcessor.isHangulCharacter(chr) ? this.getCursor() : -1;
+                colored = true;
+                continue;
+            } else if (colored) {
+                this.writeText(String.valueOf(chr));
+                colored = false;
                 continue;
             }
             int qwertyIndex = KeyboardLayout.INSTANCE.getQwertyIndexCodePoint(chr);
