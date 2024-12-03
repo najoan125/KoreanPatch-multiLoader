@@ -8,17 +8,21 @@ import net.minecraft.client.gui.GuiGraphics;
 
 public class Indicator {
     static Minecraft client = Minecraft.getInstance();
-    private static final float frame = 0.6f;
+    private static final float frame = 1f;
     private static final float margin = 1f;
 
     public static void showIndicator(GuiGraphics context, float x, float y) {
         int rgb = 0x000000;
         int backgroundOpacity = 50 * 255 / 100; // N% * (0 to 255)/100
         int backgroundColor = ((backgroundOpacity & 0xFF) << 24) | rgb; // ARGB
-        int frameColor = LanguageUtil.isKorean() ? 0xffff0000 : 0xff00ff00; // ARGB
+        int frameColor; // ARGB
 
         if (KoreanPatchClient.IME) {
             frameColor = 0xffffffff;
+        } else if (LanguageUtil.isKorean()) {
+            frameColor = 0xffff0000;
+        } else {
+            frameColor = 0xff00ff00;
         }
 
         float width = (float) LanguageUtil.getCurrentTextWidth();
@@ -51,8 +55,8 @@ public class Indicator {
     }
 
     private static void renderBox(GuiGraphics context, float x1, float y1, float x2, float y2, int frameColor, int backgroundColor) {
-        float radius = 2f;
-        float adjustment = 0.4f;
+        float radius = 3.5f;
+        float adjustment = 0.7f;
 
         RenderUtil.fill(context, x1 + frame, y1 + frame, x2 - frame, y2 - frame, backgroundColor); // Background
 
