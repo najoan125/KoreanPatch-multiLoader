@@ -13,12 +13,16 @@ public class Indicator {
 
     public static void showIndicator(GuiGraphics context, float x, float y) {
         int rgb = 0x000000;
-        int backgroundOpacity = 55 * 255 / 100; // N% * (0 to 255)/100
+        int backgroundOpacity = 50 * 255 / 100; // N% * (0 to 255)/100
         int backgroundColor = ((backgroundOpacity & 0xFF) << 24) | rgb; // ARGB
-        int frameColor = LanguageUtil.isKorean() ? 0xffff0000 : 0xff00ff00; // ARGB
+        int frameColor; // ARGB
 
         if (KoreanPatchClient.IME) {
             frameColor = 0xffffffff;
+        } else if (LanguageUtil.isKorean()) {
+            frameColor = 0xffff0000;
+        } else {
+            frameColor = 0xff00ff00;
         }
 
         float width = (float) LanguageUtil.getCurrentTextWidth();
@@ -51,11 +55,19 @@ public class Indicator {
     }
 
     private static void renderBox(GuiGraphics context, float x1, float y1, float x2, float y2, int frameColor, int backgroundColor) {
-        RenderUtil.fill(context, x1, y1, x2, y1 + frame, frameColor); // frame with fixed axis-y1
-        RenderUtil.fill(context, x1, y2, x2, y2 - frame, frameColor); // frame with fixed axis-y2
-        RenderUtil.fill(context, x1, y1, x1 + frame, y2, frameColor); // frame with fixed axis-x1
-        RenderUtil.fill(context, x2, y1, x2 - frame, y2, frameColor); // frame with fixed axis-x2
+        float radius = 3.5f;
+        float adjustment = 0.7f;
 
         RenderUtil.fill(context, x1 + frame, y1 + frame, x2 - frame, y2 - frame, backgroundColor); // Background
+
+        RenderUtil.drawVertexCircleFrame(context, x1 + radius, y1 + radius, radius, frameColor, frame, RenderUtil.VertexDirection.TOP_LEFT);
+        RenderUtil.drawVertexCircleFrame(context, x2 - radius, y1 + radius, radius, frameColor, frame, RenderUtil.VertexDirection.TOP_RIGHT);
+        RenderUtil.drawVertexCircleFrame(context, x1 + radius, y2 - radius, radius, frameColor, frame, RenderUtil.VertexDirection.BOTTOM_LEFT);
+        RenderUtil.drawVertexCircleFrame(context, x2 - radius, y2 - radius, radius, frameColor, frame, RenderUtil.VertexDirection.BOTTOM_RIGHT);
+
+        RenderUtil.fill(context, x1 + radius - adjustment, y1, x2 - radius + adjustment, y1 + frame, frameColor); // frame with fixed axis-y1
+        RenderUtil.fill(context, x1 + radius - adjustment, y2, x2 - radius + adjustment, y2 - frame, frameColor); // frame with fixed axis-y2
+        RenderUtil.fill(context, x1, y1 + radius - adjustment, x1 + frame, y2 - radius + adjustment, frameColor); // frame with fixed axis-x1
+        RenderUtil.fill(context, x2, y1 + radius - adjustment, x2 - frame, y2 - radius + adjustment, frameColor); // frame with fixed axis-x2
     }
 }
