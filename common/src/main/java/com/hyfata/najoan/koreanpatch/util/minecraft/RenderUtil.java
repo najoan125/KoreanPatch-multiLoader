@@ -5,6 +5,7 @@ import com.mojang.blaze3d.vertex.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.util.Mth;
 import org.joml.Matrix4f;
@@ -30,10 +31,8 @@ public class RenderUtil {
 
     public static void drawText(PoseStack context, FormattedCharSequence text, float x, float y, int color) {
         Font textRenderer = client.font;
-        Matrix4f matrix = context.last().pose();
-        MultiBufferSource vertexConsumers = context.getBufferSource();
         RenderSystem.enableBlend();
-        textRenderer.drawInBatch(text, x, y, color, false, matrix, vertexConsumers, Font.DisplayMode.NORMAL, 0, 15728880);
+        textRenderer.draw(context, text, x, y, color);
         RenderSystem.disableBlend();
     }
 
