@@ -19,6 +19,10 @@ on:
         required: false
         type: string
         description: '변경 기록: 여러 줄을 입력하려면 `\\n`을 사용 (markdown 지원)'
+        default: |
+          first
+          second
+          third
 
 jobs:
   build:
