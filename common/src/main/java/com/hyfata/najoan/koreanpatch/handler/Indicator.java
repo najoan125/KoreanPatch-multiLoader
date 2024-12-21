@@ -7,7 +7,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 
 public class Indicator {
-    static Minecraft client = Minecraft.getInstance();
+    private static final Minecraft client = Minecraft.getInstance();
     private static final float frame = 1f;
     private static final float margin = 1f;
 
