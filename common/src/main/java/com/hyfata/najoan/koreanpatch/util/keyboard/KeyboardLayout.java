@@ -13,7 +13,7 @@ public class KeyboardLayout {
     public final List<String> jongsung_ref_table = Splitter.on(",").splitToList(",,,ㄱㅅ,,ㄴㅈ,ㄴㅎ,,,ㄹㄱ,ㄹㅁ,ㄹㅂ,ㄹㅅ,ㄹㅌ,ㄹㅍ,ㄹㅎ,,,ㅂㅅ,,,,,,,,,");
     public int assemblePosition = -1;
 
-    public static KeyboardLayout INSTANCE = new KeyboardLayout();
+    public static final KeyboardLayout INSTANCE = new KeyboardLayout();
 
     public int getQwertyIndexCodePoint(char ch) {
         return QwertyLayout.getInstance().getLayoutString().indexOf(ch);
