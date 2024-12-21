@@ -21,9 +21,11 @@ public class CommandBlockEditScreenMixin extends Screen {
     @Shadow
     protected EditBox commandEdit;
 
-    @Shadow @Final private static Component COMMAND_LABEL;
+    @Shadow @Final
+    private static Component COMMAND_LABEL;
+
     @Unique
-    AnimationUtil koreanPatch$animationUtil = new AnimationUtil();
+    private final AnimationUtil koreanPatch$animationUtil = new AnimationUtil();
 
     protected CommandBlockEditScreenMixin(Component title) {
         super(title);

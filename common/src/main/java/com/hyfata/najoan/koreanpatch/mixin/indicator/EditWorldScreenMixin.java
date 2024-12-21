@@ -27,7 +27,7 @@ public class EditWorldScreenMixin extends Screen {
     private static Component NAME_LABEL;
 
     @Unique
-    AnimationUtil koreanPatch$animationUtil = new AnimationUtil();
+    private final AnimationUtil koreanPatch$animationUtil = new AnimationUtil();
 
     @Inject(at = {@At(value = "TAIL")}, method = {"render"})
     public void addCustomLabel(PoseStack context, int mouseX, int mouseY, float delta, CallbackInfo ci) {
