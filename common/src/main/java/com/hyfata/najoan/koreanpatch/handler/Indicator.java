@@ -56,7 +56,7 @@ public class Indicator {
 
     private static void renderBox(GuiGraphics context, float x1, float y1, float x2, float y2, int frameColor, int backgroundColor) {
         float radius = 3.5f;
-        float adjustment = 0.7f;
+        float adjustment = 0.65f;
 
         RenderUtil.fill(context, x1 + frame, y1 + frame, x2 - frame, y2 - frame, backgroundColor); // Background
 
