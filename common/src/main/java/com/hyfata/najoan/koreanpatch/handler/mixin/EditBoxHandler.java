@@ -26,15 +26,7 @@ public class EditBoxHandler implements IMixinCommon {
 
     public void writeText(String str) {
         accessor.invokeInsertText(str);
-        sendTextChanged(str);
-        accessor.invokeChanged(accessor.invokeGetValue());
         updateScreen();
-    }
-
-    private void sendTextChanged(String str) {
-        if (accessor.getResponder() != null) {
-            accessor.getResponder().accept(str);
-        }
     }
 
     private void updateScreen() {

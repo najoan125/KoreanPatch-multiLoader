@@ -19,7 +19,7 @@ public class ModMenuScreenMixin {
     private EditBox searchBox;
 
     @Unique
-    AnimationUtil animationUtil = new AnimationUtil();
+    private final AnimationUtil animationUtil = new AnimationUtil();
 
     @Inject(at = @At("TAIL"), method = "render")
     private void render(GuiGraphics context, int mouseX, int mouseY, float delta, CallbackInfo ci) {

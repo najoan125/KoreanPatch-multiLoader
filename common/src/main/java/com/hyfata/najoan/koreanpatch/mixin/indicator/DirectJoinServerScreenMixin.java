@@ -21,7 +21,7 @@ public class DirectJoinServerScreenMixin extends Screen {
     private EditBox ipEdit;
 
     @Unique
-    AnimationUtil koreanPatch$animationUtil = new AnimationUtil();
+    private final AnimationUtil koreanPatch$animationUtil = new AnimationUtil();
 
     protected DirectJoinServerScreenMixin(Component title) {
         super(title);
