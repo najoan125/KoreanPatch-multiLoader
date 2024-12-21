@@ -5,15 +5,15 @@ import org.lwjgl.glfw.GLFW;
 public class AnimationUtil {
     private static final float animationDuration = 0.7f;
 
-    float[] savedIndicator = new float[2];
-    float[] savedAnimatedIndicator = new float[2];
-    float[] animatedIndicator = new float[2];
-    float[] animationTickTime = new float[2];
+    private final float[] savedIndicator = new float[2];
+    private final float[] savedAnimatedIndicator = new float[2];
+    private final float[] animatedIndicator = new float[2];
+    private final float[] animationTickTime = new float[2];
 
-    float resultX;
-    float resultY;
+    private float resultX;
+    private float resultY;
 
-    boolean init = false;
+    private boolean init = false;
 
     public void init(float x, float y) {
         if (!init) {
