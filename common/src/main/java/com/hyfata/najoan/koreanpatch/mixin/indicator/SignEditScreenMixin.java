@@ -23,7 +23,7 @@ public abstract class SignEditScreenMixin extends Screen {
 
     @Shadow
     @Final
-    protected SignBlockEntity sign;
+    private SignBlockEntity sign;
 
     @Unique
     public final Minecraft koreanPatch$client = Minecraft.getInstance();
