@@ -30,7 +30,7 @@ public class CreateWorldScreenMixin extends Screen {
     private TabNavigationBar tabNavigationBar;
 
     @Unique
-    AnimationUtil koreanPatch$animationUtil = new AnimationUtil();
+    private final AnimationUtil koreanPatch$animationUtil = new AnimationUtil();
 
     @Inject(at = {@At(value = "RETURN")}, method = {"render"})
     private void addCustomLabel(PoseStack context, int mouseX, int mouseY, float delta, CallbackInfo ci) {

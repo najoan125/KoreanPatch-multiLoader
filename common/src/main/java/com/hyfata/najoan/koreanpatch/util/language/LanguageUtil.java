@@ -10,9 +10,9 @@ public class LanguageUtil {
     public static final int KO = 1;
     private static int currentType = EN;
 
-    static Minecraft client = Minecraft.getInstance();
-    static Component KO_TEXT = Component.translatable("koreanpatch.langtype.korean");
-    static Component EN_TEXT = Component.translatable("koreanpatch.langtype.english");
+    private static final Minecraft client = Minecraft.getInstance();
+    private static final Component KO_TEXT = Component.translatable("koreanpatch.langtype.korean");
+    private static final Component EN_TEXT = Component.translatable("koreanpatch.langtype.english");
 
     public static int getCurrentType() {
         return currentType;
