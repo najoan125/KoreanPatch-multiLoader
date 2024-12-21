@@ -30,7 +30,7 @@ public class LibraryUtil {
                 lib.deleteOnExit();
             }
 
-            Constants.LOG.info(name + " has copied library to native directory.");
+            Constants.LOG.info("{} has copied library to native directory.", name);
 
             return lib.getAbsolutePath();
         } catch (final Exception exception) {

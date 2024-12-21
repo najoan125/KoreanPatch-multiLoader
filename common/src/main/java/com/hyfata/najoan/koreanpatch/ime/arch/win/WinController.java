@@ -23,11 +23,11 @@ public class WinController implements InputController {
         setFocus(!focus);
     }
 
-    WinHandle.PreeditCallback pc = (str, cursor, length) -> {};
-    WinHandle.DoneCallback dc = (str) -> {};
-    WinHandle.RectCallback rc = ret -> 1;
-
     public WinController() {
+        WinHandle.PreeditCallback pc = (str, cursor, length) -> {};
+        WinHandle.DoneCallback dc = (str) -> {};
+        WinHandle.RectCallback rc = ret -> 1;
+
         WinHandle.INSTANCE.initialize(org.lwjgl.glfw.GLFWNativeWin32.glfwGetWin32Window(Minecraft.getInstance().getWindow().getWindow()), pc, dc,rc, (log) -> Constants.LOG.info("[Native|C] {}", log), (log) -> Constants.LOG.error("[Native|C] {}", log), (log) -> Constants.LOG.debug("[Native|C] {}", log));
     }
 }
