@@ -36,7 +36,7 @@ public class EditWorldScreenMixin extends Screen {
     private static Component NAME_LABEL;
 
     @Unique
-    AnimationUtil koreanPatch$animationUtil = new AnimationUtil();
+    private final AnimationUtil koreanPatch$animationUtil = new AnimationUtil();
 
     @Inject(method = "<init>", at = @At("TAIL"), locals = LocalCapture.CAPTURE_FAILEXCEPTION)
     private void onInit(Minecraft $$0, LevelStorageSource.LevelStorageAccess $$1, String $$2, BooleanConsumer $$3, CallbackInfo ci, Font $$4, EditBox $$5, LinearLayout $$6, Button $$7) {

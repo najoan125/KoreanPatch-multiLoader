@@ -12,7 +12,7 @@ import net.minecraft.util.Mth;
 import org.joml.Matrix4f;
 
 public class RenderUtil {
-    static Minecraft client = Minecraft.getInstance();
+    private static final Minecraft client = Minecraft.getInstance();
 
     public static void drawCenteredText(GuiGraphics context, FormattedCharSequence text, float x, float y) {
         drawCenteredText(context, text, x, y, -1);
