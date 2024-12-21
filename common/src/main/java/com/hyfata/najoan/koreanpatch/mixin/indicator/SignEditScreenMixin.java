@@ -23,7 +23,7 @@ public abstract class SignEditScreenMixin extends Screen {
     public final Minecraft koreanPatch$client = Minecraft.getInstance();
 
     @Unique
-    AnimationUtil koreanPatch$animationUtil = new AnimationUtil();
+    private final AnimationUtil koreanPatch$animationUtil = new AnimationUtil();
 
     protected SignEditScreenMixin(Component title) {
         super(title);
