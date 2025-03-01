@@ -33,6 +33,7 @@ sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 dependencies {
     implementation "net.neoforged:neoforge:${neoforge_version}"
+    compileOnly "maven.modrinth:easy-anvils:${project.easy_anvils_version_neo}"
 }
 
 compileJava.options.encoding = 'UTF-8'

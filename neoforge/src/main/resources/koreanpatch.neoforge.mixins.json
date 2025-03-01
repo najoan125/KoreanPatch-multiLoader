@@ -5,6 +5,7 @@
   "compatibilityLevel": "JAVA_21",
   "mixins": [],
   "client": [
+    "mods.easy_anvils.FormattableEditBoxMixin"
   ],
   "server": [],
   "injectors": {

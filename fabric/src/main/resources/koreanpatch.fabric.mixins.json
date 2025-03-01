@@ -11,6 +11,7 @@
     "mods.commandblockide.MultilineEditBoxMixin",
     "mods.commandblockide.indicator.CommandBlockEditorMixin",
     "mods.commandblockide.indicator.CommandEditorMixin",
+    "mods.easy_anvils.FormattableEditBoxMixin",
     "mods.modmenu.ModMenuScreenMixin"
   ],
   "server": [],
