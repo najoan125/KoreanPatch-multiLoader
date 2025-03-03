@@ -4,7 +4,9 @@
   "package": "com.hyfata.najoan.koreanpatch.mixin",
   "refmap": "${mod_id}.refmap.json",
   "compatibilityLevel": "JAVA_21",
-  "mixins": [],
+  "mixins": [
+    "mods.axiom.EditorUIMixin"
+  ],
   "client": [
     "mods.bettercommand.AbstractBetterCommandBlockScreenMixin",
     "mods.bettercommand.MultiLineEditBoxMixin",

@@ -6,6 +6,7 @@ import com.hyfata.najoan.koreanpatch.ime.controller.InputManager;
 
 public class KoreanPatchClient {
     public static boolean IME = false;
+    public static boolean axiomEditorUIOpened = false;
     public static boolean bypassInjection = false;
 
     public static void init() {
