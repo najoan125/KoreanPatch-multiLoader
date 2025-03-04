@@ -38,6 +38,10 @@ neoForge {
 
 sourceSets.main.resources { srcDir 'src/generated/resources' }
 
+dependencies {
+    compileOnly "maven.modrinth:easy-anvils:${project.easy_anvils_version_neo}"
+}
+
 compileJava.options.encoding = 'UTF-8'
 tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8'
