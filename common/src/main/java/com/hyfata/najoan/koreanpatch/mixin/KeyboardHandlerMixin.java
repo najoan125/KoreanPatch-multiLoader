@@ -21,8 +21,8 @@ public class KeyboardHandlerMixin {
 
     @Inject(method = "keyPress", at = @At("HEAD"))
     private void onInput(long window, int keyCode, int scanCode, int action, int modifiers, CallbackInfo ci) {
-        if (window == minecraft.getWindow().getWindow() && action == 1 && minecraft.screen != null && !KoreanPatchClient.bypassInjection) {
-            if (KeyBinds.getImeBinding().matches(keyCode, scanCode) && modifiers == 2) {
+        if (window == minecraft.getWindow().getWindow() && action == 1 && !KoreanPatchClient.bypassInjection) {
+            if (minecraft.screen != null && KeyBinds.getImeBinding().matches(keyCode, scanCode) && modifiers == 2) {
                 InputManager.getController().toggleFocus();
             } else if (KeyBinds.getLangBinding().matches(keyCode, scanCode) && !KoreanPatchClient.IME) {
                 LanguageUtil.toggleCurrentType();
