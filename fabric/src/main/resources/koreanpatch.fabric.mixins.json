@@ -4,13 +4,17 @@
   "package": "com.hyfata.najoan.koreanpatch.mixin",
   "refmap": "${mod_id}.refmap.json",
   "compatibilityLevel": "JAVA_17",
-  "mixins": [],
+  "mixins": [
+    "mods.axiom.EditorUIMixin"
+  ],
   "client": [
     "mods.bettercommand.AbstractBetterCommandBlockScreenMixin",
     "mods.bettercommand.MultiLineEditBoxMixin",
     "mods.commandblockide.MultilineEditBoxMixin",
     "mods.commandblockide.indicator.CommandBlockEditorMixin",
     "mods.commandblockide.indicator.CommandEditorMixin",
+    "mods.easy_anvils.FormattableEditBoxMixin",
+    "mods.easy_anvils.NameTagEditScreenMixin",
     "mods.modmenu.ModMenuScreenMixin"
   ],
   "server": [],

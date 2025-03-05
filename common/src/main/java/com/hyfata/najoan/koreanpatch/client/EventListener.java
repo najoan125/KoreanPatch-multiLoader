@@ -49,6 +49,7 @@ public class EventListener {
         Minecraft client = Minecraft.getInstance();
 
         if (client.screen != null) {
+//            Constants.LOG.info("Screen changed: " + client.screen); // debug
             // injection bypass screens
             Class<?>[] bypassScreens = {JigsawBlockEditScreen.class, StructureBlockEditScreen.class};
             KoreanPatchClient.bypassInjection = Arrays.stream(bypassScreens)
@@ -79,8 +80,10 @@ public class EventListener {
         Minecraft client = Minecraft.getInstance();
         if (InputManager.getController() == null) return;
 
-        if (client.screen == null) {
+        if (client.screen == null && !KoreanPatchClient.axiomEditorUIOpened) {
             InputManager.getController().setFocus(false);
+        } else if (KoreanPatchClient.axiomEditorUIOpened) {
+            InputManager.getController().setFocus(true);
         }
     }
 
