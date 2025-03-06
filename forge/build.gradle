@@ -69,6 +69,7 @@ dependencies {
 
     // Forge's hack fix
     implementation('net.sf.jopt-simple:jopt-simple:5.0.4') { version { strictly '5.0.4' } }
+    implementation "maven.modrinth:easy-anvils:${project.easy_anvils_version_forge}"
 }
 
 publishing {
