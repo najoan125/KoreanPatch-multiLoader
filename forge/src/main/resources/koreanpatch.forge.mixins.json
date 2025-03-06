@@ -4,10 +4,7 @@
   "package": "com.hyfata.najoan.koreanpatch.mixin",
   "compatibilityLevel": "JAVA_16",
   "mixins": [],
-  "client": [
-    "mods.easy_anvils.FormattableEditBoxMixin",
-    "mods.easy_anvils.NameTagEditScreenMixin"
-  ],
+  "client": [],
   "server": [],
   "injectors": {
     "defaultRequire": 1
