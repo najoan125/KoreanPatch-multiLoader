@@ -4,10 +4,10 @@ import com.hyfata.najoan.koreanpatch.client.KoreanPatchClient;
 import com.hyfata.najoan.koreanpatch.handler.mixin.EditBoxHandler;
 import com.hyfata.najoan.koreanpatch.mixin.accessor.EditBoxAccessor;
 import com.hyfata.najoan.koreanpatch.util.language.LanguageUtil;
-import fuzs.easyanvils.client.gui.components.AdvancedEditBox;
-import fuzs.easyanvils.client.gui.components.FormattableEditBox;
+import fuzs.easyanvils.client.gui.components.OpenEditBox;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.network.chat.Component;
 import org.lwjgl.glfw.GLFW;
 import org.spongepowered.asm.mixin.Mixin;
@@ -16,8 +16,8 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-@Mixin(value = {FormattableEditBox.class})
-public abstract class FormattableEditBoxMixin extends AdvancedEditBox {
+@Mixin(value = {OpenEditBox.class})
+public abstract class FormattableEditBoxMixin extends EditBox {
     public FormattableEditBoxMixin(Font font, int x, int y, int width, int height, Component message) {
         super(font, x, y, width, height, message);
     }
