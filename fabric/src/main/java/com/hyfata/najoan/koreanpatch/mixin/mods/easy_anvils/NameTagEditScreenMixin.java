@@ -1,8 +1,8 @@
 package com.hyfata.najoan.koreanpatch.mixin.mods.easy_anvils;
 
 import com.hyfata.najoan.koreanpatch.handler.Indicator;
+import com.mojang.blaze3d.vertex.PoseStack;
 import fuzs.easyanvils.client.gui.screens.inventory.NameTagEditScreen;
-import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.EditBox;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -15,7 +15,7 @@ public class NameTagEditScreenMixin {
     @Shadow private EditBox name;
 
     @Inject(at = @At("TAIL"), method = "render")
-    private void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick, CallbackInfo ci) {
+    private void render(PoseStack guiGraphics, int mouseX, int mouseY, float partialTick, CallbackInfo ci) {
         float x = name.getX() - Indicator.getIndicatorWidth() / 2f - 5f;
         float y = name.getY() + name.getHeight() / 2f - 2f;
 
