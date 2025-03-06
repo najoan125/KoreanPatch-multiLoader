@@ -12,18 +12,6 @@ repositories {
         url "https://maven.nucleoid.xyz/"
         name "Nucleoid"
     }
-
-	exclusiveContent {
-		forRepository {
-			maven {
-				name = "Modrinth"
-				url = "https://api.modrinth.com/maven"
-			}
-		}
-		filter {
-			includeGroup "maven.modrinth"
-		}
-	}
 }
 
 dependencies {
