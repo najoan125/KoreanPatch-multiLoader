@@ -16,8 +16,8 @@ public class NameTagEditScreenMixin {
 
     @Inject(at = @At("TAIL"), method = "render")
     private void render(PoseStack guiGraphics, int mouseX, int mouseY, float partialTick, CallbackInfo ci) {
-        float x = name.getX() - Indicator.getIndicatorWidth() / 2f - 5f;
-        float y = name.getY() + name.getHeight() / 2f - 2f;
+        float x = name.x - Indicator.getIndicatorWidth() / 2f - 5f;
+        float y = name.y + name.getHeight() / 2f - 2f;
 
         Indicator.showCenteredIndicator(guiGraphics, x, y);
     }

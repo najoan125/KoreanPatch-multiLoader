@@ -14,10 +14,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class NameTagEditScreenMixin {
     @Shadow(remap = false) private EditBox name;
 
-    @Inject(at = @At("TAIL"), method = "m_86412_", remap = false)
+    @Inject(at = @At("TAIL"), method = "m_6305_", remap = false)
     private void render(PoseStack guiGraphics, int mouseX, int mouseY, float partialTick, CallbackInfo ci) {
-        float x = name.getX() - Indicator.getIndicatorWidth() / 2f - 5f;
-        float y = name.getY() + name.getHeight() / 2f - 2f;
+        float x = name.x - Indicator.getIndicatorWidth() / 2f - 5f;
+        float y = name.y + name.getHeight() / 2f - 2f;
 
         Indicator.showCenteredIndicator(guiGraphics, x, y);
     }
