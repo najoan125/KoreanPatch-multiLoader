@@ -33,8 +33,8 @@ dependencies {
 	modCompileOnly "maven.modrinth:bettercommandblockui:${project.better_command_block_ui_version}"
     modCompileOnly "maven.modrinth:easy-anvils:${project.easy_anvils_version_fabric}"
     modCompileOnly "maven.modrinth:axiom:${project.axiom_version}"
-    modImplementation "maven.modrinth:xaeros-minimap:${project.xaeros_minimap_fabric}"
-    modImplementation "maven.modrinth:xaeros-world-map:${project.xaeros_world_map_fabric}"
+    modCompileOnly "maven.modrinth:xaeros-minimap:${project.xaeros_minimap_fabric}"
+    modCompileOnly "maven.modrinth:xaeros-world-map:${project.xaeros_world_map_fabric}"
 }
 
 loom {
