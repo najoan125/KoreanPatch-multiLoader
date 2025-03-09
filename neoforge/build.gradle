@@ -34,6 +34,8 @@ sourceSets.main.resources { srcDir 'src/generated/resources' }
 dependencies {
     implementation "net.neoforged:neoforge:${neoforge_version}"
     compileOnly "maven.modrinth:easy-anvils:${project.easy_anvils_version_neo}"
+    compileOnly "maven.modrinth:xaeros-minimap:${project.xaeros_minimap_neo}"
+    compileOnly "maven.modrinth:xaeros-world-map:${project.xaeros_world_map_neo}"
 }
 
 compileJava.options.encoding = 'UTF-8'

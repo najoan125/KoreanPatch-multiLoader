@@ -6,7 +6,8 @@
   "mixins": [],
   "client": [
     "mods.easy_anvils.FormattableEditBoxMixin",
-    "mods.easy_anvils.NameTagEditScreenMixin"
+    "mods.easy_anvils.NameTagEditScreenMixin",
+    "mods.xaeros.minimap.GuiAddWaypointMixin"
   ],
   "server": [],
   "injectors": {
