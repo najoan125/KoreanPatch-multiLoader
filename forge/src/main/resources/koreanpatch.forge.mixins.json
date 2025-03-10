@@ -4,7 +4,9 @@
   "package": "com.hyfata.najoan.koreanpatch.mixin",
   "compatibilityLevel": "JAVA_16",
   "mixins": [],
-  "client": [],
+  "client": [
+    "mods.xaeros.minimap.GuiAddWaypointMixin"
+  ],
   "server": [],
   "injectors": {
     "defaultRequire": 1

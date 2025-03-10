@@ -8,7 +8,8 @@
   "client": [
     "mods.commandblockide.indicator.CommandBlockEditorMixin",
     "mods.commandblockide.indicator.CommandEditorMixin",
-    "mods.modmenu.ModMenuScreenMixin"
+    "mods.modmenu.ModMenuScreenMixin",
+    "mods.xaeros.minimap.GuiAddWaypointMixin"
   ],
   "server": [],
   "injectors": {

@@ -19,6 +19,7 @@ dependencies {
     mappings loom.officialMojangMappings()
 
     modImplementation "net.fabricmc:fabric-loader:${fabric_loader_version}"
+//    modImplementation "net.fabricmc.fabric-api:fabric-api:${fabric_version}" //debug
 
     def addEmbeddedFabricModule = { name ->
         def module = fabricApi.module(name, fabric_version)
@@ -33,6 +34,8 @@ dependencies {
 
     modCompileOnly "com.terraformersmc:modmenu:${project.modmenu_version}"
 	modCompileOnly "maven.modrinth:command-block-ide:${project.command_block_ide_version}"
+    modCompileOnly "maven.modrinth:xaeros-minimap:${project.xaeros_minimap_fabric}"
+    modCompileOnly "maven.modrinth:xaeros-world-map:${project.xaeros_world_map_fabric}"
 }
 
 loom {
