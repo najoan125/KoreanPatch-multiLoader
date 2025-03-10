@@ -14,7 +14,8 @@
     "mods.commandblockide.indicator.CommandEditorMixin",
     "mods.easy_anvils.FormattableEditBoxMixin",
     "mods.easy_anvils.NameTagEditScreenMixin",
-    "mods.modmenu.ModMenuScreenMixin"
+    "mods.modmenu.ModMenuScreenMixin",
+    "mods.xaeros.minimap.GuiAddWaypointMixin"
   ],
   "server": [],
   "injectors": {
