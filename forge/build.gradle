@@ -70,6 +70,8 @@ dependencies {
 
     // Forge's hack fix
     implementation('net.sf.jopt-simple:jopt-simple:5.0.4') { version { strictly '5.0.4' } }
+    compileOnly "maven.modrinth:xaeros-minimap:${project.xaeros_minimap_forge}"
+    compileOnly "maven.modrinth:xaeros-world-map:${project.xaeros_world_map_forge}"
 }
 
 publishing {

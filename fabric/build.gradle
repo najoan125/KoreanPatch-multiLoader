@@ -15,6 +15,7 @@ dependencies {
     mappings loom.officialMojangMappings()
 
     modImplementation "net.fabricmc:fabric-loader:${fabric_loader_version}"
+//    modImplementation "net.fabricmc.fabric-api:fabric-api:${fabric_version}" //debug
 
     def addEmbeddedFabricModule = { name ->
         def module = fabricApi.module(name, fabric_version)
@@ -32,6 +33,8 @@ dependencies {
 	modCompileOnly "maven.modrinth:bettercommandblockui:${project.better_command_block_ui_version}"
     modCompileOnly "maven.modrinth:easy-anvils:${project.easy_anvils_version_fabric}"
     modCompileOnly "maven.modrinth:axiom:${project.axiom_version}"
+    modCompileOnly "maven.modrinth:xaeros-minimap:${project.xaeros_minimap_fabric}"
+    modCompileOnly "maven.modrinth:xaeros-world-map:${project.xaeros_world_map_fabric}"
 }
 
 loom {

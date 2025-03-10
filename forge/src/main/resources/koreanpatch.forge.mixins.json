@@ -5,6 +5,7 @@
   "compatibilityLevel": "JAVA_18",
   "mixins": [],
   "client": [
+    "mods.xaeros.minimap.GuiAddWaypointMixin"
   ],
   "server": [],
   "injectors": {
