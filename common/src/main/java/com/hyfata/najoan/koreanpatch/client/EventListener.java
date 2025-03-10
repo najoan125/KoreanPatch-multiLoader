@@ -18,7 +18,8 @@ public class EventListener {
         KoreanPatchClient.clientStarted();
 
         String[] imeDisabledScreens = {
-                "arm32x.minecraft.commandblockide.client.gui.screen.CommandIDEScreen"
+                "arm32x.minecraft.commandblockide.client.gui.screen.CommandIDEScreen",
+                "xaero.map.gui.GuiMap"
         };
         Class<?>[] imeDisabledClasses = {
                 KeyBindsScreen.class,
