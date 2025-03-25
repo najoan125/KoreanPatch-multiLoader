@@ -8,4 +8,13 @@ public class Indicator {
     boolean showIndicator = true;
     @CollapsibleObject
     Outline outline = new Outline();
+    @Tooltip
+    @CollapsibleObject
+    IndicatorBackground background = new IndicatorBackground();
+    @Tooltip
+    @CollapsibleObject
+    IndicatorText text = new IndicatorText();
+    @Tooltip
+    @CollapsibleObject
+    IndicatorAnimation animation = new IndicatorAnimation();
 }
