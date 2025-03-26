@@ -35,7 +35,6 @@ public class AnimationUtil {
             return;
         }
         for (int i = 0; i < 2; i++) {
-
             if (target[i] != savedTargetPos[i]) { // detect target changed
                 savedTargetPos[i] = target[i];
                 startPos[i] = resultPos[i]; // set start position to last result position
