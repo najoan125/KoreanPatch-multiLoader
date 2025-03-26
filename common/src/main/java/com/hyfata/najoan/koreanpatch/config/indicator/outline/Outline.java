@@ -9,4 +9,16 @@ public class Outline {
     @Tooltip
     @CollapsibleObject
     OutlineColorOpacity colorOpacity = new OutlineColorOpacity();
+
+    public boolean isShowOutline() {
+        return showOutline;
+    }
+
+    public boolean isRounded() {
+        return rounded;
+    }
+
+    public OutlineColorOpacity getColorOpacitySettings() {
+        return colorOpacity;
+    }
 }

@@ -1,7 +1,7 @@
 package com.hyfata.najoan.koreanpatch.config;
 
 import com.hyfata.najoan.koreanpatch.client.Constants;
-import com.hyfata.najoan.koreanpatch.config.indicator.Indicator;
+import com.hyfata.najoan.koreanpatch.config.indicator.CategoryIndicator;
 import me.shedaniel.autoconfig.ConfigData;
 import me.shedaniel.autoconfig.annotation.Config;
 import me.shedaniel.autoconfig.annotation.ConfigEntry.Category;
@@ -11,5 +11,9 @@ import me.shedaniel.autoconfig.annotation.ConfigEntry.Gui.TransitiveObject;
 public class ModConfig implements ConfigData {
     @Category("indicatorSettings")
     @TransitiveObject
-    Indicator indicator = new Indicator();
+    CategoryIndicator categoryIndicator = new CategoryIndicator();
+
+    public CategoryIndicator getCategoryIndicator() {
+        return categoryIndicator;
+    }
 }

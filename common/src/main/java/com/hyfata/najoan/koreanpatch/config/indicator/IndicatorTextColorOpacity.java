@@ -1,13 +1,12 @@
-package com.hyfata.najoan.koreanpatch.config.indicator.outline;
+package com.hyfata.najoan.koreanpatch.config.indicator;
 
-import com.hyfata.najoan.koreanpatch.config.indicator.ColorOpacityConfig;
 import me.shedaniel.autoconfig.annotation.ConfigEntry;
 
-public class OutlineColorOpacity implements ColorOpacityConfig {
+public class IndicatorTextColorOpacity implements ColorOpacityConfig {
     @ConfigEntry.ColorPicker
-    int koreanColor = 0xff0000;
+    int koreanColor = 0xffffff;
     @ConfigEntry.ColorPicker
-    int enColor = 0x00ff00;
+    int enColor = 0xffffff;
     @ConfigEntry.ColorPicker
     int imeColor = 0xffffff;
     @ConfigEntry.BoundedDiscrete(min=0,max=100)
