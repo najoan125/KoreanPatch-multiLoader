@@ -18,7 +18,7 @@ on:
       changelog:
         required: false
         type: string
-        description: '변경 기록: 여러 줄을 입력하려면 `\\n`을 사용 (markdown 지원)'
+        description: '변경 기록: 여러 줄을 입력하려면 DevTools에서 textarea로 변경 후 입력 (markdown 지원)'
 
 jobs:
   build:
