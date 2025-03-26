@@ -62,7 +62,7 @@ jobs:
           modrinth-id: qyulnpBL
           curseforge-id: 657742
           modrinth-featured: false
-          name: ${{ steps.properties.outputs.mod_version }} for NeoForge
+          name: Korean Chat Patch ${{ steps.properties.outputs.mod_version }} for NeoForge ${{ steps.properties.outputs.minecraft_version }}
           version: mc${{ steps.properties.outputs.minecraft_version }}-${{ steps.properties.outputs.mod_version }}-neoforge
           changelog: ${{ inputs.changelog }}
           version-type: ${{ inputs.version-type }}
@@ -78,7 +78,7 @@ jobs:
           modrinth-id: qyulnpBL
           curseforge-id: 657742
           modrinth-featured: false
-          name: ${{ steps.properties.outputs.mod_version }} for Fabric
+          name: Korean Chat Patch ${{ steps.properties.outputs.mod_version }} for Fabric ${{ steps.properties.outputs.minecraft_version }}
           version: mc${{ steps.properties.outputs.minecraft_version }}-${{ steps.properties.outputs.mod_version }}-fabric
           changelog: ${{ inputs.changelog }}
           version-type: ${{ inputs.version-type }}
