@@ -1,7 +1,6 @@
 package com.hyfata.najoan.koreanpatch.util.minecraft;
 
 import com.hyfata.najoan.koreanpatch.mixin.accessor.GuiGraphicsAccessor;
-import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
@@ -36,9 +35,7 @@ public class RenderUtil {
         Font textRenderer = client.font;
         Matrix4f matrix = context.pose().last().pose();
         MultiBufferSource vertexConsumers = guiGraphicsAccessor.getBufferSource();
-        RenderSystem.enableBlend();
         textRenderer.drawInBatch(text, x, y, color, false, matrix, vertexConsumers, Font.DisplayMode.NORMAL, 0, 15728880);
-        RenderSystem.disableBlend();
     }
 
     public static void fill(GuiGraphics context, float x1, float y1, float x2, float y2, int color) {
@@ -57,14 +54,12 @@ public class RenderUtil {
             y2 = i;
         }
 
-        RenderSystem.enableBlend();
         VertexConsumer vertexConsumer = guiGraphicsAccessor.getBufferSource().getBuffer(RenderType.gui());
         vertexConsumer.addVertex(matrix, x1, y1, 0f).setColor(color);
         vertexConsumer.addVertex(matrix, x1, y2, 0f).setColor(color);
         vertexConsumer.addVertex(matrix, x2, y2, 0f).setColor(color);
         vertexConsumer.addVertex(matrix, x2, y1, 0f).setColor(color);
         context.flush();
-        RenderSystem.disableBlend();
     }
 
     public static void drawVertexCircleFrame(GuiGraphics context, float centerX, float centerY, float radius, int frameColor, float frameThickness, VertexDirection direction) {
