@@ -68,8 +68,6 @@ jobs:
           version-type: ${{ inputs.version-type }}
           game-versions: ${{ steps.properties.outputs.minecraft_version_range }}
           loaders: neoforge
-          dependencies: |
-            cloth-config
 
       - name: Upload artifacts to Modrinth/CurseForge for Fabric & Quilt
         uses: Kir-Antipov/mc-publish@v3.3
@@ -86,9 +84,6 @@ jobs:
           version-type: ${{ inputs.version-type }}
           game-versions: ${{ steps.properties.outputs.minecraft_version_range }}
           loaders: fabric quilt
-          dependencies: |
-            cloth-config
-            modmenu(optional)
 
       - name: Upload artifacts to GitHub
         uses: Kir-Antipov/mc-publish@v3.3
