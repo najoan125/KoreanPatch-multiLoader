@@ -6,5 +6,43 @@
     "koreanpatch.langtype.english": "En",
     "koreanpatch.langtype.korean": "Ko",
 
-    "modmenu.descriptionTranslation.koreanpatch": "It allows you to input Hangul naturally, and the Hangul input state does not interfere with other keys."
+    "modmenu.descriptionTranslation.koreanpatch": "It allows you to input Hangul naturally, and the Hangul input state does not interfere with other keys.",
+
+    "text.autoconfig.koreanpatch.title": "Korean Patch Settings",
+    "text.autoconfig.koreanpatch.option.categoryIndicator.showIndicator": "Enable Indicator",
+    "text.autoconfig.koreanpatch.option.categoryIndicator.showIndicator.@Tooltip": "It displays Korean/English input status near the input field",
+    "text.autoconfig.koreanpatch.option.categoryIndicator.outline": "Outline Settings",
+    "text.autoconfig.koreanpatch.option.categoryIndicator.outline.showOutline": "Enable indicator outline",
+    "text.autoconfig.koreanpatch.option.categoryIndicator.outline.showOutline.@Tooltip": "In the Korean/English indicator, the outline is displayed for readability.",
+    "text.autoconfig.koreanpatch.option.categoryIndicator.outline.rounded": "Enable rounded corners",
+
+    "text.autoconfig.koreanpatch.option.categoryIndicator.outline.colorOpacity": "Outline color and opacity",
+    "text.autoconfig.koreanpatch.option.categoryIndicator.outline.colorOpacity.@Tooltip": "Tip: You can easily find colors by searching for \"color picker\" on Google.",
+    "text.autoconfig.koreanpatch.option.categoryIndicator.outline.colorOpacity.koreanColor": "Color of \"Korean\" input state",
+    "text.autoconfig.koreanpatch.option.categoryIndicator.outline.colorOpacity.enColor": "Color of \"English\" input state",
+    "text.autoconfig.koreanpatch.option.categoryIndicator.outline.colorOpacity.imeColor": "Color of \"IME\" state",
+    "text.autoconfig.koreanpatch.option.categoryIndicator.outline.colorOpacity.opacity": "Opacity",
+
+    "text.autoconfig.koreanpatch.option.categoryIndicator.background": "Background color and opacity",
+    "text.autoconfig.koreanpatch.option.categoryIndicator.background.@Tooltip": "Tip: You can easily find colors by searching for \"color picker\" on Google.",
+    "text.autoconfig.koreanpatch.option.categoryIndicator.background.koreanColor": "Color of \"Korean\" input state",
+    "text.autoconfig.koreanpatch.option.categoryIndicator.background.enColor": "Color of \"English\" input state",
+    "text.autoconfig.koreanpatch.option.categoryIndicator.background.imeColor": "Color of \"IME\" state",
+    "text.autoconfig.koreanpatch.option.categoryIndicator.background.opacity": "Opacity",
+
+    "text.autoconfig.koreanpatch.option.categoryIndicator.text": "Text color and opacity",
+    "text.autoconfig.koreanpatch.option.categoryIndicator.text.@Tooltip": "Tip: You can easily find colors by searching for \"color picker\" on Google.",
+    "text.autoconfig.koreanpatch.option.categoryIndicator.text.koreanColor": "Color of \"Korean\" input state",
+    "text.autoconfig.koreanpatch.option.categoryIndicator.text.enColor": "Color of \"English\" input state",
+    "text.autoconfig.koreanpatch.option.categoryIndicator.text.imeColor": "Color of \"IME\" state",
+    "text.autoconfig.koreanpatch.option.categoryIndicator.text.opacity": "Opacity",
+
+    "text.autoconfig.koreanpatch.option.categoryIndicator.animation": "Animation Settings",
+    "text.autoconfig.koreanpatch.option.categoryIndicator.animation.@Tooltip": "These are the settings that the indicator follows the text cursor position.",
+    "text.autoconfig.koreanpatch.option.categoryIndicator.animation.showAnimation": "Enable animation",
+    "text.autoconfig.koreanpatch.option.categoryIndicator.animation.showAnimation.@Tooltip": "The indicator allows you to follow the text cursor position.",
+    "text.autoconfig.koreanpatch.option.categoryIndicator.animation.easingFunction": "Easing Functions",
+    "text.autoconfig.koreanpatch.option.categoryIndicator.animation.easingFunction.@Tooltip": "Set the Easing function used when the indicator moves.\nYou can find it more easily by referring to easings.net.",
+    "text.autoconfig.koreanpatch.option.categoryIndicator.animation.speed": "Speed",
+    "text.autoconfig.koreanpatch.option.categoryIndicator.animation.speed.@Tooltip": "Set the animation speed. The larger the value, the faster you follow the cursor."
 }
