@@ -1,7 +1,7 @@
 # This workflow will build a Java project with Brachyra
 # For more information see: docs/development/brachyura.md
 
-name: build-release
+name: build-release-backport
 
 on:
   workflow_dispatch:
@@ -108,14 +108,23 @@ jobs:
             cloth-config
             modmenu(optional)
 
-      - name: Upload artifacts to GitHub
-        uses: Kir-Antipov/mc-publish@v3.3
+      - name: Create GitHub tag for backport
+        uses: actions/github-script@v7
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          files: |
-            fabric/build/libs/!(*-@(dev|sources|all|javadoc)).jar
-            neoforge/build/libs/!(*-@(dev|sources|all|javadoc)).jar
-          name: Korean Chat Patch ${{ steps.properties.outputs.mod_version }} for Minecraft ${{ steps.properties.outputs.minecraft_version }} # release title
-          version: mc${{ steps.properties.outputs.minecraft_version }}-${{ steps.properties.outputs.mod_version }} # create tag
-          changelog: ${{ inputs.changelog }} # release desc.
-          version-type: ${{ inputs.version-type }} # release or pre-release
+          script: |
+            const version = "mc${{ steps.properties.outputs.minecraft_version }}-${{ steps.properties.outputs.mod_version }}";
+            github.rest.git.createRef({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              ref: `refs/tags/${version}`,
+              sha: context.sha
+            });
+
+      - name: Upload backport artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: koreanpatch-backport-${{ steps.properties.outputs.minecraft_version }}
+          path: |
+            fabric/build/libs/*.jar
+            neoforge/build/libs/*.jar
