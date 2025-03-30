@@ -10,9 +10,9 @@ import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.ModLoadingContext;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
+import net.neoforged.neoforge.client.ConfigScreenHandler;
 import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
 import net.neoforged.neoforge.client.event.ScreenEvent;
-import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.TickEvent;
 
@@ -29,9 +29,9 @@ public class KoreanPatchNeoForge {
 
     public void registerConfig() {
         AutoConfig.register(ModConfig.class, GsonConfigSerializer::new);
-        ModLoadingContext.get().registerExtensionPoint(IConfigScreenFactory.class, () ->
-                (container, parent) ->
-                AutoConfig.getConfigScreen(ModConfig.class, parent).get());
+        ModLoadingContext.get().registerExtensionPoint(ConfigScreenHandler.ConfigScreenFactory.class, () ->
+                new ConfigScreenHandler.ConfigScreenFactory((client, parent) ->
+                AutoConfig.getConfigScreen(ModConfig.class, parent).get()));
     }
 
     public void registerEvents(IEventBus bus) {
