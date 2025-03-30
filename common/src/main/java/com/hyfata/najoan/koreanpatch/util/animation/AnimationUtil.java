@@ -1,56 +1,63 @@
 package com.hyfata.najoan.koreanpatch.util.animation;
 
+import com.hyfata.najoan.koreanpatch.client.KoreanPatchClient;
+import com.hyfata.najoan.koreanpatch.config.indicator.IndicatorAnimation;
 import org.lwjgl.glfw.GLFW;
 
 public class AnimationUtil {
-    private static final float animationDuration = 0.7f;
-
-    private final float[] savedIndicator = new float[2];
-    private final float[] savedAnimatedIndicator = new float[2];
-    private final float[] animatedIndicator = new float[2];
-    private final float[] animationTickTime = new float[2];
-
-    private float resultX;
-    private float resultY;
+    private final float[] savedTargetPos = new float[2];
+    private final float[] startPos = new float[2];
+    private final float[] savedTime = new float[2];
+    private final float[] resultPos = new float[2];
 
     private boolean init = false;
 
-    public void init(float x, float y) {
+    public void init(float currentX, float currentY) {
         if (!init) {
             init = true;
-            float[] crd = new float[]{x, y};
+
+            final float[] current = {currentX, currentY};
             for (int i = 0; i < 2; i++) {
-                savedIndicator[i] = crd[i];
-                savedAnimatedIndicator[i] = crd[i];
-                animatedIndicator[i] = crd[i];
+                savedTargetPos[i] = current[i];
+                startPos[i] = current[i];
+                savedTime[i] = (float) GLFW.glfwGetTime();
+                resultPos[i] = current[i];
             }
         }
     }
 
     public void calculateAnimation(float targetX, float targetY) {
-        float[] indicator = new float[]{targetX, targetY};
-        for (int i=0; i<2; i++) {
-            if (indicator[i] != savedIndicator[i]) {
-                savedIndicator[i] = indicator[i];
-                animationTickTime[i] = (float) GLFW.glfwGetTime();
-                savedAnimatedIndicator[i] = animatedIndicator[i];
+        IndicatorAnimation animation = KoreanPatchClient.config.getCategoryIndicator().getAnimationSettings();
+        final float[] target = {targetX, targetY};
+        float animationDuration = 1f - animation.getSpeed() / 100f;
+
+        if (!animation.isShowAnimation()) {
+            return;
+        }
+        for (int i = 0; i < 2; i++) {
+            if (target[i] != savedTargetPos[i]) { // detect target changed
+                savedTargetPos[i] = target[i];
+                startPos[i] = resultPos[i]; // set start position to last result position
+                savedTime[i] = (float) GLFW.glfwGetTime();
             }
-            if (GLFW.glfwGetTime() - animationTickTime[i] > animationDuration) {
-                savedAnimatedIndicator[i] = indicator[i];
-            } else {
-                animatedIndicator[i] = savedAnimatedIndicator[i] + (indicator[i] - savedAnimatedIndicator[i]) * EasingFunctions.easeOutQuint((float)(GLFW.glfwGetTime() - animationTickTime[i]) / animationDuration);
-                indicator[i] = animatedIndicator[i];
+
+            float elapsedTime = (float) (GLFW.glfwGetTime() - savedTime[i]);
+            if (animationDuration == 0 || elapsedTime > animationDuration) { // animate end
+                resultPos[i] = target[i];
+            } else { // calculate for animate
+                float targetDistance = target[i] - startPos[i];
+                float x = elapsedTime / animationDuration; // 0~1
+
+                resultPos[i] = startPos[i] + targetDistance * (float) animation.getEasingFunction().calculate(x);
             }
         }
-        resultX = indicator[0];
-        resultY = indicator[1];
     }
 
     public float getResultX() {
-        return resultX;
+        return resultPos[0];
     }
 
     public float getResultY() {
-        return resultY;
+        return resultPos[1];
     }
 }

@@ -1,6 +1,9 @@
 package com.hyfata.najoan.koreanpatch.handler;
 
 import com.hyfata.najoan.koreanpatch.client.KoreanPatchClient;
+import com.hyfata.najoan.koreanpatch.config.indicator.CategoryIndicator;
+import com.hyfata.najoan.koreanpatch.config.indicator.ColorOpacityConfig;
+import com.hyfata.najoan.koreanpatch.config.indicator.outline.Outline;
 import com.hyfata.najoan.koreanpatch.util.minecraft.RenderUtil;
 import com.hyfata.najoan.koreanpatch.util.language.LanguageUtil;
 import net.minecraft.client.Minecraft;
@@ -12,24 +15,24 @@ public class Indicator {
     private static final float margin = 1f;
 
     public static void showIndicator(GuiGraphics context, float x, float y) {
-        int rgb = 0x000000;
-        int backgroundOpacity = 50 * 255 / 100; // N% * (0 to 255)/100
-        int backgroundColor = ((backgroundOpacity & 0xFF) << 24) | rgb; // ARGB
-        int frameColor; // ARGB
+        CategoryIndicator categoryIndicator = KoreanPatchClient.config.getCategoryIndicator();
 
-        if (KoreanPatchClient.IME) {
-            frameColor = 0xffffffff;
-        } else if (LanguageUtil.isKorean()) {
-            frameColor = 0xffff0000;
-        } else {
-            frameColor = 0xff00ff00;
+        if (!categoryIndicator.isShowIndicator()) {
+            return;
         }
 
         float width = (float) LanguageUtil.getCurrentTextWidth();
         float height = (float) client.font.lineHeight;
 
-        renderBox(context, x, y, x + frame + width + margin * 2f, y + frame + height + margin * 2f, frameColor, backgroundColor);
-        RenderUtil.drawCenteredText(context, LanguageUtil.getCurrentText(), x + frame + width / 2f + margin, y + frame + height / 2f + margin);
+        renderBox(context, x, y, x + frame + width + margin * 2f, y + frame + height + margin * 2f,
+                getARGB(categoryIndicator.getOutlineSettings().getColorOpacitySettings()),
+                getARGB(categoryIndicator.getBackgroundSettings())
+        );
+
+        RenderUtil.drawCenteredText(context, LanguageUtil.getCurrentText(),
+                x + frame + width / 2f + margin, y + frame + height / 2f + margin,
+                getARGB(categoryIndicator.getTextSettings())
+        );
     }
 
     public static void showIndicator(GuiGraphics context, int x, int y) {
@@ -54,20 +57,36 @@ public class Indicator {
         return frame + (float) client.font.lineHeight + margin * 2f;
     }
 
+    private static int getARGB(ColorOpacityConfig colorOpacityConfig) {
+        int outlineRGB = KoreanPatchClient.IME ?
+                colorOpacityConfig.getImeColor() :
+                LanguageUtil.isKorean() ?
+                        colorOpacityConfig.getKoreanColor() :
+                        colorOpacityConfig.getEnColor();
+        int outlineOpacity = colorOpacityConfig.getOpacity() * 255 / 100; // N% * (0 to 255)/100
+        return ((outlineOpacity & 0xFF) << 24) | outlineRGB; // ARGB
+    }
+
     private static void renderBox(GuiGraphics context, float x1, float y1, float x2, float y2, int frameColor, int backgroundColor) {
-        float radius = 3.5f;
-        float adjustment = 0.65f;
+        Outline outline = KoreanPatchClient.config.getCategoryIndicator().getOutlineSettings();
+
+        float radius = outline.isRounded() ? 3.5f : 0f;
+        float adjustment = outline.isRounded() ? 0.65f : 0f;
 
         RenderUtil.fill(context, x1 + frame, y1 + frame, x2 - frame, y2 - frame, backgroundColor); // Background
 
-        RenderUtil.drawVertexCircleFrame(context, x1 + radius, y1 + radius, radius, frameColor, frame, RenderUtil.VertexDirection.TOP_LEFT);
-        RenderUtil.drawVertexCircleFrame(context, x2 - radius, y1 + radius, radius, frameColor, frame, RenderUtil.VertexDirection.TOP_RIGHT);
-        RenderUtil.drawVertexCircleFrame(context, x1 + radius, y2 - radius, radius, frameColor, frame, RenderUtil.VertexDirection.BOTTOM_LEFT);
-        RenderUtil.drawVertexCircleFrame(context, x2 - radius, y2 - radius, radius, frameColor, frame, RenderUtil.VertexDirection.BOTTOM_RIGHT);
+        if (outline.isShowOutline()) {
+            if (outline.isRounded()) {
+                RenderUtil.drawVertexCircleFrame(context, x1 + radius, y1 + radius, radius, frameColor, frame, RenderUtil.VertexDirection.TOP_LEFT);
+                RenderUtil.drawVertexCircleFrame(context, x2 - radius, y1 + radius, radius, frameColor, frame, RenderUtil.VertexDirection.TOP_RIGHT);
+                RenderUtil.drawVertexCircleFrame(context, x1 + radius, y2 - radius, radius, frameColor, frame, RenderUtil.VertexDirection.BOTTOM_LEFT);
+                RenderUtil.drawVertexCircleFrame(context, x2 - radius, y2 - radius, radius, frameColor, frame, RenderUtil.VertexDirection.BOTTOM_RIGHT);
+            }
 
-        RenderUtil.fill(context, x1 + radius - adjustment, y1, x2 - radius + adjustment, y1 + frame, frameColor); // frame with fixed axis-y1
-        RenderUtil.fill(context, x1 + radius - adjustment, y2, x2 - radius + adjustment, y2 - frame, frameColor); // frame with fixed axis-y2
-        RenderUtil.fill(context, x1, y1 + radius - adjustment, x1 + frame, y2 - radius + adjustment, frameColor); // frame with fixed axis-x1
-        RenderUtil.fill(context, x2, y1 + radius - adjustment, x2 - frame, y2 - radius + adjustment, frameColor); // frame with fixed axis-x2
+            RenderUtil.fill(context, x1 + radius - adjustment, y1, x2 - radius + adjustment, y1 + frame, frameColor); // frame with fixed axis-y1
+            RenderUtil.fill(context, x1 + radius - adjustment, y2, x2 - radius + adjustment, y2 - frame, frameColor); // frame with fixed axis-y2
+            RenderUtil.fill(context, x1, y1 + radius - adjustment, x1 + frame, y2 - radius + adjustment, frameColor); // frame with fixed axis-x1
+            RenderUtil.fill(context, x2, y1 + radius - adjustment, x2 - frame, y2 - radius + adjustment, frameColor); // frame with fixed axis-x2
+        }
     }
 }
