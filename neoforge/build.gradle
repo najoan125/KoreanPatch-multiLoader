@@ -39,6 +39,7 @@ dependencies {
     compileOnly "maven.modrinth:easy-anvils:${project.easy_anvils_version_neo}"
     compileOnly "maven.modrinth:xaeros-minimap:${project.xaeros_minimap_neo}"
     compileOnly "maven.modrinth:xaeros-world-map:${project.xaeros_world_map_neo}"
+    compileOnly "maven.modrinth:rei:${project.rei_neo}"
 }
 
 compileJava.options.encoding = 'UTF-8'
