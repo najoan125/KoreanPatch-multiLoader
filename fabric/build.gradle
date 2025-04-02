@@ -37,6 +37,7 @@ dependencies {
     modCompileOnly "maven.modrinth:axiom:${project.axiom_version}"
     modCompileOnly "maven.modrinth:xaeros-minimap:${project.xaeros_minimap_fabric}"
     modCompileOnly "maven.modrinth:xaeros-world-map:${project.xaeros_world_map_fabric}"
+    modCompileOnly "maven.modrinth:rei:${project.rei_fabric}"
 }
 
 loom {
