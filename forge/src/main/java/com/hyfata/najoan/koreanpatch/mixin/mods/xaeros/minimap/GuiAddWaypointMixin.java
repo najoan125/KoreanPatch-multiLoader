@@ -14,10 +14,10 @@ public abstract class GuiAddWaypointMixin {
     @Shadow(remap = false)
     protected abstract WaypointEditForm getCurrent();
 
-    @Shadow
+    @Shadow(remap = false)
     private EditBox nameTextField;
 
-    @Shadow
+    @Shadow(remap = false)
     private EditBox initialTextField;
 
     @Inject(method = "renderPreDropdown", at = @At(value = "HEAD"), remap = false)
