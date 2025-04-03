@@ -1,12 +1,17 @@
 package com.hyfata.najoan.koreanpatch.client;
 
+import com.hyfata.najoan.koreanpatch.config.ModConfig;
+import me.shedaniel.autoconfig.AutoConfig;
+import me.shedaniel.autoconfig.serializer.GsonConfigSerializer;
 import net.minecraft.client.KeyMapping;
+import net.minecraftforge.client.ConfigScreenHandler;
 import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
 import net.minecraftforge.client.event.ScreenEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 
@@ -19,10 +24,18 @@ public class KoreanPatchForge {
     }
 
     private KoreanPatchForge(IEventBus bus) {
+        registerConfig();
         KoreanPatchClient.init();
         bus.addListener(this::registerKeys);
 
         registerEvents(bus);
+    }
+
+    public void registerConfig() {
+        AutoConfig.register(ModConfig.class, GsonConfigSerializer::new);
+        ModLoadingContext.get().registerExtensionPoint(ConfigScreenHandler.ConfigScreenFactory.class, () ->
+                new ConfigScreenHandler.ConfigScreenFactory((client, parent) ->
+                        AutoConfig.getConfigScreen(ModConfig.class, parent).get()));
     }
 
     public static void registerEvents(IEventBus bus) {
@@ -36,7 +49,7 @@ public class KoreanPatchForge {
         for (KeyMapping key : KeyBinds.getKeyMappings()) {
             event.register(key);
         }
-	}
+    }
 
     @SubscribeEvent
     public static void onClientStarted(FMLClientSetupEvent event) {
