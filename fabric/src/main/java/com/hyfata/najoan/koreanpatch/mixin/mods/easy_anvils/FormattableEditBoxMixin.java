@@ -1,7 +1,7 @@
 package com.hyfata.najoan.koreanpatch.mixin.mods.easy_anvils;
 
-import com.hyfata.najoan.koreanpatch.client.KoreanPatchClient;
-import com.hyfata.najoan.koreanpatch.handler.mixin.EditBoxHandler;
+import com.hyfata.najoan.koreanpatch.data.GUIStatus;
+import com.hyfata.najoan.koreanpatch.process.controller.mixin.EditBoxController;
 import com.hyfata.najoan.koreanpatch.mixin.accessor.EditBoxAccessor;
 import com.hyfata.najoan.koreanpatch.util.language.LanguageUtil;
 import fuzs.easyanvils.client.gui.components.AdvancedEditBox;
@@ -26,11 +26,11 @@ public abstract class FormattableEditBoxMixin extends AdvancedEditBox {
     private final Minecraft koreanPatch$client = Minecraft.getInstance();
 
     @Unique
-    private final EditBoxHandler koreanPatch$handler = new EditBoxHandler((EditBoxAccessor) this);
+    private final EditBoxController koreanPatch$handler = new EditBoxController((EditBoxAccessor) this);
 
     @Inject(at = {@At(value = "HEAD")}, method = {"charTyped(CI)Z"}, cancellable = true)
     public void charTyped(char chr, int modifiers, CallbackInfoReturnable<Boolean> cir) {
-        if (this.koreanPatch$client.screen != null && !KoreanPatchClient.bypassInjection &&
+        if (this.koreanPatch$client.screen != null && !GUIStatus.isBypassInjection() &&
                 LanguageUtil.isKorean() && this.isEditable() && Character.charCount(chr) == 1) {
             koreanPatch$handler.typedTextField(chr, modifiers, cir);
         }
@@ -40,7 +40,7 @@ public abstract class FormattableEditBoxMixin extends AdvancedEditBox {
     @Override
     public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
         Minecraft client = Minecraft.getInstance();
-        if (client.screen != null && !KoreanPatchClient.bypassInjection) {
+        if (client.screen != null && !GUIStatus.isBypassInjection()) {
             if (keyCode == GLFW.GLFW_KEY_BACKSPACE) {
                 if (koreanPatch$handler.onBackspaceKeyPressed()) {
                     return true;

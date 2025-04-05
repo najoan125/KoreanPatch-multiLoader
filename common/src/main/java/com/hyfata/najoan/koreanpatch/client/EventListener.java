@@ -1,6 +1,7 @@
 package com.hyfata.najoan.koreanpatch.client;
 
-import com.hyfata.najoan.koreanpatch.ime.controller.InputManager;
+import com.hyfata.najoan.koreanpatch.data.GUIStatus;
+import com.hyfata.najoan.koreanpatch.process.ime.InputManager;
 import com.hyfata.najoan.koreanpatch.util.ReflectionFieldChecker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.EditBox;
@@ -53,8 +54,8 @@ public class EventListener {
 //            Constants.LOG.info("Screen changed: " + client.screen); // debug
             // injection bypass screens
             Class<?>[] bypassScreens = {JigsawBlockEditScreen.class, StructureBlockEditScreen.class};
-            KoreanPatchClient.bypassInjection = Arrays.stream(bypassScreens)
-                    .anyMatch(cls -> cls.isInstance(client.screen));
+            GUIStatus.setBypassInjection(Arrays.stream(bypassScreens)
+                    .anyMatch(cls -> cls.isInstance(client.screen)));
 
             // IME set focus
             boolean screenPatched = false;
@@ -81,9 +82,9 @@ public class EventListener {
         Minecraft client = Minecraft.getInstance();
         if (InputManager.getController() == null) return;
 
-        if (client.screen == null && !KoreanPatchClient.axiomEditorUIOpened) {
+        if (client.screen == null && !GUIStatus.isShouldUseIME()) {
             InputManager.getController().setFocus(false);
-        } else if (KoreanPatchClient.axiomEditorUIOpened) {
+        } else if (GUIStatus.isShouldUseIME()) {
             InputManager.getController().setFocus(true);
         }
     }

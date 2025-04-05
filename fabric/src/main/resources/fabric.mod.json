@@ -20,9 +20,6 @@
     "entrypoints": {
         "client": [
             "com.hyfata.najoan.koreanpatch.client.KoreanPatchFabric"
-        ],
-        "modmenu": [
-            "com.hyfata.najoan.koreanpatch.config.ModMenuIntegration"
         ]
     },
     "mixins": [

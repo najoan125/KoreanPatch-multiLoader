@@ -1,48 +1,28 @@
 package com.hyfata.najoan.koreanpatch.util.language;
 
-import com.hyfata.najoan.koreanpatch.client.KoreanPatchClient;
+import com.hyfata.najoan.koreanpatch.data.provider.LanguageType;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.FormattedCharSequence;
 
 public class LanguageUtil {
-    public static final int EN = 0;
-    public static final int KO = 1;
-    private static int currentType = EN;
-
     private static final Minecraft client = Minecraft.getInstance();
-    private static final Component KO_TEXT = Component.translatable("koreanpatch.langtype.korean");
-    private static final Component EN_TEXT = Component.translatable("koreanpatch.langtype.english");
-
-    public static int getCurrentType() {
-        return currentType;
-    }
+    private static LanguageType currentType = LanguageType.EN;
+    private static final Component IME_TEXT = Component.literal("IME");
 
     public static boolean isKorean() {
-        return getCurrentType() == KO && !KoreanPatchClient.IME;
-    }
-
-    public static void setCurrentType(int currentType) {
-        LanguageUtil.currentType = currentType;
+        return currentType == LanguageType.KO && !LanguageType.isIME();
     }
 
     public static void toggleCurrentType() {
-        if (isKorean()) {
-            setCurrentType(EN);
-        } else {
-            setCurrentType(KO);
-        }
+        currentType = currentType == LanguageType.KO ? LanguageType.EN : LanguageType.KO;
     }
-    
+
     public static FormattedCharSequence getCurrentText() {
-        if (KoreanPatchClient.IME) {
-            return Component.literal("IME").getVisualOrderText();
+        if (LanguageType.isIME()) {
+            return IME_TEXT.getVisualOrderText();
         }
-        return switch (currentType) {
-            case EN -> EN_TEXT.getVisualOrderText();
-            case KO -> KO_TEXT.getVisualOrderText();
-            default -> throw new IllegalStateException("Unexpected value: " + currentType);
-        };
+        return currentType.getTranslatedVisualOrderText();
     }
 
     public static int getCurrentTextWidth() {

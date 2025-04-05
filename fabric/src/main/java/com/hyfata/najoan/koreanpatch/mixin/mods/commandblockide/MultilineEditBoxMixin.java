@@ -1,8 +1,8 @@
 package com.hyfata.najoan.koreanpatch.mixin.mods.commandblockide;
 
 import arm32x.minecraft.commandblockide.client.gui.MultilineTextFieldWidget;
-import com.hyfata.najoan.koreanpatch.client.KoreanPatchClient;
-import com.hyfata.najoan.koreanpatch.handler.mixin.EditBoxHandler;
+import com.hyfata.najoan.koreanpatch.data.GUIStatus;
+import com.hyfata.najoan.koreanpatch.process.controller.mixin.EditBoxController;
 import com.hyfata.najoan.koreanpatch.mixin.accessor.EditBoxAccessor;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
@@ -22,12 +22,12 @@ public abstract class MultilineEditBoxMixin extends EditBox {
     }
 
     @Unique
-    private final EditBoxHandler handler = new EditBoxHandler((EditBoxAccessor) this);
+    private final EditBoxController handler = new EditBoxController((EditBoxAccessor) this);
 
     @Inject(at = @At(value = "HEAD"), method = "keyPressed", cancellable = true)
     public void keyPressed(int keyCode, int scanCode, int modifiers, CallbackInfoReturnable<Boolean> cir) {
         Minecraft client = Minecraft.getInstance();
-        if (client.screen != null && !KoreanPatchClient.bypassInjection) {
+        if (client.screen != null && !GUIStatus.isBypassInjection()) {
             if (keyCode == GLFW.GLFW_KEY_BACKSPACE) {
                 if (handler.onBackspaceKeyPressed()) {
                     cir.setReturnValue(Boolean.TRUE);

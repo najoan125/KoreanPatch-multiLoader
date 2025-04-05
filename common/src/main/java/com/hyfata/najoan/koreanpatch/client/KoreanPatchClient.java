@@ -1,19 +1,11 @@
 package com.hyfata.najoan.koreanpatch.client;
 
-import com.hyfata.najoan.koreanpatch.config.ModConfig;
 import com.hyfata.najoan.koreanpatch.platform.Services;
-import com.hyfata.najoan.koreanpatch.ime.controller.InputController;
-import com.hyfata.najoan.koreanpatch.ime.controller.InputManager;
-import me.shedaniel.autoconfig.AutoConfig;
+import com.hyfata.najoan.koreanpatch.process.ime.InputController;
+import com.hyfata.najoan.koreanpatch.process.ime.InputManager;
 
 public class KoreanPatchClient {
-    public static boolean IME = false;
-    public static boolean axiomEditorUIOpened = false;
-    public static boolean bypassInjection = false;
-    public static ModConfig config;
-
     public static void init() {
-        config = AutoConfig.getConfigHolder(ModConfig.class).getConfig();
         KeyBinds.register();
     }
 

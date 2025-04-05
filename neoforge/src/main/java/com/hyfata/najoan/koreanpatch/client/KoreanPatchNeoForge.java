@@ -1,38 +1,25 @@
 package com.hyfata.najoan.koreanpatch.client;
 
-import com.hyfata.najoan.koreanpatch.config.ModConfig;
-import me.shedaniel.autoconfig.AutoConfig;
-import me.shedaniel.autoconfig.serializer.GsonConfigSerializer;
 import net.minecraft.client.KeyMapping;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModContainer;
-import net.neoforged.fml.ModLoadingContext;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.neoforge.client.event.ClientTickEvent;
 import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
 import net.neoforged.neoforge.client.event.ScreenEvent;
-import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
 import net.neoforged.neoforge.common.NeoForge;
 
 @Mod(value = Constants.MOD_ID, dist = Dist.CLIENT)
 public class KoreanPatchNeoForge {
 
     public KoreanPatchNeoForge(IEventBus bus, ModContainer container) {
-        registerConfig();
         KoreanPatchClient.init();
         bus.addListener(this::registerKeys);
 
         registerEvents(bus);
-    }
-
-    public void registerConfig() {
-        AutoConfig.register(ModConfig.class, GsonConfigSerializer::new);
-        ModLoadingContext.get().registerExtensionPoint(IConfigScreenFactory.class, () ->
-                (container, parent) ->
-                AutoConfig.getConfigScreen(ModConfig.class, parent).get());
     }
 
     public void registerEvents(IEventBus bus) {

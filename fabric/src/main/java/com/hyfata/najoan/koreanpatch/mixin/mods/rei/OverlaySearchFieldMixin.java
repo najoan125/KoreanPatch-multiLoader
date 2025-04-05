@@ -1,6 +1,6 @@
 package com.hyfata.najoan.koreanpatch.mixin.mods.rei;
 
-import com.hyfata.najoan.koreanpatch.client.KoreanPatchClient;
+import com.hyfata.najoan.koreanpatch.data.GUIStatus;
 import com.hyfata.najoan.koreanpatch.handler.mixin.REITextFieldHandler;
 import com.hyfata.najoan.koreanpatch.util.language.LanguageUtil;
 import me.shedaniel.math.Rectangle;
@@ -28,7 +28,7 @@ public abstract class OverlaySearchFieldMixin extends TextFieldWidget {
 
     @Inject(at = @At("HEAD"), method = "charTyped", cancellable = true)
     public void charTyped(char chr, int modifiers, CallbackInfoReturnable<Boolean> cir) {
-        if (this.koreanPatch$client.screen != null && !KoreanPatchClient.bypassInjection &&
+        if (this.koreanPatch$client.screen != null && !GUIStatus.isBypassInjection() &&
                 LanguageUtil.isKorean() && Character.charCount(chr) == 1) {
             koreanPatch$handler.typedTextField(chr, modifiers, cir);
         }
@@ -37,7 +37,7 @@ public abstract class OverlaySearchFieldMixin extends TextFieldWidget {
     @Inject(at = @At("HEAD"), method = "keyPressed", cancellable = true)
     public void keyPressed(int keyCode, int scanCode, int modifiers, CallbackInfoReturnable<Boolean> cir) {
         Minecraft client = Minecraft.getInstance();
-        if (client.screen != null && !KoreanPatchClient.bypassInjection) {
+        if (client.screen != null && !GUIStatus.isBypassInjection()) {
             if (keyCode == GLFW.GLFW_KEY_BACKSPACE) {
                 if (koreanPatch$handler.onBackspaceKeyPressed()) {
                     cir.setReturnValue(Boolean.TRUE);
