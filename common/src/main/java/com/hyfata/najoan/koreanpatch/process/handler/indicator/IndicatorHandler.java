@@ -71,17 +71,38 @@ public class IndicatorHandler {
     private static void renderBox(GuiGraphics context, float x1, float y1, float x2, float y2, int frameColor, int backgroundColor) {
         OutlineConfig outlineConfig = ConfigManager.getConfig().getCategoryIndicator().getOutlineSettings();
 
-        float radius = outlineConfig.isRounded() ? 3.5f : 0f;
-        float adjustment = outlineConfig.isRounded() ? 0.65f : 0f;
+        float radius = 3.5f;
+        float adjustment = 0.65f;
+        float offset = outlineConfig.isShowOutline() ? 0f : frame;
 
-        RenderUtil.fill(context, x1 + frame, y1 + frame, x2 - frame, y2 - frame, backgroundColor); // Background
+        RenderUtil.fill(context, x1 + frame - offset, y1 + frame - offset, x2 - frame + offset, y2 - frame + offset, backgroundColor); // Background
 
         if (outlineConfig.isShowOutline()) {
-            if (outlineConfig.isRounded()) {
-                RenderUtil.drawVertexCircleFrame(context, x1 + radius, y1 + radius, radius, frameColor, frame, RenderUtil.VertexDirection.TOP_LEFT);
-                RenderUtil.drawVertexCircleFrame(context, x2 - radius, y1 + radius, radius, frameColor, frame, RenderUtil.VertexDirection.TOP_RIGHT);
-                RenderUtil.drawVertexCircleFrame(context, x1 + radius, y2 - radius, radius, frameColor, frame, RenderUtil.VertexDirection.BOTTOM_LEFT);
-                RenderUtil.drawVertexCircleFrame(context, x2 - radius, y2 - radius, radius, frameColor, frame, RenderUtil.VertexDirection.BOTTOM_RIGHT);
+            switch (outlineConfig.getOutlineType()) {
+                case RECTANGLE -> {
+                    radius = 0f;
+                    adjustment = 0f;
+                    RenderUtil.fill(context, x1, y1, x2, y1 + frame, frameColor); // frame with fixed axis-y1
+                    RenderUtil.fill(context, x1, y2, x2, y2 - frame, frameColor); // frame with fixed axis-y2
+                    RenderUtil.fill(context, x1, y1, x1 + frame, y2, frameColor); // frame with fixed axis-x1
+                    RenderUtil.fill(context, x2, y1, x2 - frame, y2, frameColor); // frame with fixed axis-x2
+                }
+                case SUPERELLIPSE -> {
+                    float radiusX = radius + 0.5f;
+                    float radiusY = radius;
+                    float exponent = 2f;
+                    adjustment = 0.5f;
+                    RenderUtil.drawVertexSuperellipseFrame(context, x1 + radiusX, y1 + radius, radiusX, radiusY, exponent, frameColor, frame, RenderUtil.VertexDirection.TOP_LEFT);
+                    RenderUtil.drawVertexSuperellipseFrame(context, x2 - radiusX, y1 + radius, radiusX, radiusY, exponent, frameColor, frame, RenderUtil.VertexDirection.TOP_RIGHT);
+                    RenderUtil.drawVertexSuperellipseFrame(context, x1 + radiusX, y2 - radius, radiusX, radiusY, exponent, frameColor, frame, RenderUtil.VertexDirection.BOTTOM_LEFT);
+                    RenderUtil.drawVertexSuperellipseFrame(context, x2 - radiusX, y2 - radius, radiusX, radiusY, exponent, frameColor, frame, RenderUtil.VertexDirection.BOTTOM_RIGHT);
+                }
+                case null, default -> { // CIRCLE
+                    RenderUtil.drawVertexCircleFrame(context, x1 + radius, y1 + radius, radius, frameColor, frame, RenderUtil.VertexDirection.TOP_LEFT);
+                    RenderUtil.drawVertexCircleFrame(context, x2 - radius, y1 + radius, radius, frameColor, frame, RenderUtil.VertexDirection.TOP_RIGHT);
+                    RenderUtil.drawVertexCircleFrame(context, x1 + radius, y2 - radius, radius, frameColor, frame, RenderUtil.VertexDirection.BOTTOM_LEFT);
+                    RenderUtil.drawVertexCircleFrame(context, x2 - radius, y2 - radius, radius, frameColor, frame, RenderUtil.VertexDirection.BOTTOM_RIGHT);
+                }
             }
 
             RenderUtil.fill(context, x1 + radius - adjustment, y1, x2 - radius + adjustment, y1 + frame, frameColor); // frame with fixed axis-y1

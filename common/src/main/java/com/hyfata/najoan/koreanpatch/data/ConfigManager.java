@@ -6,7 +6,9 @@ import com.hyfata.najoan.koreanpatch.client.Constants;
 import com.hyfata.najoan.koreanpatch.data.config.ModConfig;
 import com.hyfata.najoan.koreanpatch.data.gson.ColorAdapter;
 import com.hyfata.najoan.koreanpatch.data.gson.EasingFunctionsAdapter;
+import com.hyfata.najoan.koreanpatch.data.gson.OutlineTypeAdapter;
 import com.hyfata.najoan.koreanpatch.data.provider.EasingFunctions;
+import com.hyfata.najoan.koreanpatch.data.provider.OutlineType;
 import net.minecraft.client.Minecraft;
 
 import java.awt.*;
@@ -24,6 +26,7 @@ public class ConfigManager {
         return new GsonBuilder()
                 .registerTypeAdapter(Color.class, new ColorAdapter())
                 .registerTypeAdapter(EasingFunctions.class, new EasingFunctionsAdapter())
+                .registerTypeAdapter(OutlineType.class, new OutlineTypeAdapter())
                 .setPrettyPrinting()
                 .create();
     }

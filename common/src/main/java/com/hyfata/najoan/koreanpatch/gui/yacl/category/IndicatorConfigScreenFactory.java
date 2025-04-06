@@ -6,6 +6,7 @@ import com.hyfata.najoan.koreanpatch.data.config.category.indicator.IndicatorBac
 import com.hyfata.najoan.koreanpatch.data.config.category.indicator.IndicatorTextColorConfig;
 import com.hyfata.najoan.koreanpatch.data.config.category.indicator.outline.OutlineConfig;
 import com.hyfata.najoan.koreanpatch.data.provider.EasingFunctions;
+import com.hyfata.najoan.koreanpatch.data.provider.OutlineType;
 import dev.isxander.yacl3.api.ConfigCategory;
 import dev.isxander.yacl3.api.Option;
 import dev.isxander.yacl3.api.OptionDescription;
@@ -81,15 +82,21 @@ public class IndicatorConfigScreenFactory {
                 .controller(TickBoxControllerBuilder::create)
                 .build();
 
-        Option<Boolean> roundOption = Option.<Boolean>createBuilder()
-                .name(Component.translatable("koreanpatch.config.indicator.outline.round"))
-                .description(OptionDescription.of(Component.translatable("koreanpatch.config.indicator.outline.round.description")))
+        Option<OutlineType> outlineTypeOption = Option.<OutlineType>createBuilder()
+                .name(Component.translatable("koreanpatch.config.indicator.outline.outline_type"))
+                .description(OptionDescription.of(Component.translatable("koreanpatch.config.indicator.outline.outline_type.description")))
                 .binding(
-                        outline.isRounded(),
-                        outline::isRounded,
-                        outline::setRounded
+                        outline.getOutlineType(),
+                        outline::getOutlineType,
+                        outline::setOutlineType
                 )
-                .controller(TickBoxControllerBuilder::create)
+                .controller(option -> EnumControllerBuilder.create(option)
+                .enumClass(OutlineType.class)
+                .formatValue(value -> Component.literal(
+                        Arrays.stream(value.name().split("_"))
+                                .map(w -> w.charAt(0) + w.substring(1).toLowerCase())
+                                .collect(Collectors.joining(" ")))
+                ))
                 .build();
 
         Option<Color> koColorOption = Option.<Color>createBuilder()
@@ -141,7 +148,7 @@ public class IndicatorConfigScreenFactory {
                 .build();
 
         group.option(showOption);
-        group.option(roundOption);
+        group.option(outlineTypeOption);
         group.option(koColorOption);
         group.option(enColorOption);
         group.option(imeColorOption);
