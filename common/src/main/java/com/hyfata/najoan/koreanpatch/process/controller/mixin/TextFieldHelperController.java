@@ -5,8 +5,8 @@ import com.hyfata.najoan.koreanpatch.process.controller.mixin.common.MixinCommon
 import com.hyfata.najoan.koreanpatch.mixin.accessor.TextFieldHelperAccessor;
 import com.hyfata.najoan.koreanpatch.data.provider.keyboard.KeyboardLayout;
 import com.hyfata.najoan.koreanpatch.process.handler.hangul.HangulProcessor;
-import com.hyfata.najoan.koreanpatch.util.language.HangulUtil;
-import com.hyfata.najoan.koreanpatch.util.language.LanguageUtil;
+import com.hyfata.najoan.koreanpatch.util.HangulUtil;
+import com.hyfata.najoan.koreanpatch.data.LangTypeManager;
 import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.client.Minecraft;
 import org.lwjgl.glfw.GLFW;
@@ -75,7 +75,7 @@ public class TextFieldHelperController implements IMixinCommon {
     }
 
     public void insertChar(char chr, CallbackInfoReturnable<Boolean> cir) {
-        if (this.client.screen != null && LanguageUtil.isKorean()) {
+        if (this.client.screen != null && LangTypeManager.isKorean()) {
             cir.setReturnValue(Boolean.TRUE);
             if (chr == ' ') {
                 this.writeText(String.valueOf(chr));
@@ -103,7 +103,7 @@ public class TextFieldHelperController implements IMixinCommon {
         boolean colored = false;
 
         for (char chr : string.toCharArray()) {
-            if (this.client.screen == null || !LanguageUtil.isKorean()) continue;
+            if (this.client.screen == null || !LangTypeManager.isKorean()) continue;
             ci.cancel();
             if (chr == ' ' || chr == '\n') {
                 this.writeText(String.valueOf(chr));

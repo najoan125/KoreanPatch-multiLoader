@@ -1,11 +1,11 @@
-package com.hyfata.najoan.koreanpatch.util.language;
+package com.hyfata.najoan.koreanpatch.data;
 
 import com.hyfata.najoan.koreanpatch.data.provider.LanguageType;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.FormattedCharSequence;
 
-public class LanguageUtil {
+public class LangTypeManager {
     private static final Minecraft client = Minecraft.getInstance();
     private static LanguageType currentType = LanguageType.EN;
     private static final Component IME_TEXT = Component.literal("IME");

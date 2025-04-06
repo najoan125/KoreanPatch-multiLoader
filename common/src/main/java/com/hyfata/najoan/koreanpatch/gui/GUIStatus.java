@@ -1,4 +1,4 @@
-package com.hyfata.najoan.koreanpatch.data;
+package com.hyfata.najoan.koreanpatch.gui;
 
 public class GUIStatus {
     private static boolean shouldUseIME = false;

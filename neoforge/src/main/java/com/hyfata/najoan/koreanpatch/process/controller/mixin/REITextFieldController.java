@@ -1,17 +1,17 @@
-package com.hyfata.najoan.koreanpatch.handler.mixin;
+package com.hyfata.najoan.koreanpatch.process.controller.mixin;
 
 import com.hyfata.najoan.koreanpatch.process.controller.mixin.common.IMixinCommon;
 import com.hyfata.najoan.koreanpatch.process.controller.mixin.common.MixinCommonController;
 import com.hyfata.najoan.koreanpatch.data.provider.keyboard.KeyboardLayout;
 import com.hyfata.najoan.koreanpatch.process.handler.hangul.HangulProcessor;
-import com.hyfata.najoan.koreanpatch.util.language.HangulUtil;
+import com.hyfata.najoan.koreanpatch.util.HangulUtil;
 import me.shedaniel.rei.api.client.gui.widgets.TextField;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-public class REITextFieldHandler implements IMixinCommon {
+public class REITextFieldController implements IMixinCommon {
     private final TextField accessor;
 
-    public REITextFieldHandler(TextField accessor) {
+    public REITextFieldController(TextField accessor) {
         this.accessor = accessor;
     }
 

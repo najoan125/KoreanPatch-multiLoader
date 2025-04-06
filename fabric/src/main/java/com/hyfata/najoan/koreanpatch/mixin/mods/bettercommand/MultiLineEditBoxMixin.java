@@ -1,9 +1,9 @@
 package com.hyfata.najoan.koreanpatch.mixin.mods.bettercommand;
 
 import bettercommandblockui.main.ui.MultiLineTextFieldWidget;
-import com.hyfata.najoan.koreanpatch.data.GUIStatus;
+import com.hyfata.najoan.koreanpatch.gui.GUIStatus;
 import com.hyfata.najoan.koreanpatch.mixin.accessor.EditBoxAccessor;
-import com.hyfata.najoan.koreanpatch.util.language.LanguageUtil;
+import com.hyfata.najoan.koreanpatch.data.LangTypeManager;
 import com.hyfata.najoan.koreanpatch.process.controller.mixin.EditBoxController;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
@@ -29,7 +29,7 @@ public abstract class MultiLineEditBoxMixin extends EditBox {
     private void charTyped(char chr, int modifiers, CallbackInfoReturnable<Boolean> cir) {
         Minecraft client = Minecraft.getInstance();
         if (client.screen != null && !GUIStatus.isBypassInjection() &&
-                LanguageUtil.isKorean() && this.isEditable() && Character.charCount(chr) == 1) {
+                LangTypeManager.isKorean() && this.isEditable() && Character.charCount(chr) == 1) {
             handler.typedTextField(chr, modifiers, cir);
         }
     }

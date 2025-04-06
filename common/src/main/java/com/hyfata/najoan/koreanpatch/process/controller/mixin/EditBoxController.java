@@ -6,7 +6,7 @@ import com.hyfata.najoan.koreanpatch.mixin.accessor.EditBoxAccessor;
 import com.hyfata.najoan.koreanpatch.data.provider.keyboard.KeyboardLayout;
 import com.hyfata.najoan.koreanpatch.mixin.accessor.CreativeModeInventoryScreenInvoker;
 import com.hyfata.najoan.koreanpatch.process.handler.hangul.HangulProcessor;
-import com.hyfata.najoan.koreanpatch.util.language.HangulUtil;
+import com.hyfata.najoan.koreanpatch.util.HangulUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.inventory.CreativeModeInventoryScreen;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;

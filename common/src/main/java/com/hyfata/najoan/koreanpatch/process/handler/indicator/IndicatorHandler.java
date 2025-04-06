@@ -6,7 +6,7 @@ import com.hyfata.najoan.koreanpatch.data.config.ColorOpacityConfig;
 import com.hyfata.najoan.koreanpatch.data.config.category.indicator.outline.OutlineConfig;
 import com.hyfata.najoan.koreanpatch.data.provider.LanguageType;
 import com.hyfata.najoan.koreanpatch.util.minecraft.RenderUtil;
-import com.hyfata.najoan.koreanpatch.util.language.LanguageUtil;
+import com.hyfata.najoan.koreanpatch.data.LangTypeManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 
@@ -22,7 +22,7 @@ public class IndicatorHandler {
             return;
         }
 
-        float width = (float) LanguageUtil.getCurrentTextWidth();
+        float width = (float) LangTypeManager.getCurrentTextWidth();
         float height = (float) client.font.lineHeight;
 
         renderBox(context, x, y, x + frame + width + margin * 2f, y + frame + height + margin * 2f,
@@ -30,7 +30,7 @@ public class IndicatorHandler {
                 getARGB(categoryIndicator.getBackgroundSettings())
         );
 
-        RenderUtil.drawCenteredText(context, LanguageUtil.getCurrentText(),
+        RenderUtil.drawCenteredText(context, LangTypeManager.getCurrentText(),
                 x + frame + width / 2f + margin, y + frame + height / 2f + margin,
                 getARGB(categoryIndicator.getTextSettings())
         );
@@ -51,7 +51,7 @@ public class IndicatorHandler {
     }
 
     public static float getIndicatorWidth() {
-        return frame + (float) LanguageUtil.getCurrentTextWidth() + margin * 2f;
+        return frame + (float) LangTypeManager.getCurrentTextWidth() + margin * 2f;
     }
 
     public static float getIndicatorHeight() {
@@ -61,7 +61,7 @@ public class IndicatorHandler {
     private static int getARGB(ColorOpacityConfig colorOpacityConfig) {
         int outlineRGB = LanguageType.isIME() ?
                 colorOpacityConfig.getImeColor() :
-                LanguageUtil.isKorean() ?
+                LangTypeManager.isKorean() ?
                         colorOpacityConfig.getKoreanColor() :
                         colorOpacityConfig.getEnColor();
         int outlineOpacity = colorOpacityConfig.getOpacity() * 255 / 100; // N% * (0 to 255)/100

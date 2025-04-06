@@ -1,7 +1,7 @@
 package com.hyfata.najoan.koreanpatch.mixin.mods.commandblockide;
 
 import arm32x.minecraft.commandblockide.client.gui.MultilineTextFieldWidget;
-import com.hyfata.najoan.koreanpatch.data.GUIStatus;
+import com.hyfata.najoan.koreanpatch.gui.GUIStatus;
 import com.hyfata.najoan.koreanpatch.process.controller.mixin.EditBoxController;
 import com.hyfata.najoan.koreanpatch.mixin.accessor.EditBoxAccessor;
 import net.minecraft.client.Minecraft;

@@ -2,7 +2,7 @@ package com.hyfata.najoan.koreanpatch.process.controller.mixin.common;
 
 import com.hyfata.najoan.koreanpatch.data.provider.keyboard.KeyboardLayout;
 import com.hyfata.najoan.koreanpatch.process.handler.hangul.HangulProcessor;
-import com.hyfata.najoan.koreanpatch.util.language.HangulUtil;
+import com.hyfata.najoan.koreanpatch.util.HangulUtil;
 
 public class MixinCommonController {
     public static boolean onBackspaceKeyPressed(IMixinCommon mixinCommon, int cursorPosition, String text) {

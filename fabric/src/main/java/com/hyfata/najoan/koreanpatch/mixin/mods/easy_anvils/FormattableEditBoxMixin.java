@@ -1,9 +1,9 @@
 package com.hyfata.najoan.koreanpatch.mixin.mods.easy_anvils;
 
-import com.hyfata.najoan.koreanpatch.data.GUIStatus;
+import com.hyfata.najoan.koreanpatch.gui.GUIStatus;
 import com.hyfata.najoan.koreanpatch.process.controller.mixin.EditBoxController;
 import com.hyfata.najoan.koreanpatch.mixin.accessor.EditBoxAccessor;
-import com.hyfata.najoan.koreanpatch.util.language.LanguageUtil;
+import com.hyfata.najoan.koreanpatch.data.LangTypeManager;
 import fuzs.easyanvils.client.gui.components.AdvancedEditBox;
 import fuzs.easyanvils.client.gui.components.FormattableEditBox;
 import net.minecraft.client.Minecraft;
@@ -31,7 +31,7 @@ public abstract class FormattableEditBoxMixin extends AdvancedEditBox {
     @Inject(at = {@At(value = "HEAD")}, method = {"charTyped(CI)Z"}, cancellable = true)
     public void charTyped(char chr, int modifiers, CallbackInfoReturnable<Boolean> cir) {
         if (this.koreanPatch$client.screen != null && !GUIStatus.isBypassInjection() &&
-                LanguageUtil.isKorean() && this.isEditable() && Character.charCount(chr) == 1) {
+                LangTypeManager.isKorean() && this.isEditable() && Character.charCount(chr) == 1) {
             koreanPatch$handler.typedTextField(chr, modifiers, cir);
         }
     }
