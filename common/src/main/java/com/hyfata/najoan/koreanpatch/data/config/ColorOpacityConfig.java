@@ -1,12 +1,14 @@
 package com.hyfata.najoan.koreanpatch.data.config;
 
+import java.awt.*;
+
 public interface ColorOpacityConfig {
     int getOpacity();
-    int getKoreanColor();
-    int getEnColor();
-    int getImeColor();
+    Color getKoreanColor();
+    Color getEnColor();
+    Color getImeColor();
     void setOpacity(int opacity);
-    void setKoreanColor(int koreanColor);
-    void setEnColor(int enColor);
-    void setImeColor(int imeColor);
+    void setKoreanColor(Color koreanColor);
+    void setEnColor(Color enColor);
+    void setImeColor(Color imeColor);
 }

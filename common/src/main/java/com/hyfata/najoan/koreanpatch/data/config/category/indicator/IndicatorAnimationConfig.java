@@ -4,7 +4,7 @@ import com.hyfata.najoan.koreanpatch.data.provider.EasingFunctions;
 
 public class IndicatorAnimationConfig {
     boolean showAnimation = true;
-    EasingFunctions easingFunction = EasingFunctions.easeOutQuint;
+    EasingFunctions easingFunction = EasingFunctions.EASE_OUT_QUINT;
     int speed = 30;
 
     public IndicatorAnimationConfig() {}

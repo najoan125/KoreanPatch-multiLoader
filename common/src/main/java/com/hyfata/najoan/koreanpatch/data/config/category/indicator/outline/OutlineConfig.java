@@ -1,15 +1,17 @@
 package com.hyfata.najoan.koreanpatch.data.config.category.indicator.outline;
 
+import com.hyfata.najoan.koreanpatch.data.provider.OutlineType;
+
 public class OutlineConfig {
     boolean showOutline = true;
-    boolean rounded = true;
+    OutlineType outlineType = OutlineType.CIRCLE;
     OutlineColorConfig colorOpacity = new OutlineColorConfig();
 
     public OutlineConfig() {}
 
-    public OutlineConfig(boolean showOutline, boolean rounded, OutlineColorConfig colorOpacity) {
+    public OutlineConfig(boolean showOutline, OutlineType outlineType, OutlineColorConfig colorOpacity) {
         this.showOutline = showOutline;
-        this.rounded = rounded;
+        this.outlineType = outlineType;
         this.colorOpacity = colorOpacity;
     }
 
@@ -17,8 +19,8 @@ public class OutlineConfig {
         return showOutline;
     }
 
-    public boolean isRounded() {
-        return rounded;
+    public OutlineType getOutlineType() {
+        return outlineType;
     }
 
     public OutlineColorConfig getColorOpacitySettings() {
@@ -29,8 +31,8 @@ public class OutlineConfig {
         this.showOutline = showOutline;
     }
 
-    public void setRounded(boolean rounded) {
-        this.rounded = rounded;
+    public void setOutlineType(OutlineType outlineType) {
+        this.outlineType = outlineType;
     }
 
     public void setColorOpacity(OutlineColorConfig colorOpacity) {

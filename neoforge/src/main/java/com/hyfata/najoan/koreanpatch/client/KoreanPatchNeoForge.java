@@ -1,5 +1,7 @@
 package com.hyfata.najoan.koreanpatch.client;
 
+import com.hyfata.najoan.koreanpatch.gui.yacl.YaclConfigScreenFactoryManager;
+import com.hyfata.najoan.koreanpatch.platform.Services;
 import com.hyfata.najoan.koreanpatch.process.handler.EventListener;
 import net.minecraft.client.KeyMapping;
 import net.neoforged.api.distmarker.Dist;
@@ -11,6 +13,7 @@ import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.neoforge.client.event.ClientTickEvent;
 import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
 import net.neoforged.neoforge.client.event.ScreenEvent;
+import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
 import net.neoforged.neoforge.common.NeoForge;
 
 @Mod(value = Constants.MOD_ID, dist = Dist.CLIENT)
@@ -21,6 +24,10 @@ public class KoreanPatchNeoForge {
         bus.addListener(this::registerKeys);
 
         registerEvents(bus);
+
+        if (Services.PLATFORM.isModLoaded("yet_another_config_lib_v3")) {
+            container.registerExtensionPoint(IConfigScreenFactory.class, (client, parent) -> YaclConfigScreenFactoryManager.createScreen(parent));
+        }
     }
 
     public void registerEvents(IEventBus bus) {
