@@ -41,4 +41,24 @@ public class CategoryIndicator {
     public IndicatorAnimationConfig getAnimationSettings() {
         return animation;
     }
+
+    public void setShowIndicator(boolean showIndicator) {
+        this.showIndicator = showIndicator;
+    }
+
+    public void setOutlineConfig(OutlineConfig outlineConfig) {
+        this.outlineConfig = outlineConfig;
+    }
+
+    public void setBackground(IndicatorBackgroundColorConfig background) {
+        this.background = background;
+    }
+
+    public void setText(IndicatorTextColorConfig text) {
+        this.text = text;
+    }
+
+    public void setAnimation(IndicatorAnimationConfig animation) {
+        this.animation = animation;
+    }
 }

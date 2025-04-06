@@ -8,7 +8,8 @@ public class OutlineColorConfig implements ColorOpacityConfig {
     int imeColor = 0xffffff;
     int opacity = 100;
 
-    public OutlineColorConfig() {}
+    public OutlineColorConfig() {
+    }
 
     public OutlineColorConfig(int koreanColor, int enColor, int imeColor, int opacity) {
         this.koreanColor = koreanColor;
@@ -35,5 +36,25 @@ public class OutlineColorConfig implements ColorOpacityConfig {
     @Override
     public int getOpacity() {
         return opacity;
+    }
+
+    @Override
+    public void setKoreanColor(int koreanColor) {
+        this.koreanColor = koreanColor;
+    }
+
+    @Override
+    public void setEnColor(int enColor) {
+        this.enColor = enColor;
+    }
+
+    @Override
+    public void setImeColor(int imeColor) {
+        this.imeColor = imeColor;
+    }
+
+    @Override
+    public void setOpacity(int opacity) {
+        this.opacity = opacity;
     }
 }

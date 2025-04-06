@@ -26,4 +26,16 @@ public class IndicatorAnimationConfig {
     public int getSpeed() {
         return speed;
     }
+
+    public void setShowAnimation(boolean showAnimation) {
+        this.showAnimation = showAnimation;
+    }
+
+    public void setEasingFunction(EasingFunctions easingFunction) {
+        this.easingFunction = easingFunction;
+    }
+
+    public void setSpeed(int speed) {
+        this.speed = speed;
+    }
 }

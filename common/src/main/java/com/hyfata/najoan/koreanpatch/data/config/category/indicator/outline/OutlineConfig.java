@@ -24,4 +24,16 @@ public class OutlineConfig {
     public OutlineColorConfig getColorOpacitySettings() {
         return colorOpacity;
     }
+
+    public void setShowOutline(boolean showOutline) {
+        this.showOutline = showOutline;
+    }
+
+    public void setRounded(boolean rounded) {
+        this.rounded = rounded;
+    }
+
+    public void setColorOpacity(OutlineColorConfig colorOpacity) {
+        this.colorOpacity = colorOpacity;
+    }
 }

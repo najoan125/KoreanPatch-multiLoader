@@ -14,4 +14,8 @@ public class ModConfig {
     public CategoryIndicator getCategoryIndicator() {
         return categoryIndicator;
     }
+
+    public void setCategoryIndicator(CategoryIndicator categoryIndicator) {
+        this.categoryIndicator = categoryIndicator;
+    }
 }

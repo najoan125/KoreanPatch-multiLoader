@@ -5,4 +5,8 @@ public interface ColorOpacityConfig {
     int getKoreanColor();
     int getEnColor();
     int getImeColor();
+    void setOpacity(int opacity);
+    void setKoreanColor(int koreanColor);
+    void setEnColor(int enColor);
+    void setImeColor(int imeColor);
 }
