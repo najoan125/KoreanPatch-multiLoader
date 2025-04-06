@@ -2,15 +2,17 @@ package com.hyfata.najoan.koreanpatch.data.config.category.indicator;
 
 import com.hyfata.najoan.koreanpatch.data.config.ColorOpacityConfig;
 
+import java.awt.*;
+
 public class IndicatorTextColorConfig implements ColorOpacityConfig {
-    int koreanColor = 0xffffff;
-    int enColor = 0xffffff;
-    int imeColor = 0xffffff;
+    Color koreanColor = new Color(0xffffff);
+    Color enColor = new Color(0xffffff);
+    Color imeColor = new Color(0xffffff);
     int opacity = 100;
 
     public IndicatorTextColorConfig() {}
 
-    public IndicatorTextColorConfig(int koreanColor, int enColor, int imeColor, int opacity) {
+    public IndicatorTextColorConfig(Color koreanColor, Color enColor, Color imeColor, int opacity) {
         this.koreanColor = koreanColor;
         this.enColor = enColor;
         this.imeColor = imeColor;
@@ -18,17 +20,17 @@ public class IndicatorTextColorConfig implements ColorOpacityConfig {
     }
 
     @Override
-    public int getKoreanColor() {
+    public Color getKoreanColor() {
         return koreanColor;
     }
 
     @Override
-    public int getEnColor() {
+    public Color getEnColor() {
         return enColor;
     }
 
     @Override
-    public int getImeColor() {
+    public Color getImeColor() {
         return imeColor;
     }
 
@@ -43,17 +45,17 @@ public class IndicatorTextColorConfig implements ColorOpacityConfig {
     }
 
     @Override
-    public void setKoreanColor(int koreanColor) {
+    public void setKoreanColor(Color koreanColor) {
         this.koreanColor = koreanColor;
     }
 
     @Override
-    public void setEnColor(int enColor) {
+    public void setEnColor(Color enColor) {
         this.enColor = enColor;
     }
 
     @Override
-    public void setImeColor(int imeColor) {
+    public void setImeColor(Color imeColor) {
         this.imeColor = imeColor;
     }
 }

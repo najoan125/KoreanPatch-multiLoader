@@ -60,10 +60,10 @@ public class IndicatorHandler {
 
     private static int getARGB(ColorOpacityConfig colorOpacityConfig) {
         int outlineRGB = LanguageType.isIME() ?
-                colorOpacityConfig.getImeColor() :
+                colorOpacityConfig.getImeColor().getRGB() :
                 LangTypeManager.isKorean() ?
-                        colorOpacityConfig.getKoreanColor() :
-                        colorOpacityConfig.getEnColor();
+                        colorOpacityConfig.getKoreanColor().getRGB() :
+                        colorOpacityConfig.getEnColor().getRGB();
         int outlineOpacity = colorOpacityConfig.getOpacity() * 255 / 100; // N% * (0 to 255)/100
         return ((outlineOpacity & 0xFF) << 24) | outlineRGB; // ARGB
     }

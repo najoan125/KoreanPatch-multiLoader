@@ -4,8 +4,12 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.hyfata.najoan.koreanpatch.client.Constants;
 import com.hyfata.najoan.koreanpatch.data.config.ModConfig;
+import com.hyfata.najoan.koreanpatch.data.gson.ColorAdapter;
+import com.hyfata.najoan.koreanpatch.data.gson.EasingFunctionsAdapter;
+import com.hyfata.najoan.koreanpatch.data.provider.EasingFunctions;
 import net.minecraft.client.Minecraft;
 
+import java.awt.*;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -15,6 +19,14 @@ public class ConfigManager {
     private static ModConfig config = new ModConfig();
     private static final String CONFIG_FILE_NAME = Constants.MOD_ID + ".json";
     private static File CONFIG_FILE;
+
+    private static Gson createGson() {
+        return new GsonBuilder()
+                .registerTypeAdapter(Color.class, new ColorAdapter())
+                .registerTypeAdapter(EasingFunctions.class, new EasingFunctionsAdapter())
+                .setPrettyPrinting()
+                .create();
+    }
 
     public static void init() {
         CONFIG_FILE = Minecraft.getInstance().gameDirectory.toPath()
@@ -27,7 +39,7 @@ public class ConfigManager {
     }
 
     private static void loadFromFile() {
-        Gson gson = new Gson();
+        Gson gson = createGson();
         try (FileReader reader = new FileReader(CONFIG_FILE)) {
             config = gson.fromJson(reader, ModConfig.class);
         } catch (IOException e) {
@@ -42,7 +54,7 @@ public class ConfigManager {
     public static boolean saveConfig(ModConfig config) {
         ConfigManager.config = config;
 
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        Gson gson = createGson();
         try (FileWriter writer = new FileWriter(CONFIG_FILE)) {
             gson.toJson(config, writer);
         } catch (IOException e) {
