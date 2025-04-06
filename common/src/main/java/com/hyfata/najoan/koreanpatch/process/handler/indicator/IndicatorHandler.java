@@ -82,10 +82,6 @@ public class IndicatorHandler {
                 case RECTANGLE -> {
                     radius = 0f;
                     adjustment = 0f;
-                    RenderUtil.fill(context, x1, y1, x2, y1 + frame, frameColor); // frame with fixed axis-y1
-                    RenderUtil.fill(context, x1, y2, x2, y2 - frame, frameColor); // frame with fixed axis-y2
-                    RenderUtil.fill(context, x1, y1, x1 + frame, y2, frameColor); // frame with fixed axis-x1
-                    RenderUtil.fill(context, x2, y1, x2 - frame, y2, frameColor); // frame with fixed axis-x2
                 }
                 case SUPERELLIPSE -> {
                     float radiusX = radius + 0.5f;
