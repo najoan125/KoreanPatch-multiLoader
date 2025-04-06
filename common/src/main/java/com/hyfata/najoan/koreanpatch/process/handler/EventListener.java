@@ -1,5 +1,6 @@
-package com.hyfata.najoan.koreanpatch.client;
+package com.hyfata.najoan.koreanpatch.process.handler;
 
+import com.hyfata.najoan.koreanpatch.client.KoreanPatchClient;
 import com.hyfata.najoan.koreanpatch.data.GUIStatus;
 import com.hyfata.najoan.koreanpatch.process.ime.InputManager;
 import com.hyfata.najoan.koreanpatch.util.ReflectionFieldChecker;
