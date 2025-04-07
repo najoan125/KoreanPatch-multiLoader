@@ -1,4 +1,4 @@
-package com.hyfata.najoan.koreanpatch.data.gson;
+package com.hyfata.najoan.koreanpatch.data.gson.adapter;
 
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;

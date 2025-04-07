@@ -1,9 +1,11 @@
 package com.hyfata.najoan.koreanpatch.data.config.category.indicator.outline;
 
+import com.hyfata.najoan.koreanpatch.data.gson.JsonComment;
 import com.hyfata.najoan.koreanpatch.data.provider.OutlineType;
 
 public class OutlineConfig {
     boolean showOutline = true;
+    @JsonComment(value = "Outline type: ", enums = true)
     OutlineType outlineType = OutlineType.CIRCLE;
     OutlineColorConfig colorOpacity = new OutlineColorConfig();
 
