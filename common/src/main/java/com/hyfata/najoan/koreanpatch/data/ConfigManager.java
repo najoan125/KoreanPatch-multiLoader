@@ -4,9 +4,10 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.hyfata.najoan.koreanpatch.client.Constants;
 import com.hyfata.najoan.koreanpatch.data.config.ModConfig;
-import com.hyfata.najoan.koreanpatch.data.gson.ColorAdapter;
-import com.hyfata.najoan.koreanpatch.data.gson.EasingFunctionsAdapter;
-import com.hyfata.najoan.koreanpatch.data.gson.OutlineTypeAdapter;
+import com.hyfata.najoan.koreanpatch.data.gson.JsonCommentProcessor;
+import com.hyfata.najoan.koreanpatch.data.gson.adapter.ColorAdapter;
+import com.hyfata.najoan.koreanpatch.data.gson.adapter.EasingFunctionsAdapter;
+import com.hyfata.najoan.koreanpatch.data.gson.adapter.OutlineTypeAdapter;
 import com.hyfata.najoan.koreanpatch.data.provider.EasingFunctions;
 import com.hyfata.najoan.koreanpatch.data.provider.OutlineType;
 import net.minecraft.client.Minecraft;
@@ -19,7 +20,7 @@ import java.io.IOException;
 
 public class ConfigManager {
     private static ModConfig config = new ModConfig();
-    private static final String CONFIG_FILE_NAME = Constants.MOD_ID + ".json";
+    private static final String CONFIG_FILE_NAME = Constants.MOD_ID + ".json5";
     private static File CONFIG_FILE;
 
     private static Gson createGson() {
@@ -42,9 +43,9 @@ public class ConfigManager {
     }
 
     private static void loadFromFile() {
-        Gson gson = createGson();
         try (FileReader reader = new FileReader(CONFIG_FILE)) {
-            config = gson.fromJson(reader, ModConfig.class);
+            JsonCommentProcessor processor = new JsonCommentProcessor(createGson());
+            config = processor.readRemovingComments(reader, ModConfig.class);
         } catch (IOException e) {
             Constants.LOG.error("Failed to read config file: {}", CONFIG_FILE.toString(), e);
         }
@@ -57,9 +58,9 @@ public class ConfigManager {
     public static boolean saveConfig(ModConfig config) {
         ConfigManager.config = config;
 
-        Gson gson = createGson();
         try (FileWriter writer = new FileWriter(CONFIG_FILE)) {
-            gson.toJson(config, writer);
+            JsonCommentProcessor commentedWriter = new JsonCommentProcessor(createGson());
+            commentedWriter.writeWithComments(config, writer);
         } catch (IOException e) {
             Constants.LOG.error("Failed to write config file: {}", CONFIG_FILE.toString(), e);
             return false;

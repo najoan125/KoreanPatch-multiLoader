@@ -1,9 +1,11 @@
 package com.hyfata.najoan.koreanpatch.data.config.category.indicator;
 
+import com.hyfata.najoan.koreanpatch.data.gson.JsonComment;
 import com.hyfata.najoan.koreanpatch.data.provider.EasingFunctions;
 
 public class IndicatorAnimationConfig {
     boolean showAnimation = true;
+    @JsonComment(value = "Easing function: ", enums = true)
     EasingFunctions easingFunction = EasingFunctions.EASE_OUT_QUINT;
     int speed = 30;
 
