@@ -69,12 +69,12 @@ public class JsonCommentProcessor {
                 continue;
             }
 
+            // write comment
             JsonComment comment = field.getAnnotation(JsonComment.class);
             if (comment != null) {
-                indent(writer, indent + 1);
+                writeIndent(writer, indent + 1);
 
                 StringBuilder commentLine = new StringBuilder("// " + comment.value());
-
                 if (comment.enums() && field.getType().isEnum()) {
                     Object[] enumConstants = field.getType().getEnumConstants();
                     if (enumConstants != null) {
@@ -85,10 +85,11 @@ public class JsonCommentProcessor {
                     }
                 }
 
-                writer.write(commentLine.toString() + "\n");
+                writer.write(commentLine + "\n");
             }
 
-            indent(writer, indent + 1);
+            // write key: value or Object
+            writeIndent(writer, indent + 1);
             writer.write("\"" + field.getName() + "\": ");
             writeObject(value, writer, indent + 1, visited);
 
@@ -98,7 +99,7 @@ public class JsonCommentProcessor {
             writer.write("\n");
         }
 
-        indent(writer, indent);
+        writeIndent(writer, indent);
         writer.write("}");
         visited.remove(obj);
     }
@@ -113,7 +114,7 @@ public class JsonCommentProcessor {
         return clazz.getPackage() != null && clazz.getPackage().getName().startsWith("java");
     }
 
-    private void indent(Writer writer, int indent) throws IOException {
+    private void writeIndent(Writer writer, int indent) throws IOException {
         for (int i = 0; i < indent; i++) {
             writer.write("  ");
         }
