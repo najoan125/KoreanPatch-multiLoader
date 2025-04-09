@@ -45,7 +45,7 @@ public class ConfigManager {
     private static void loadFromFile() {
         try (FileReader reader = new FileReader(CONFIG_FILE)) {
             JsonCommentProcessor processor = new JsonCommentProcessor(createGson());
-            config = processor.readRemovingComments(reader, ModConfig.class);
+            config = processor.readWithoutComments(reader, ModConfig.class);
         } catch (IOException e) {
             Constants.LOG.error("Failed to read config file: {}", CONFIG_FILE.toString(), e);
         }
@@ -55,7 +55,7 @@ public class ConfigManager {
         return config;
     }
 
-    public static boolean saveConfig(ModConfig config) {
+    public static void saveConfig(ModConfig config) {
         ConfigManager.config = config;
 
         try (FileWriter writer = new FileWriter(CONFIG_FILE)) {
@@ -63,8 +63,6 @@ public class ConfigManager {
             commentedWriter.writeWithComments(config, writer);
         } catch (IOException e) {
             Constants.LOG.error("Failed to write config file: {}", CONFIG_FILE.toString(), e);
-            return false;
         }
-        return true;
     }
 }

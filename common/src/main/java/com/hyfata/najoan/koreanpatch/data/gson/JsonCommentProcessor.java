@@ -18,11 +18,7 @@ public class JsonCommentProcessor {
         this.gson = gson;
     }
 
-    public void writeWithComments(Object obj, Writer writer) throws IOException {
-        writeObject(obj, writer, 0, new IdentityHashMap<>());
-    }
-
-    public <T> T readRemovingComments(Reader reader, Class<T> type) throws IOException {
+    public <T> T readWithoutComments(Reader reader, Class<T> type) throws IOException {
         StringBuilder builder = new StringBuilder();
         int ch;
         while ((ch = reader.read()) != -1) {
@@ -38,60 +34,28 @@ public class JsonCommentProcessor {
         return json;
     }
 
-    private void writeObject(Object obj, Writer writer, int indent, Map<Object, Boolean> visited) throws IOException {
-        if (obj == null) {
-            writer.write("null");
-            return;
-        }
+    public void writeWithComments(Object obj, Writer writer) throws IOException {
+        writeObjectWithComments(obj, writer, 0, new IdentityHashMap<>());
+    }
 
-        if (isPrimitive(obj) || obj.getClass().isEnum() || isJavaClass(obj.getClass())) {
-            gson.toJson(obj, writer);
-            return;
-        }
+    private void writeObjectWithComments(Object obj, Writer writer, int indent, Map<Object, Boolean> visited) throws IOException {
+        if (handleSpecialCases(obj, writer, visited)) return;
 
-        if (visited.containsKey(obj)) {
-            writer.write("\"<circular>\"");
-            return;
-        }
-        visited.put(obj, true);
-
-        Field[] fields = obj.getClass().getDeclaredFields();
         writer.write("{\n");
 
+        int currentIndent = indent + 1;
+        Field[] fields = obj.getClass().getDeclaredFields();
         for (int i = 0; i < fields.length; i++) {
-            Field field = fields[i];
-            field.setAccessible(true);
-
-            Object value;
-            try {
-                value = field.get(obj);
-            } catch (IllegalAccessException e) {
+            Field field = getAccessibleField(fields[i]);
+            Object value = getFieldValue(obj, field);
+            if (value == null) {
                 continue;
             }
 
-            // write comment
-            JsonComment comment = field.getAnnotation(JsonComment.class);
-            if (comment != null) {
-                writeIndent(writer, indent + 1);
-
-                StringBuilder commentLine = new StringBuilder("// " + comment.value());
-                if (comment.enums() && field.getType().isEnum()) {
-                    Object[] enumConstants = field.getType().getEnumConstants();
-                    if (enumConstants != null) {
-                        String enumList = Arrays.stream(enumConstants)
-                                .map(Object::toString)
-                                .collect(Collectors.joining(", "));
-                        commentLine.append("[").append(enumList).append("]");
-                    }
-                }
-
-                writer.write(commentLine + "\n");
-            }
-
-            // write key: value or Object
-            writeIndent(writer, indent + 1);
-            writer.write("\"" + field.getName() + "\": ");
-            writeObject(value, writer, indent + 1, visited);
+            // write entry
+            writeComment(writer, currentIndent, field);
+            write(writer, currentIndent, "\"" + field.getName() + "\": ");
+            writeObjectWithComments(value, writer, currentIndent, visited);
 
             if (i < fields.length - 1) {
                 writer.write(",");
@@ -99,9 +63,57 @@ public class JsonCommentProcessor {
             writer.write("\n");
         }
 
-        writeIndent(writer, indent);
-        writer.write("}");
+        write(writer, indent, "}");
         visited.remove(obj);
+    }
+
+    private boolean handleSpecialCases(Object obj, Writer writer, Map<Object, Boolean> visited) throws IOException {
+        if (obj == null) {
+            writer.write("null");
+            return true;
+        }
+
+        if (isPrimitive(obj) || obj.getClass().isEnum() || isJavaClass(obj.getClass())) {
+            gson.toJson(obj, writer);
+            return true;
+        }
+
+        if (visited.containsKey(obj)) {
+            writer.write("\"<circular>\"");
+            return true;
+        }
+        visited.put(obj, true);
+        return false;
+    }
+
+    private Object getFieldValue(Object obj, Field field) {
+        try {
+            return field.get(obj);
+        } catch (IllegalAccessException e) {
+            return null;
+        }
+    }
+
+    private void writeComment(Writer writer, int indent, Field field) throws IOException {
+        JsonComment comment = field.getAnnotation(JsonComment.class);
+        if (comment != null) {
+            writeIndent(writer, indent);
+
+            StringBuilder commentLine = new StringBuilder("// " + comment.value());
+
+            // enum
+            if (comment.enums() && field.getType().isEnum()) {
+                Object[] enumConstants = field.getType().getEnumConstants();
+                if (enumConstants != null) {
+                    String enumList = Arrays.stream(enumConstants)
+                            .map(Object::toString)
+                            .collect(Collectors.joining(", "));
+                    commentLine.append("[").append(enumList).append("]");
+                }
+            }
+
+            writer.write(commentLine + "\n");
+        }
     }
 
     private boolean isPrimitive(Object value) {
@@ -118,5 +130,15 @@ public class JsonCommentProcessor {
         for (int i = 0; i < indent; i++) {
             writer.write("  ");
         }
+    }
+
+    private void write(Writer writer, int indent, String str) throws IOException {
+        writeIndent(writer, indent);
+        writer.write(str);
+    }
+
+    private Field getAccessibleField(Field field) {
+        field.setAccessible(true);
+        return field;
     }
 }
