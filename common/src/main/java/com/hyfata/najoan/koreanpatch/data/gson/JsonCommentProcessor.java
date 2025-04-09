@@ -47,8 +47,10 @@ public class JsonCommentProcessor {
         Field[] fields = obj.getClass().getDeclaredFields();
         for (int i = 0; i < fields.length; i++) {
             Field field = getAccessibleField(fields[i]);
-            Object value = getFieldValue(obj, field);
-            if (value == null) {
+            Object value;
+            try {
+                value = field.get(obj);
+            } catch (IllegalAccessException e) {
                 continue;
             }
 
@@ -84,14 +86,6 @@ public class JsonCommentProcessor {
         }
         visited.put(obj, true);
         return false;
-    }
-
-    private Object getFieldValue(Object obj, Field field) {
-        try {
-            return field.get(obj);
-        } catch (IllegalAccessException e) {
-            return null;
-        }
     }
 
     private void writeComment(Writer writer, int indent, Field field) throws IOException {
