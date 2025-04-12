@@ -100,8 +100,8 @@ public class IndicatorConfigScreenFactory {
                 .build();
 
         Option<Color> koColorOption = Option.<Color>createBuilder()
-                .name(Component.translatable("koreanpatch.config.indicator.outline.ko_color"))
-                .description(OptionDescription.of(Component.translatable("koreanpatch.config.indicator.outline.ko_color.description")))
+                .name(Component.translatable("koreanpatch.config.color_opacity.ko"))
+                .description(OptionDescription.of(Component.translatable("koreanpatch.config.color_opacity.ko.description")))
                 .binding(
                         outline.getColorOpacitySettings().getKoreanColor(),
                         outline.getColorOpacitySettings()::getKoreanColor,
@@ -111,8 +111,8 @@ public class IndicatorConfigScreenFactory {
                 .build();
 
         Option<Color> enColorOption = Option.<Color>createBuilder()
-                .name(Component.translatable("koreanpatch.config.indicator.outline.en_color"))
-                .description(OptionDescription.of(Component.translatable("koreanpatch.config.indicator.outline.en_color.description")))
+                .name(Component.translatable("koreanpatch.config.color_opacity.en"))
+                .description(OptionDescription.of(Component.translatable("koreanpatch.config.color_opacity.en.description")))
                 .binding(
                         outline.getColorOpacitySettings().getEnColor(),
                         outline.getColorOpacitySettings()::getEnColor,
@@ -122,8 +122,8 @@ public class IndicatorConfigScreenFactory {
                 .build();
 
         Option<Color> imeColorOption = Option.<Color>createBuilder()
-                .name(Component.translatable("koreanpatch.config.indicator.outline.ime_color"))
-                .description(OptionDescription.of(Component.translatable("koreanpatch.config.indicator.outline.ime_color.description")))
+                .name(Component.translatable("koreanpatch.config.color_opacity.ime"))
+                .description(OptionDescription.of(Component.translatable("koreanpatch.config.color_opacity.ime.description")))
                 .binding(
                         outline.getColorOpacitySettings().getImeColor(),
                         outline.getColorOpacitySettings()::getImeColor,
@@ -133,7 +133,7 @@ public class IndicatorConfigScreenFactory {
                 .build();
 
         Option<Integer> opacityOption = Option.<Integer>createBuilder()
-                .name(Component.translatable("koreanpatch.config.indicator.outline.opacity"))
+                .name(Component.translatable("koreanpatch.config.color_opacity.opacity"))
                 .description(OptionDescription.of(Component.translatable("koreanpatch.config.indicator.outline.opacity.description")))
                 .binding(
                         outline.getColorOpacitySettings().getOpacity(),
@@ -165,8 +165,8 @@ public class IndicatorConfigScreenFactory {
         IndicatorBackgroundColorConfig background = config.getCategoryIndicator().getBackgroundSettings();
 
         Option<Color> koColorOption = Option.<Color>createBuilder()
-                .name(Component.translatable("koreanpatch.config.indicator.background.ko_color"))
-                .description(OptionDescription.of(Component.translatable("koreanpatch.config.indicator.background.ko_color.description")))
+                .name(Component.translatable("koreanpatch.config.color_opacity.ko"))
+                .description(OptionDescription.of(Component.translatable("koreanpatch.config.color_opacity.ko.description")))
                 .binding(
                         background.getKoreanColor(),
                         background::getKoreanColor,
@@ -176,8 +176,8 @@ public class IndicatorConfigScreenFactory {
                 .build();
 
         Option<Color> enColorOption = Option.<Color>createBuilder()
-                .name(Component.translatable("koreanpatch.config.indicator.background.en_color"))
-                .description(OptionDescription.of(Component.translatable("koreanpatch.config.indicator.background.en_color.description")))
+                .name(Component.translatable("koreanpatch.config.color_opacity.en"))
+                .description(OptionDescription.of(Component.translatable("koreanpatch.config.color_opacity.en.description")))
                 .binding(
                         background.getEnColor(),
                         background::getEnColor,
@@ -187,8 +187,8 @@ public class IndicatorConfigScreenFactory {
                 .build();
 
         Option<Color> imeColorOption = Option.<Color>createBuilder()
-                .name(Component.translatable("koreanpatch.config.indicator.background.ime_color"))
-                .description(OptionDescription.of(Component.translatable("koreanpatch.config.indicator.background.ime_color.description")))
+                .name(Component.translatable("koreanpatch.config.color_opacity.ime"))
+                .description(OptionDescription.of(Component.translatable("koreanpatch.config.color_opacity.ime.description")))
                 .binding(
                         background.getImeColor(),
                         background::getImeColor,
@@ -198,7 +198,7 @@ public class IndicatorConfigScreenFactory {
                 .build();
 
         Option<Integer> opacityOption = Option.<Integer>createBuilder()
-                .name(Component.translatable("koreanpatch.config.indicator.background.opacity"))
+                .name(Component.translatable("koreanpatch.config.color_opacity.opacity"))
                 .description(OptionDescription.of(Component.translatable("koreanpatch.config.indicator.background.opacity.description")))
                 .binding(
                         background.getOpacity(),
@@ -228,8 +228,8 @@ public class IndicatorConfigScreenFactory {
         IndicatorTextColorConfig text = config.getCategoryIndicator().getTextSettings();
 
         Option<Color> koColorOption = Option.<Color>createBuilder()
-                .name(Component.translatable("koreanpatch.config.indicator.text.ko_color"))
-                .description(OptionDescription.of(Component.translatable("koreanpatch.config.indicator.text.ko_color.description")))
+                .name(Component.translatable("koreanpatch.config.color_opacity.ko"))
+                .description(OptionDescription.of(Component.translatable("koreanpatch.config.color_opacity.ko.description")))
                 .binding(
                         text.getKoreanColor(),
                         text::getKoreanColor,
@@ -239,8 +239,8 @@ public class IndicatorConfigScreenFactory {
                 .build();
 
         Option<Color> enColorOption = Option.<Color>createBuilder()
-                .name(Component.translatable("koreanpatch.config.indicator.text.en_color"))
-                .description(OptionDescription.of(Component.translatable("koreanpatch.config.indicator.text.en_color.description")))
+                .name(Component.translatable("koreanpatch.config.color_opacity.en"))
+                .description(OptionDescription.of(Component.translatable("koreanpatch.config.color_opacity.en.description")))
                 .binding(
                         text.getEnColor(),
                         text::getEnColor,
@@ -250,8 +250,8 @@ public class IndicatorConfigScreenFactory {
                 .build();
 
         Option<Color> imeColorOption = Option.<Color>createBuilder()
-                .name(Component.translatable("koreanpatch.config.indicator.text.ime_color"))
-                .description(OptionDescription.of(Component.translatable("koreanpatch.config.indicator.text.ime_color.description")))
+                .name(Component.translatable("koreanpatch.config.color_opacity.ime"))
+                .description(OptionDescription.of(Component.translatable("koreanpatch.config.color_opacity.ime.description")))
                 .binding(
                         text.getImeColor(),
                         text::getImeColor,
@@ -261,7 +261,7 @@ public class IndicatorConfigScreenFactory {
                 .build();
 
         Option<Integer> opacityOption = Option.<Integer>createBuilder()
-                .name(Component.translatable("koreanpatch.config.indicator.text.opacity"))
+                .name(Component.translatable("koreanpatch.config.color_opacity.opacity"))
                 .description(OptionDescription.of(Component.translatable("koreanpatch.config.indicator.text.opacity.description")))
                 .binding(
                         text.getOpacity(),
