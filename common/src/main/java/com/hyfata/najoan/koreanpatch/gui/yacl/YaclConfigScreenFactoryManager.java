@@ -3,6 +3,7 @@ package com.hyfata.najoan.koreanpatch.gui.yacl;
 import com.hyfata.najoan.koreanpatch.data.ConfigManager;
 import com.hyfata.najoan.koreanpatch.data.config.ModConfig;
 import com.hyfata.najoan.koreanpatch.gui.yacl.category.IndicatorConfigScreenFactory;
+import com.hyfata.najoan.koreanpatch.gui.yacl.category.InputConfigScreenFactory;
 import dev.isxander.yacl3.api.ConfigCategory;
 import dev.isxander.yacl3.api.YetAnotherConfigLib;
 import net.minecraft.client.gui.screens.Screen;
@@ -16,11 +17,15 @@ public class YaclConfigScreenFactoryManager {
     private static final ModConfig CONFIG = ConfigManager.getConfig();
 
     public static Screen createScreen(Screen parent) {
+        ConfigScreenFactory[] factories = {
+                new IndicatorConfigScreenFactory(),
+                new InputConfigScreenFactory()
+        };
+
         List<ConfigCategory> categories = new ArrayList<>();
-
-        ConfigCategory indicator = IndicatorConfigScreenFactory.createCategory(CONFIG);
-
-        categories.add(indicator);
+        for (ConfigScreenFactory factory : factories) {
+            categories.add(factory.createCategory(CONFIG));
+        }
 
         return YetAnotherConfigLib.createBuilder()
                 .title(Component.translatable("koreanpatch.config"))

@@ -7,6 +7,7 @@ import com.hyfata.najoan.koreanpatch.data.config.category.indicator.IndicatorTex
 import com.hyfata.najoan.koreanpatch.data.config.category.indicator.outline.OutlineConfig;
 import com.hyfata.najoan.koreanpatch.data.provider.EasingFunctions;
 import com.hyfata.najoan.koreanpatch.data.provider.OutlineType;
+import com.hyfata.najoan.koreanpatch.gui.yacl.ConfigScreenFactory;
 import com.hyfata.najoan.koreanpatch.util.YACLUtil;
 import dev.isxander.yacl3.api.ConfigCategory;
 import dev.isxander.yacl3.api.Option;
@@ -17,18 +18,16 @@ import dev.isxander.yacl3.api.controller.EnumControllerBuilder;
 import dev.isxander.yacl3.api.controller.IntegerSliderControllerBuilder;
 import dev.isxander.yacl3.api.controller.TickBoxControllerBuilder;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.MutableComponent;
 
 import java.awt.*;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
-public class IndicatorConfigScreenFactory {
+public class IndicatorConfigScreenFactory extends ConfigScreenFactory {
 
-    public static ConfigCategory createCategory(ModConfig config) {
-        ConfigCategory.Builder category = ConfigCategory.createBuilder()
-                .name(Component.translatable("koreanpatch.config.indicator"))
-                .tooltip(Component.translatable("koreanpatch.config.indicator.description"));
+    @Override
+    public ConfigCategory createCategory(ModConfig config) {
+        ConfigCategory.Builder category = createCategoryBuilder("indicator");
 
         OptionGroup general = generalGroup(config);
         OptionGroup outline = outlineGroup(config);
@@ -45,36 +44,16 @@ public class IndicatorConfigScreenFactory {
         return category.build();
     }
 
-    private static MutableComponent formatedColorOpacityDesc(String group, String type) {
-        String name = Component.translatable("koreanpatch.config.indicator." + group + ".name").getString();
-        String translated;
-        switch (type) {
-            case "ko":
-                translated = Component.translatable("koreanpatch.config.color_opacity.ko.description").getString();
-                break;
-            case "en":
-                translated = Component.translatable("koreanpatch.config.color_opacity.en.description").getString();
-                break;
-            case "ime":
-                translated = Component.translatable("koreanpatch.config.color_opacity.ime.description").getString();
-                break;
-            case "opacity":
-                translated = Component.translatable("koreanpatch.config.color_opacity.description").getString();
-                break;
-            default:
-                return null;
-        }
-        return Component.literal(String.format(translated, name));
-    }
-
-    private static OptionGroup generalGroup(ModConfig config) {
+    private OptionGroup generalGroup(ModConfig config) {
         OptionGroup.Builder group = OptionGroup.createBuilder()
-                .name(Component.translatable("koreanpatch.config.indicator.general"))
-                .description(OptionDescription.of(Component.translatable("koreanpatch.config.indicator.general.description")));
+                .name(createTranslatableComponent("general"))
+                .description(OptionDescription.of(createTranslatableComponent("general.description")));
 
         Option<Boolean> showOption = Option.<Boolean>createBuilder()
-                .name(Component.translatable("koreanpatch.config.indicator.general.show"))
-                .description(YACLUtil.descWithImage("koreanpatch.config.indicator.general.show.description", "indicator"))
+                .name(createTranslatableComponent("general.show"))
+                .description(YACLUtil.descWithImage(
+                        createTranslationKey("general.show.description"), "indicator")
+                )
                 .binding(
                         config.getCategoryIndicator().isShowIndicator(),
                         config.getCategoryIndicator()::isShowIndicator,
@@ -88,16 +67,16 @@ public class IndicatorConfigScreenFactory {
         return group.build();
     }
 
-    private static OptionGroup outlineGroup(ModConfig config) {
+    private OptionGroup outlineGroup(ModConfig config) {
         OptionGroup.Builder group = OptionGroup.createBuilder()
-                .name(Component.translatable("koreanpatch.config.indicator.outline"))
-                .description(OptionDescription.of(Component.translatable("koreanpatch.config.indicator.outline.description")));
+                .name(createTranslatableComponent("outline"))
+                .description(OptionDescription.of(createTranslatableComponent("outline.description")));
 
         OutlineConfig outline = config.getCategoryIndicator().getOutlineSettings();
 
         Option<Boolean> showOption = Option.<Boolean>createBuilder()
-                .name(Component.translatable("koreanpatch.config.indicator.outline.show"))
-                .description(OptionDescription.of(Component.translatable("koreanpatch.config.indicator.outline.show.description")))
+                .name(createTranslatableComponent("outline.show"))
+                .description(OptionDescription.of(createTranslatableComponent("outline.show.description")))
                 .binding(
                         outline.isShowOutline(),
                         outline::isShowOutline,
@@ -107,8 +86,8 @@ public class IndicatorConfigScreenFactory {
                 .build();
 
         Option<OutlineType> outlineTypeOption = Option.<OutlineType>createBuilder()
-                .name(Component.translatable("koreanpatch.config.indicator.outline.outline_type"))
-                .description(OptionDescription.of(Component.translatable("koreanpatch.config.indicator.outline.outline_type.description")))
+                .name(createTranslatableComponent("outline.outline_type"))
+                .description(OptionDescription.of(createTranslatableComponent("outline.outline_type.description")))
                 .binding(
                         outline.getOutlineType(),
                         outline::getOutlineType,
@@ -181,10 +160,10 @@ public class IndicatorConfigScreenFactory {
         return group.build();
     }
 
-    private static OptionGroup backgroundGroup(ModConfig config) {
+    private OptionGroup backgroundGroup(ModConfig config) {
         OptionGroup.Builder group = OptionGroup.createBuilder()
-                .name(Component.translatable("koreanpatch.config.indicator.background"))
-                .description(OptionDescription.of(Component.translatable("koreanpatch.config.indicator.background.description")));
+                .name(createTranslatableComponent("background"))
+                .description(OptionDescription.of(createTranslatableComponent("background.description")));
 
         IndicatorBackgroundColorConfig background = config.getCategoryIndicator().getBackgroundSettings();
 
@@ -244,10 +223,10 @@ public class IndicatorConfigScreenFactory {
         return group.build();
     }
 
-    private static OptionGroup textGroup(ModConfig config) {
+    private OptionGroup textGroup(ModConfig config) {
         OptionGroup.Builder group = OptionGroup.createBuilder()
-                .name(Component.translatable("koreanpatch.config.indicator.text"))
-                .description(OptionDescription.of(Component.translatable("koreanpatch.config.indicator.text.description")));
+                .name(createTranslatableComponent("text"))
+                .description(OptionDescription.of(createTranslatableComponent("text.description")));
 
         IndicatorTextColorConfig text = config.getCategoryIndicator().getTextSettings();
 
@@ -307,16 +286,16 @@ public class IndicatorConfigScreenFactory {
         return group.build();
     }
 
-    private static OptionGroup animationGroup(ModConfig config) {
+    private OptionGroup animationGroup(ModConfig config) {
         OptionGroup.Builder group = OptionGroup.createBuilder()
-                .name(Component.translatable("koreanpatch.config.indicator.animation"))
-                .description(OptionDescription.of(Component.translatable("koreanpatch.config.indicator.animation.description")));
+                .name(createTranslatableComponent("animation"))
+                .description(OptionDescription.of(createTranslatableComponent("animation.description")));
 
         IndicatorAnimationConfig animation = config.getCategoryIndicator().getAnimationSettings();
 
         Option<Boolean> showOption = Option.<Boolean>createBuilder()
-                .name(Component.translatable("koreanpatch.config.indicator.animation.show"))
-                .description(YACLUtil.descWithImage("koreanpatch.config.indicator.animation.show.description", "animation"))
+                .name(createTranslatableComponent("animation.show"))
+                .description(YACLUtil.descWithImage(createTranslationKey("animation.show.description"), "animation"))
                 .binding(
                         animation.isShowAnimation(),
                         animation::isShowAnimation,
@@ -326,8 +305,8 @@ public class IndicatorConfigScreenFactory {
                 .build();
 
         Option<EasingFunctions> easingFunctionsOption = Option.<EasingFunctions>createBuilder()
-                .name(Component.translatable("koreanpatch.config.indicator.animation.easing_function"))
-                .description(OptionDescription.of(Component.translatable("koreanpatch.config.indicator.animation.easing_function.description")))
+                .name(createTranslatableComponent("animation.easing_function"))
+                .description(OptionDescription.of(createTranslatableComponent("animation.easing_function.description")))
                 .binding(
                         animation.getEasingFunction(),
                         animation::getEasingFunction,
@@ -343,8 +322,8 @@ public class IndicatorConfigScreenFactory {
                 .build();
 
         Option<Integer> speedOption = Option.<Integer>createBuilder()
-                .name(Component.translatable("koreanpatch.config.indicator.animation.speed"))
-                .description(OptionDescription.of(Component.translatable("koreanpatch.config.indicator.animation.speed.description")))
+                .name(createTranslatableComponent("animation.speed"))
+                .description(OptionDescription.of(createTranslatableComponent("animation.speed.description")))
                 .binding(
                         animation.getSpeed(),
                         animation::getSpeed,
