@@ -10,6 +10,14 @@ public class LangTypeManager {
     private static LanguageType currentType = LanguageType.EN;
     private static final Component IME_TEXT = Component.literal("IME");
 
+    public static void setCurrentType(LanguageType type) {
+        currentType = type;
+    }
+
+    public static LanguageType getCurrentType() {
+        return currentType;
+    }
+
     public static boolean isKorean() {
         return currentType == LanguageType.KO && !LanguageType.isIME();
     }

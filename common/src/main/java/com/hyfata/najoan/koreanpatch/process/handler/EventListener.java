@@ -1,6 +1,11 @@
 package com.hyfata.najoan.koreanpatch.process.handler;
 
 import com.hyfata.najoan.koreanpatch.client.KoreanPatchClient;
+import com.hyfata.najoan.koreanpatch.data.ConfigManager;
+import com.hyfata.najoan.koreanpatch.data.LangTypeManager;
+import com.hyfata.najoan.koreanpatch.data.config.category.CategoryInput;
+import com.hyfata.najoan.koreanpatch.data.config.category.input.AutoLangTypeMode;
+import com.hyfata.najoan.koreanpatch.data.provider.LanguageType;
 import com.hyfata.najoan.koreanpatch.gui.GUIStatus;
 import com.hyfata.najoan.koreanpatch.process.ime.InputManager;
 import com.hyfata.najoan.koreanpatch.util.ReflectionFieldChecker;
@@ -52,7 +57,7 @@ public class EventListener {
         Minecraft client = Minecraft.getInstance();
 
         if (client.screen != null) {
-//            Constants.LOG.info("Screen changed: " + client.screen); // debug
+//            Constants.LOG.info("Screen changed: " + client.screen.getClass()); // debug
             // injection bypass screens
             Class<?>[] bypassScreens = {JigsawBlockEditScreen.class, StructureBlockEditScreen.class};
             GUIStatus.setBypassInjection(Arrays.stream(bypassScreens)
@@ -71,9 +76,15 @@ public class EventListener {
                 if (!screenPatched) {
                     boolean hasTextFieldWidget = ReflectionFieldChecker.hasFieldOfType(client.screen, EditBox.class);
                     boolean hasSelectionManager = ReflectionFieldChecker.hasFieldOfType(client.screen, TextFieldHelper.class);
-                    InputManager.getController().setFocus(!hasTextFieldWidget && !hasSelectionManager);
+                    if (!hasTextFieldWidget && !hasSelectionManager) {
+                        InputManager.getController().setFocus(true);
+                    } else {
+                        InputManager.getController().setFocus(false);
+                        setLangType();
+                    }
                 } else {
                     InputManager.getController().setFocus(false);
+                    setLangType();
                 }
             }
         }
@@ -87,6 +98,25 @@ public class EventListener {
             InputManager.getController().setFocus(false);
         } else if (GUIStatus.isShouldUseIME()) {
             InputManager.getController().setFocus(true);
+        }
+    }
+
+    private static void setLangType() {
+        CategoryInput categoryInput = ConfigManager.getConfig().getCategoryInput();
+        AutoLangTypeMode mode = categoryInput.getAutoLangTypeMode();
+
+        if (mode != AutoLangTypeMode.AUTO) {
+            switch (mode) {
+                case KOREAN -> LangTypeManager.setCurrentType(LanguageType.KO);
+                case ENGLISH -> LangTypeManager.setCurrentType(LanguageType.EN);
+                case IME -> LanguageType.setIME(true);
+            }
+        }
+
+        if (categoryInput.isMemoryLangTypePerScreen()) {
+            // TODO: memory lang type per screen
+            // make HashMap<String, LanguageType> and save it(realtime) when screen changed
+            // save bin file when screen closed
         }
     }
 
