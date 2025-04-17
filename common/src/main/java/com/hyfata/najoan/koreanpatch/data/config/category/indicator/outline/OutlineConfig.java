@@ -4,40 +4,30 @@ import com.hyfata.najoan.koreanpatch.data.gson.JsonComment;
 import com.hyfata.najoan.koreanpatch.data.provider.OutlineType;
 
 public class OutlineConfig {
-    boolean showOutline = true;
+    private boolean showOutline = true;
+
     @JsonComment(value = "Outline type: ", enums = true)
-    OutlineType outlineType = OutlineType.CIRCLE;
-    OutlineColorConfig colorOpacity = new OutlineColorConfig();
+    private OutlineType outlineType = OutlineType.CIRCLE;
 
-    public OutlineConfig() {}
-
-    public OutlineConfig(boolean showOutline, OutlineType outlineType, OutlineColorConfig colorOpacity) {
-        this.showOutline = showOutline;
-        this.outlineType = outlineType;
-        this.colorOpacity = colorOpacity;
-    }
+    private final OutlineColorConfig colorOpacity = new OutlineColorConfig();
 
     public boolean isShowOutline() {
         return showOutline;
-    }
-
-    public OutlineType getOutlineType() {
-        return outlineType;
-    }
-
-    public OutlineColorConfig getColorOpacitySettings() {
-        return colorOpacity;
     }
 
     public void setShowOutline(boolean showOutline) {
         this.showOutline = showOutline;
     }
 
+    public OutlineType getOutlineType() {
+        return outlineType;
+    }
+
     public void setOutlineType(OutlineType outlineType) {
         this.outlineType = outlineType;
     }
 
-    public void setColorOpacity(OutlineColorConfig colorOpacity) {
-        this.colorOpacity = colorOpacity;
+    public OutlineColorConfig getColorOpacitySettings() {
+        return colorOpacity;
     }
 }

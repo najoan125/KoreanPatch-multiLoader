@@ -6,24 +6,18 @@ import com.hyfata.najoan.koreanpatch.data.config.category.indicator.IndicatorTex
 import com.hyfata.najoan.koreanpatch.data.config.category.indicator.outline.OutlineConfig;
 
 public class CategoryIndicator {
-    boolean showIndicator = true;
-    OutlineConfig outlineConfig = new OutlineConfig();
-    IndicatorBackgroundColorConfig background = new IndicatorBackgroundColorConfig();
-    IndicatorTextColorConfig text = new IndicatorTextColorConfig();
-    IndicatorAnimationConfig animation = new IndicatorAnimationConfig();
-
-    public CategoryIndicator() {}
-
-    public CategoryIndicator(boolean showIndicator, OutlineConfig outlineConfig, IndicatorBackgroundColorConfig background, IndicatorTextColorConfig text, IndicatorAnimationConfig animation) {
-        this.showIndicator = showIndicator;
-        this.outlineConfig = outlineConfig;
-        this.background = background;
-        this.text = text;
-        this.animation = animation;
-    }
+    private boolean showIndicator = true;
+    private final OutlineConfig outlineConfig = new OutlineConfig();
+    private final IndicatorBackgroundColorConfig background = new IndicatorBackgroundColorConfig();
+    private final IndicatorTextColorConfig text = new IndicatorTextColorConfig();
+    private final IndicatorAnimationConfig animation = new IndicatorAnimationConfig();
 
     public boolean isShowIndicator() {
         return showIndicator;
+    }
+
+    public void setShowIndicator(boolean showIndicator) {
+        this.showIndicator = showIndicator;
     }
 
     public OutlineConfig getOutlineSettings() {
@@ -40,25 +34,5 @@ public class CategoryIndicator {
 
     public IndicatorAnimationConfig getAnimationSettings() {
         return animation;
-    }
-
-    public void setShowIndicator(boolean showIndicator) {
-        this.showIndicator = showIndicator;
-    }
-
-    public void setOutlineConfig(OutlineConfig outlineConfig) {
-        this.outlineConfig = outlineConfig;
-    }
-
-    public void setBackground(IndicatorBackgroundColorConfig background) {
-        this.background = background;
-    }
-
-    public void setText(IndicatorTextColorConfig text) {
-        this.text = text;
-    }
-
-    public void setAnimation(IndicatorAnimationConfig animation) {
-        this.animation = animation;
     }
 }

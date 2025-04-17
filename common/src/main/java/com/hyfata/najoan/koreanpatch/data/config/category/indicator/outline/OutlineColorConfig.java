@@ -5,20 +5,10 @@ import com.hyfata.najoan.koreanpatch.data.config.ColorOpacityConfig;
 import java.awt.*;
 
 public class OutlineColorConfig implements ColorOpacityConfig {
-    Color koreanColor = new Color(0xff0000);
-    Color enColor = new Color(0x00ff00);
-    Color imeColor = new Color(0xffffff);
-    int opacity = 100;
-
-    public OutlineColorConfig() {
-    }
-
-    public OutlineColorConfig(Color koreanColor, Color enColor, Color imeColor, int opacity) {
-        this.koreanColor = koreanColor;
-        this.enColor = enColor;
-        this.imeColor = imeColor;
-        this.opacity = opacity;
-    }
+    private Color koreanColor = new Color(0xff0000);
+    private Color enColor = new Color(0x00ff00);
+    private Color imeColor = new Color(0xffffff);
+    private int opacity = 100;
 
     @Override
     public Color getKoreanColor() {

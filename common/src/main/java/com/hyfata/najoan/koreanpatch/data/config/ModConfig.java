@@ -3,19 +3,9 @@ package com.hyfata.najoan.koreanpatch.data.config;
 import com.hyfata.najoan.koreanpatch.data.config.category.CategoryIndicator;
 
 public class ModConfig {
-    private CategoryIndicator categoryIndicator = new CategoryIndicator();
-
-    public ModConfig() {}
-
-    public ModConfig(CategoryIndicator categoryIndicator) {
-        this.categoryIndicator = categoryIndicator;
-    }
+    private final CategoryIndicator categoryIndicator = new CategoryIndicator();
 
     public CategoryIndicator getCategoryIndicator() {
         return categoryIndicator;
-    }
-
-    public void setCategoryIndicator(CategoryIndicator categoryIndicator) {
-        this.categoryIndicator = categoryIndicator;
     }
 }

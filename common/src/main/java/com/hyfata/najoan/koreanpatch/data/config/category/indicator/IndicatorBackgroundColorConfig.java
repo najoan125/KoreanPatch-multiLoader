@@ -5,20 +5,10 @@ import com.hyfata.najoan.koreanpatch.data.config.ColorOpacityConfig;
 import java.awt.*;
 
 public class IndicatorBackgroundColorConfig implements ColorOpacityConfig {
-    Color koreanColor = new Color(0x000000);
-    Color enColor = new Color(0x000000);
-    Color imeColor = new Color(0x000000);
-    int opacity = 50;
-
-    public IndicatorBackgroundColorConfig() {
-    }
-
-    public IndicatorBackgroundColorConfig(Color koreanColor, Color enColor, Color imeColor, int opacity) {
-        this.koreanColor = koreanColor;
-        this.enColor = enColor;
-        this.imeColor = imeColor;
-        this.opacity = opacity;
-    }
+    private Color koreanColor = new Color(0x000000);
+    private Color enColor = new Color(0x000000);
+    private Color imeColor = new Color(0x000000);
+    private int opacity = 50;
 
     @Override
     public Color getKoreanColor() {

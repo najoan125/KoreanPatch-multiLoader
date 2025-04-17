@@ -4,37 +4,31 @@ import com.hyfata.najoan.koreanpatch.data.gson.JsonComment;
 import com.hyfata.najoan.koreanpatch.data.provider.EasingFunctions;
 
 public class IndicatorAnimationConfig {
-    boolean showAnimation = true;
+    private boolean showAnimation = true;
+
     @JsonComment(value = "Easing function: ", enums = true)
-    EasingFunctions easingFunction = EasingFunctions.EASE_OUT_QUINT;
-    int speed = 30;
+    private EasingFunctions easingFunction = EasingFunctions.EASE_OUT_QUINT;
 
-    public IndicatorAnimationConfig() {}
-
-    public IndicatorAnimationConfig(boolean showAnimation, EasingFunctions easingFunction, int speed) {
-        this.showAnimation = showAnimation;
-        this.easingFunction = easingFunction;
-        this.speed = speed;
-    }
+    private int speed = 30;
 
     public boolean isShowAnimation() {
         return showAnimation;
-    }
-
-    public EasingFunctions getEasingFunction() {
-        return easingFunction;
-    }
-
-    public int getSpeed() {
-        return speed;
     }
 
     public void setShowAnimation(boolean showAnimation) {
         this.showAnimation = showAnimation;
     }
 
+    public EasingFunctions getEasingFunction() {
+        return easingFunction;
+    }
+
     public void setEasingFunction(EasingFunctions easingFunction) {
         this.easingFunction = easingFunction;
+    }
+
+    public int getSpeed() {
+        return speed;
     }
 
     public void setSpeed(int speed) {
