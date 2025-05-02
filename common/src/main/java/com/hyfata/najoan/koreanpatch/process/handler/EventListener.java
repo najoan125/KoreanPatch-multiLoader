@@ -12,6 +12,7 @@ import com.hyfata.najoan.koreanpatch.util.ReflectionFieldChecker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.font.TextFieldHelper;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.*;
 import net.minecraft.client.gui.screens.options.controls.KeyBindsScreen;
 
@@ -20,6 +21,10 @@ import java.util.Arrays;
 
 public class EventListener {
     private static ArrayList<Class<?>> patchedScreenClazz = new ArrayList<>();
+    private static final Class<?>[] injectionBypassScreens = {
+            JigsawBlockEditScreen.class,
+            StructureBlockEditScreen.class
+    };
 
     public static void onClientStarted() {
         KoreanPatchClient.clientStarted();
@@ -58,33 +63,15 @@ public class EventListener {
 
         if (client.screen != null) {
 //            Constants.LOG.info("Screen changed: " + client.screen.getClass()); // debug
-            // injection bypass screens
-            Class<?>[] bypassScreens = {JigsawBlockEditScreen.class, StructureBlockEditScreen.class};
-            GUIStatus.setBypassInjection(Arrays.stream(bypassScreens)
-                    .anyMatch(cls -> cls.isInstance(client.screen)));
-
-            // IME set focus
-            boolean screenPatched = false;
-            for (Class<?> cls : patchedScreenClazz) {
-                if (cls.isInstance(client.screen)) {
-                    screenPatched = true;
-                    break;
-                }
-            }
+            GUIStatus.setBypassInjection(isInjectionBypassScreen(client.screen));
+            boolean screenPatched = isScreenPatched(client.screen); // pre-patched screen
 
             if (InputManager.getController() != null) {
-                if (!screenPatched) {
-                    boolean hasTextFieldWidget = ReflectionFieldChecker.hasFieldOfType(client.screen, EditBox.class);
-                    boolean hasSelectionManager = ReflectionFieldChecker.hasFieldOfType(client.screen, TextFieldHelper.class);
-                    if (!hasTextFieldWidget && !hasSelectionManager) {
-                        InputManager.getController().setFocus(true);
-                    } else {
-                        InputManager.getController().setFocus(false);
-                        setLangType();
-                    }
-                } else {
+                if (screenPatched || hasTextField(client.screen)) {
                     InputManager.getController().setFocus(false);
                     setLangType();
+                } else {
+                    InputManager.getController().setFocus(true);
                 }
             }
         }
@@ -126,8 +113,30 @@ public class EventListener {
             try {
                 Class<?> cls = Class.forName(className);
                 result.add(cls);
-            } catch (ClassNotFoundException ignored) {}
+            } catch (ClassNotFoundException ignored) {
+            }
         }
         return result;
+    }
+
+    private static boolean isInjectionBypassScreen(Screen screen) {
+        return Arrays.stream(injectionBypassScreens).anyMatch(cls -> cls.isInstance(screen));
+    }
+
+    private static boolean isScreenPatched(Screen screen) {
+        boolean screenPatched = false;
+        for (Class<?> cls : patchedScreenClazz) {
+            if (cls.isInstance(screen)) {
+                screenPatched = true;
+                break;
+            }
+        }
+        return screenPatched;
+    }
+
+    private static boolean hasTextField(Screen screen) {
+        boolean hasTextFieldWidget = ReflectionFieldChecker.hasFieldOfType(screen, EditBox.class);
+        boolean hasSelectionManager = ReflectionFieldChecker.hasFieldOfType(screen, TextFieldHelper.class);
+        return hasTextFieldWidget || hasSelectionManager;
     }
 }
