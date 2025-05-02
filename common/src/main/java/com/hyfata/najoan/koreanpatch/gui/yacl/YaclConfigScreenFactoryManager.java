@@ -14,7 +14,7 @@ import java.util.List;
 
 public class YaclConfigScreenFactoryManager {
 
-    private static final ModConfig CONFIG = ConfigManager.getConfig();
+    private static final ModConfig CONFIG = ConfigManager.getInstance().getConfig();
 
     public static Screen createScreen(Screen parent) {
         ConfigScreenFactory[] factories = {
@@ -30,7 +30,7 @@ public class YaclConfigScreenFactoryManager {
         return YetAnotherConfigLib.createBuilder()
                 .title(Component.translatable("koreanpatch.config"))
                 .categories(categories)
-                .save(() -> ConfigManager.saveConfig(CONFIG))
+                .save(() -> ConfigManager.getInstance().saveConfig(CONFIG))
                 .build()
                 .generateScreen(parent);
     }

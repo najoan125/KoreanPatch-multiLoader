@@ -29,7 +29,7 @@ public abstract class MultiLineEditBoxMixin extends EditBox {
     private void charTyped(char chr, int modifiers, CallbackInfoReturnable<Boolean> cir) {
         Minecraft client = Minecraft.getInstance();
         if (client.screen != null && !GUIStatus.isBypassInjection() &&
-                LangTypeManager.isKorean() && this.isEditable() && Character.charCount(chr) == 1) {
+                LangTypeManager.getInstance().isKorean() && this.isEditable() && Character.charCount(chr) == 1) {
             handler.typedTextField(chr, modifiers, cir);
         }
     }

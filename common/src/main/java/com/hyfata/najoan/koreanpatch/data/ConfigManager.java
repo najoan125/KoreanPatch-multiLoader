@@ -19,11 +19,20 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 public class ConfigManager {
-    private static ModConfig config = new ModConfig();
-    private static final String CONFIG_FILE_NAME = Constants.MOD_ID + ".json5";
-    private static File CONFIG_FILE;
+    private static ConfigManager instance;
 
-    private static Gson createGson() {
+    public static ConfigManager getInstance() {
+        if (instance == null) {
+            instance = new ConfigManager();
+        }
+        return instance;
+    }
+
+    private static final String CONFIG_FILE_NAME = Constants.MOD_ID + ".json5";
+    private ModConfig config = new ModConfig();
+    private File CONFIG_FILE;
+
+    private Gson createGson() {
         return new GsonBuilder()
                 .registerTypeAdapter(Color.class, new ColorAdapter())
                 .registerTypeAdapter(EasingFunctions.class, new EasingFunctionsAdapter())
@@ -32,7 +41,7 @@ public class ConfigManager {
                 .create();
     }
 
-    public static void init() {
+    public void init() {
         CONFIG_FILE = Minecraft.getInstance().gameDirectory.toPath()
                 .resolve("config").resolve(CONFIG_FILE_NAME).toFile();
 
@@ -42,7 +51,7 @@ public class ConfigManager {
         saveConfig(config);
     }
 
-    private static void loadFromFile() {
+    private void loadFromFile() {
         try (FileReader reader = new FileReader(CONFIG_FILE)) {
             JsonCommentProcessor processor = new JsonCommentProcessor(createGson());
             config = processor.readWithoutComments(reader, ModConfig.class);
@@ -51,12 +60,12 @@ public class ConfigManager {
         }
     }
 
-    public static ModConfig getConfig() {
+    public ModConfig getConfig() {
         return config;
     }
 
-    public static void saveConfig(ModConfig config) {
-        ConfigManager.config = config;
+    public void saveConfig(ModConfig config) {
+        this.config = config;
 
         try (FileWriter writer = new FileWriter(CONFIG_FILE)) {
             JsonCommentProcessor commentedWriter = new JsonCommentProcessor(createGson());

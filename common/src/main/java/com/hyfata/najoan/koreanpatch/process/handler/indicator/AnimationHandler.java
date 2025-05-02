@@ -27,7 +27,7 @@ public class AnimationHandler {
     }
 
     public void calculateAnimation(float targetX, float targetY) {
-        IndicatorAnimationConfig animation = ConfigManager.getConfig().getCategoryIndicator().getAnimationSettings();
+        IndicatorAnimationConfig animation = ConfigManager.getInstance().getConfig().getCategoryIndicator().getAnimationSettings();
         final float[] target = {targetX, targetY};
         float animationDuration = 1f - animation.getSpeed() / 100f;
 

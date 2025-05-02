@@ -1,7 +1,7 @@
 package com.hyfata.najoan.koreanpatch.process.ime.arch.win;
 
 import com.hyfata.najoan.koreanpatch.client.Constants;
-import com.hyfata.najoan.koreanpatch.data.provider.LanguageType;
+import com.hyfata.najoan.koreanpatch.data.LangTypeManager;
 import com.hyfata.najoan.koreanpatch.process.ime.InputController;
 import net.minecraft.client.Minecraft;
 
@@ -14,7 +14,7 @@ public class WinController implements InputController {
             return;
         }
         this.focus = focus;
-        LanguageType.setIME(focus);
+        LangTypeManager.getInstance().setIme(focus);
         WinHandle.INSTANCE.set_focus(focus ? 1 : 0);
     }
 

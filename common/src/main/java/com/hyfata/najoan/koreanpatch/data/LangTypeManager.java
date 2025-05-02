@@ -6,34 +6,52 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.util.FormattedCharSequence;
 
 public class LangTypeManager {
-    private static final Minecraft client = Minecraft.getInstance();
-    private static LanguageType currentType = LanguageType.EN;
-    private static final Component IME_TEXT = Component.literal("IME");
+    private static LangTypeManager instance;
 
-    public static void setCurrentType(LanguageType type) {
+    public static LangTypeManager getInstance() {
+        if (instance == null) {
+            instance = new LangTypeManager();
+        }
+        return instance;
+    }
+
+    private final Minecraft client = Minecraft.getInstance();
+    private LanguageType currentType = LanguageType.EN;
+    private final Component IME_TEXT = Component.literal("IME");
+    private boolean ime = false;
+
+    public void setCurrentType(LanguageType type) {
         currentType = type;
     }
 
-    public static LanguageType getCurrentType() {
+    public LanguageType getCurrentType() {
         return currentType;
     }
 
-    public static boolean isKorean() {
-        return currentType == LanguageType.KO && !LanguageType.isIME();
+    public boolean isKorean() {
+        return currentType == LanguageType.KO && !isIme();
     }
 
-    public static void toggleCurrentType() {
+    public void toggleCurrentType() {
         currentType = currentType == LanguageType.KO ? LanguageType.EN : LanguageType.KO;
     }
 
-    public static FormattedCharSequence getCurrentText() {
-        if (LanguageType.isIME()) {
+    public FormattedCharSequence getCurrentText() {
+        if (isIme()) {
             return IME_TEXT.getVisualOrderText();
         }
         return currentType.getTranslatedVisualOrderText();
     }
 
-    public static int getCurrentTextWidth() {
+    public int getCurrentTextWidth() {
         return client.font.width(getCurrentText());
+    }
+
+    public boolean isIme() {
+        return ime;
+    }
+
+    public void setIme(boolean ime) {
+        this.ime = ime;
     }
 }

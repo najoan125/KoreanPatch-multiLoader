@@ -75,7 +75,7 @@ public class TextFieldHelperController implements IMixinCommon {
     }
 
     public void insertChar(char chr, CallbackInfoReturnable<Boolean> cir) {
-        if (this.client.screen != null && LangTypeManager.isKorean()) {
+        if (this.client.screen != null && LangTypeManager.getInstance().isKorean()) {
             cir.setReturnValue(Boolean.TRUE);
             if (chr == ' ') {
                 this.writeText(String.valueOf(chr));
@@ -103,7 +103,7 @@ public class TextFieldHelperController implements IMixinCommon {
         boolean colored = false;
 
         for (char chr : string.toCharArray()) {
-            if (this.client.screen == null || !LangTypeManager.isKorean()) continue;
+            if (this.client.screen == null || !LangTypeManager.getInstance().isKorean()) continue;
             ci.cancel();
             if (chr == ' ' || chr == '\n') {
                 this.writeText(String.valueOf(chr));

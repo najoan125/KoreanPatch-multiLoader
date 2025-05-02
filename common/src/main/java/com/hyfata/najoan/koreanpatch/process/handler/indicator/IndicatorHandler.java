@@ -4,7 +4,6 @@ import com.hyfata.najoan.koreanpatch.data.ConfigManager;
 import com.hyfata.najoan.koreanpatch.data.config.category.CategoryIndicator;
 import com.hyfata.najoan.koreanpatch.data.config.ColorOpacityConfig;
 import com.hyfata.najoan.koreanpatch.data.config.category.indicator.outline.OutlineConfig;
-import com.hyfata.najoan.koreanpatch.data.provider.LanguageType;
 import com.hyfata.najoan.koreanpatch.util.minecraft.RenderUtil;
 import com.hyfata.najoan.koreanpatch.data.LangTypeManager;
 import net.minecraft.client.Minecraft;
@@ -16,13 +15,13 @@ public class IndicatorHandler {
     private static final float margin = 1f;
 
     public static void showIndicator(GuiGraphics context, float x, float y) {
-        CategoryIndicator categoryIndicator = ConfigManager.getConfig().getCategoryIndicator();
+        CategoryIndicator categoryIndicator = ConfigManager.getInstance().getConfig().getCategoryIndicator();
 
         if (!categoryIndicator.isShowIndicator()) {
             return;
         }
 
-        float width = (float) LangTypeManager.getCurrentTextWidth();
+        float width = (float) LangTypeManager.getInstance().getCurrentTextWidth();
         float height = (float) client.font.lineHeight;
 
         renderBox(context, x, y, x + frame + width + margin * 2f, y + frame + height + margin * 2f,
@@ -30,7 +29,7 @@ public class IndicatorHandler {
                 getARGB(categoryIndicator.getBackgroundSettings())
         );
 
-        RenderUtil.drawCenteredText(context, LangTypeManager.getCurrentText(),
+        RenderUtil.drawCenteredText(context, LangTypeManager.getInstance().getCurrentText(),
                 x + frame + width / 2f + margin, y + frame + height / 2f + margin,
                 getARGB(categoryIndicator.getTextSettings())
         );
@@ -51,7 +50,7 @@ public class IndicatorHandler {
     }
 
     public static float getIndicatorWidth() {
-        return frame + (float) LangTypeManager.getCurrentTextWidth() + margin * 2f;
+        return frame + (float) LangTypeManager.getInstance().getCurrentTextWidth() + margin * 2f;
     }
 
     public static float getIndicatorHeight() {
@@ -59,9 +58,9 @@ public class IndicatorHandler {
     }
 
     private static int getARGB(ColorOpacityConfig colorOpacityConfig) {
-        int outlineRGB = LanguageType.isIME() ?
+        int outlineRGB = LangTypeManager.getInstance().isIme() ?
                 colorOpacityConfig.getImeColor().getRGB() :
-                LangTypeManager.isKorean() ?
+                LangTypeManager.getInstance().isKorean() ?
                         colorOpacityConfig.getKoreanColor().getRGB() :
                         colorOpacityConfig.getEnColor().getRGB();
         int outlineOpacity = colorOpacityConfig.getOpacity() * 255 / 100; // N% * (0 to 255)/100
@@ -69,7 +68,7 @@ public class IndicatorHandler {
     }
 
     private static void renderBox(GuiGraphics context, float x1, float y1, float x2, float y2, int frameColor, int backgroundColor) {
-        OutlineConfig outlineConfig = ConfigManager.getConfig().getCategoryIndicator().getOutlineSettings();
+        OutlineConfig outlineConfig = ConfigManager.getInstance().getConfig().getCategoryIndicator().getOutlineSettings();
 
         float radius = 3.5f;
         float adjustment = 0.65f;

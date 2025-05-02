@@ -29,7 +29,7 @@ public abstract class OverlaySearchFieldMixin extends TextFieldWidget {
     @Inject(at = @At("HEAD"), method = "charTyped", cancellable = true)
     public void charTyped(char chr, int modifiers, CallbackInfoReturnable<Boolean> cir) {
         if (this.koreanPatch$client.screen != null && !GUIStatus.isBypassInjection() &&
-                LangTypeManager.isKorean() && Character.charCount(chr) == 1) {
+                LangTypeManager.getInstance().isKorean() && Character.charCount(chr) == 1) {
             koreanPatch$handler.typedTextField(chr, modifiers, cir);
         }
     }

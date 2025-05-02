@@ -102,14 +102,14 @@ public class EventListener {
     }
 
     private static void setLangType() {
-        CategoryInput categoryInput = ConfigManager.getConfig().getCategoryInput();
+        CategoryInput categoryInput = ConfigManager.getInstance().getConfig().getCategoryInput();
         AutoLangTypeMode mode = categoryInput.getAutoLangTypeMode();
 
         if (mode != AutoLangTypeMode.AUTO) {
             switch (mode) {
-                case KOREAN -> LangTypeManager.setCurrentType(LanguageType.KO);
-                case ENGLISH -> LangTypeManager.setCurrentType(LanguageType.EN);
-                case IME -> LanguageType.setIME(true);
+                case KOREAN -> LangTypeManager.getInstance().setCurrentType(LanguageType.KO);
+                case ENGLISH -> LangTypeManager.getInstance().setCurrentType(LanguageType.EN);
+                case IME -> LangTypeManager.getInstance().setIme(true);
             }
         }
 

@@ -31,7 +31,7 @@ public abstract class FormattableEditBoxMixin extends AdvancedEditBox {
     @Inject(at = {@At(value = "HEAD")}, method = {"charTyped(CI)Z"}, cancellable = true)
     public void charTyped(char chr, int modifiers, CallbackInfoReturnable<Boolean> cir) {
         if (this.koreanPatch$client.screen != null && !GUIStatus.isBypassInjection() &&
-                LangTypeManager.isKorean() && this.isEditable() && Character.charCount(chr) == 1) {
+                LangTypeManager.getInstance().isKorean() && this.isEditable() && Character.charCount(chr) == 1) {
             koreanPatch$handler.typedTextField(chr, modifiers, cir);
         }
     }

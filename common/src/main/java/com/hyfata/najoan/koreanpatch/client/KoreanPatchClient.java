@@ -13,7 +13,7 @@ public class KoreanPatchClient {
     public static void clientStarted() {
         if (Services.PLATFORM.isModLoaded(Constants.MOD_ID)) {
             InputManager.applyController(InputController.newController());
-            ConfigManager.init();
+            ConfigManager.getInstance().init();
             Constants.LOG.info("Korean Patch Loaded");
         }
     }
