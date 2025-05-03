@@ -3,7 +3,9 @@ package com.hyfata.najoan.koreanpatch.data.provider;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.FormattedCharSequence;
 
-public enum LanguageType {
+import java.io.Serializable;
+
+public enum LanguageType implements Serializable {
     KO("koreanpatch.langtype.korean"),
     EN("koreanpatch.langtype.english");
 

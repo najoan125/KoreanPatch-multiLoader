@@ -6,6 +6,8 @@ import com.hyfata.najoan.koreanpatch.data.LangTypeManager;
 import com.hyfata.najoan.koreanpatch.data.config.category.CategoryInput;
 import com.hyfata.najoan.koreanpatch.data.config.category.input.AutoLangTypeMode;
 import com.hyfata.najoan.koreanpatch.data.provider.LanguageType;
+import com.hyfata.najoan.koreanpatch.data.storage.InputStatus;
+import com.hyfata.najoan.koreanpatch.data.storage.InputStatusStorage;
 import com.hyfata.najoan.koreanpatch.gui.GUIStatus;
 import com.hyfata.najoan.koreanpatch.process.ime.InputController;
 import com.hyfata.najoan.koreanpatch.process.ime.InputManager;
@@ -61,7 +63,7 @@ public class EventListener {
 
     public static void afterScreenChange() {
         Screen screen = Minecraft.getInstance().screen;
-        if (screen == null) return;
+        if (screen == null || !KoreanPatchClient.loaded) return;
 
         GUIStatus.setBypassInjection(isInjectionBypassScreen(screen));
 
@@ -72,7 +74,7 @@ public class EventListener {
             controller.setFocus(!hasTextInput);
         }
         if (hasTextInput) {
-            setLangType();
+            setLangType(screen);
         }
     }
 
@@ -86,7 +88,7 @@ public class EventListener {
         }
     }
 
-    private static void setLangType() {
+    private static void setLangType(Screen screen) {
         CategoryInput categoryInput = ConfigManager.getInstance().getConfig().getCategoryInput();
         AutoLangTypeMode mode = categoryInput.getAutoLangTypeMode();
 
@@ -99,9 +101,15 @@ public class EventListener {
         }
 
         if (categoryInput.isMemoryLangTypePerScreen()) {
-            // TODO: memory lang type per screen
-            // make HashMap<String, LanguageType> and save it(realtime) when screen changed
-            // save bin file when screen closed
+            InputStatus inputStatus = InputStatusStorage.getInstance().get(screen);
+            if (inputStatus != null) {
+                LangTypeManager.getInstance().setCurrentType(inputStatus.getLanguageType());
+                InputManager.getController().setFocus(inputStatus.isImeFocus());
+            } else {
+                InputStatusStorage.getInstance().add(screen);
+            }
+
+            InputStatusStorage.getInstance().save();
         }
     }
 
