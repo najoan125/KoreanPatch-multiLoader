@@ -7,6 +7,7 @@ import com.hyfata.najoan.koreanpatch.data.config.category.CategoryInput;
 import com.hyfata.najoan.koreanpatch.data.config.category.input.AutoLangTypeMode;
 import com.hyfata.najoan.koreanpatch.data.provider.LanguageType;
 import com.hyfata.najoan.koreanpatch.gui.GUIStatus;
+import com.hyfata.najoan.koreanpatch.process.ime.InputController;
 import com.hyfata.najoan.koreanpatch.process.ime.InputManager;
 import com.hyfata.najoan.koreanpatch.util.ReflectionFieldChecker;
 import net.minecraft.client.Minecraft;
@@ -59,21 +60,19 @@ public class EventListener {
     }
 
     public static void afterScreenChange() {
-        Minecraft client = Minecraft.getInstance();
+        Screen screen = Minecraft.getInstance().screen;
+        if (screen == null) return;
 
-        if (client.screen != null) {
-//            Constants.LOG.info("Screen changed: " + client.screen.getClass()); // debug
-            GUIStatus.setBypassInjection(isInjectionBypassScreen(client.screen));
-            boolean screenPatched = isScreenPatched(client.screen); // pre-patched screen
+        GUIStatus.setBypassInjection(isInjectionBypassScreen(screen));
 
-            if (InputManager.getController() != null) {
-                if (screenPatched || hasTextField(client.screen)) {
-                    InputManager.getController().setFocus(false);
-                    setLangType();
-                } else {
-                    InputManager.getController().setFocus(true);
-                }
-            }
+        boolean hasTextInput = isScreenPatched(screen) || hasTextField(screen);
+        InputController controller = InputManager.getController();
+
+        if (controller != null) {
+            controller.setFocus(!hasTextInput);
+        }
+        if (hasTextInput) {
+            setLangType();
         }
     }
 
