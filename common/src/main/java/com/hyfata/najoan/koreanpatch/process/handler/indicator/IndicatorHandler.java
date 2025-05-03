@@ -4,6 +4,7 @@ import com.hyfata.najoan.koreanpatch.data.ConfigManager;
 import com.hyfata.najoan.koreanpatch.data.config.category.CategoryIndicator;
 import com.hyfata.najoan.koreanpatch.data.config.ColorOpacityConfig;
 import com.hyfata.najoan.koreanpatch.data.config.category.indicator.outline.OutlineConfig;
+import com.hyfata.najoan.koreanpatch.process.ime.InputManager;
 import com.hyfata.najoan.koreanpatch.util.minecraft.RenderUtil;
 import com.hyfata.najoan.koreanpatch.data.LangTypeManager;
 import net.minecraft.client.Minecraft;
@@ -58,7 +59,7 @@ public class IndicatorHandler {
     }
 
     private static int getARGB(ColorOpacityConfig colorOpacityConfig) {
-        int outlineRGB = LangTypeManager.getInstance().isIme() ?
+        int outlineRGB = InputManager.getController().isFocused() ?
                 colorOpacityConfig.getImeColor().getRGB() :
                 LangTypeManager.getInstance().isKorean() ?
                         colorOpacityConfig.getKoreanColor().getRGB() :

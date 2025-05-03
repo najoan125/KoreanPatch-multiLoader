@@ -24,7 +24,7 @@ public class KeyboardHandlerMixin {
         if (window == minecraft.getWindow().getWindow() && action == 1 && !GUIStatus.isBypassInjection()) {
             if (minecraft.screen != null && KeyBinds.getImeBinding().matches(keyCode, scanCode) && modifiers == 2) {
                 InputManager.getController().toggleFocus();
-            } else if (KeyBinds.getLangBinding().matches(keyCode, scanCode) && !LangTypeManager.getInstance().isIme()) {
+            } else if (KeyBinds.getLangBinding().matches(keyCode, scanCode) && !InputManager.getController().isFocused()) {
                 LangTypeManager.getInstance().toggleCurrentType();
             }
         }

@@ -78,7 +78,6 @@ public class EventListener {
 
     public static void onClientTick() {
         Minecraft client = Minecraft.getInstance();
-        if (InputManager.getController() == null) return;
 
         if (client.screen == null && !GUIStatus.isShouldUseIME()) {
             InputManager.getController().setFocus(false);
@@ -95,7 +94,7 @@ public class EventListener {
             switch (mode) {
                 case KOREAN -> LangTypeManager.getInstance().setCurrentType(LanguageType.KO);
                 case ENGLISH -> LangTypeManager.getInstance().setCurrentType(LanguageType.EN);
-                case IME -> LangTypeManager.getInstance().setIme(true);
+                case IME -> InputManager.getController().setFocus(true);
             }
         }
 

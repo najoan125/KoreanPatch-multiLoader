@@ -1,6 +1,7 @@
 package com.hyfata.najoan.koreanpatch.data;
 
 import com.hyfata.najoan.koreanpatch.data.provider.LanguageType;
+import com.hyfata.najoan.koreanpatch.process.ime.InputManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.FormattedCharSequence;
@@ -18,7 +19,6 @@ public class LangTypeManager {
     private final Minecraft client = Minecraft.getInstance();
     private LanguageType currentType = LanguageType.EN;
     private final Component IME_TEXT = Component.literal("IME");
-    private boolean ime = false;
 
     public void setCurrentType(LanguageType type) {
         currentType = type;
@@ -29,7 +29,7 @@ public class LangTypeManager {
     }
 
     public boolean isKorean() {
-        return currentType == LanguageType.KO && !isIme();
+        return currentType == LanguageType.KO && !InputManager.getController().isFocused();
     }
 
     public void toggleCurrentType() {
@@ -37,7 +37,7 @@ public class LangTypeManager {
     }
 
     public FormattedCharSequence getCurrentText() {
-        if (isIme()) {
+        if (InputManager.getController().isFocused()) {
             return IME_TEXT.getVisualOrderText();
         }
         return currentType.getTranslatedVisualOrderText();
@@ -45,13 +45,5 @@ public class LangTypeManager {
 
     public int getCurrentTextWidth() {
         return client.font.width(getCurrentText());
-    }
-
-    public boolean isIme() {
-        return ime;
-    }
-
-    public void setIme(boolean ime) {
-        this.ime = ime;
     }
 }
