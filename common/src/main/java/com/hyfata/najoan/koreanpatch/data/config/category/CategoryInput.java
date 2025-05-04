@@ -6,9 +6,9 @@ import com.hyfata.najoan.koreanpatch.data.gson.JsonComment;
 public class CategoryInput {
     @JsonComment(value = "Auto language type mode: ", enums = true)
     private AutoLangTypeMode autoLangTypeMode = AutoLangTypeMode.AUTO;
+    private boolean memoryLangTypePerScreen = false;
     private boolean disableImeWhenPlaying = true;
     private boolean autoImeSwitch = true;
-    private boolean memoryLangTypePerScreen = false;
     private boolean alwaysImeEnabled = false;
 
     public AutoLangTypeMode getAutoLangTypeMode() {
