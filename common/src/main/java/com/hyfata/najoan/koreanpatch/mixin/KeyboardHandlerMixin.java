@@ -2,6 +2,7 @@ package com.hyfata.najoan.koreanpatch.mixin;
 
 import com.hyfata.najoan.koreanpatch.client.KeyBinds;
 import com.hyfata.najoan.koreanpatch.data.ConfigManager;
+import com.hyfata.najoan.koreanpatch.data.config.category.CategoryInput;
 import com.hyfata.najoan.koreanpatch.data.storage.InputStatusStorage;
 import com.hyfata.najoan.koreanpatch.gui.GUIStatus;
 import com.hyfata.najoan.koreanpatch.process.ime.InputManager;
@@ -21,17 +22,20 @@ public class KeyboardHandlerMixin {
     @Final
     private Minecraft minecraft;
 
-    @Inject(method = "keyPress", at = @At("HEAD"))
+    @Inject(method = "keyPress", at = @At("RETURN"))
     private void onInput(long window, int keyCode, int scanCode, int action, int modifiers, CallbackInfo ci) {
-        boolean memoryLangType = ConfigManager.getInstance().getConfig().getCategoryInput().isMemoryLangTypePerScreen();
+        CategoryInput categoryInput = ConfigManager.getInstance().getConfig().getCategoryInput();
 
         if (window == minecraft.getWindow().getWindow() && action == 1 && !GUIStatus.isBypassInjection()) {
-            if (minecraft.screen != null && KeyBinds.getImeBinding().matches(keyCode, scanCode) && modifiers == 2) {
+            if (KeyBinds.getImeBinding().matches(keyCode, scanCode) && modifiers == 2 && !categoryInput.isAlwaysImeEnabled()) {
                 InputManager.getController().toggleFocus();
-                if (memoryLangType) InputStatusStorage.getInstance().add(minecraft.screen);
-            } else if (KeyBinds.getLangBinding().matches(keyCode, scanCode) && !InputManager.getController().isFocused()) {
+                if (categoryInput.isMemoryLangTypePerScreen())
+                    InputStatusStorage.getInstance().add(minecraft.screen);
+
+            } else if (KeyBinds.getLangBinding().matches(keyCode, scanCode)) {
                 LangTypeManager.getInstance().toggleCurrentType();
-                if (memoryLangType) InputStatusStorage.getInstance().add(minecraft.screen);
+                if (categoryInput.isMemoryLangTypePerScreen())
+                    InputStatusStorage.getInstance().add(minecraft.screen);
             }
         }
     }

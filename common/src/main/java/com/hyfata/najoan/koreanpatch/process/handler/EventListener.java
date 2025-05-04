@@ -69,8 +69,9 @@ public class EventListener {
 
         boolean hasTextInput = isScreenPatched(screen) || hasTextField(screen);
         InputController controller = InputManager.getController();
+        CategoryInput categoryInput = ConfigManager.getInstance().getConfig().getCategoryInput();
 
-        if (controller != null) {
+        if (controller != null && categoryInput.isAutoImeSwitch()) {
             controller.setFocus(!hasTextInput);
         }
         if (hasTextInput) {
@@ -79,9 +80,10 @@ public class EventListener {
     }
 
     public static void onClientTick() {
+        CategoryInput categoryInput = ConfigManager.getInstance().getConfig().getCategoryInput();
         Minecraft client = Minecraft.getInstance();
 
-        if (client.screen == null && !GUIStatus.isShouldUseIME()) {
+        if (client.screen == null && !GUIStatus.isShouldUseIME() && categoryInput.isDisableImeWhenPlaying()) {
             InputManager.getController().setFocus(false);
         } else if (GUIStatus.isShouldUseIME()) {
             InputManager.getController().setFocus(true);
@@ -101,16 +103,21 @@ public class EventListener {
         }
 
         if (categoryInput.isMemoryLangTypePerScreen()) {
-            InputStatus inputStatus = InputStatusStorage.getInstance().get(screen);
-            if (inputStatus != null) {
-                LangTypeManager.getInstance().setCurrentType(inputStatus.getLanguageType());
-                InputManager.getController().setFocus(inputStatus.isImeFocus());
-            } else {
-                InputStatusStorage.getInstance().add(screen);
-            }
-
-            InputStatusStorage.getInstance().save();
+            setStoredLangType(screen);
         }
+    }
+
+    private static void setStoredLangType(Screen screen) {
+        InputStatus inputStatus = InputStatusStorage.getInstance().get(screen);
+
+        if (inputStatus != null) {
+            LangTypeManager.getInstance().setCurrentType(inputStatus.getLanguageType());
+            InputManager.getController().setFocus(inputStatus.isImeFocus());
+        } else {
+            InputStatusStorage.getInstance().add(screen);
+        }
+
+        InputStatusStorage.getInstance().save();
     }
 
     private static ArrayList<Class<?>> getExistingClasses(String[] clazz) {

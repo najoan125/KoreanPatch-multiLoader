@@ -1,6 +1,7 @@
 package com.hyfata.najoan.koreanpatch.process.ime.arch.win;
 
 import com.hyfata.najoan.koreanpatch.client.Constants;
+import com.hyfata.najoan.koreanpatch.data.ConfigManager;
 import com.hyfata.najoan.koreanpatch.process.ime.InputController;
 import net.minecraft.client.Minecraft;
 
@@ -13,6 +14,10 @@ public class WinController implements InputController {
             return;
         }
         this.focus = focus;
+        if (ConfigManager.getInstance().getConfig().getCategoryInput().isAlwaysImeEnabled()) {
+            focus = true;
+        }
+
         WinHandle.INSTANCE.set_focus(focus ? 1 : 0);
     }
 

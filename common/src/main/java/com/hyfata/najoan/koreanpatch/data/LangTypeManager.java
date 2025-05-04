@@ -29,7 +29,9 @@ public class LangTypeManager {
     }
 
     public boolean isKorean() {
-        return currentType == LanguageType.KO && !InputManager.getController().isFocused();
+        if (!ConfigManager.getInstance().getConfig().getCategoryInput().isAlwaysImeEnabled())
+            return currentType == LanguageType.KO && !InputManager.getController().isFocused();
+        return currentType == LanguageType.KO;
     }
 
     public void toggleCurrentType() {
@@ -37,7 +39,8 @@ public class LangTypeManager {
     }
 
     public FormattedCharSequence getCurrentText() {
-        if (InputManager.getController().isFocused()) {
+        if (InputManager.getController().isFocused() &&
+                !ConfigManager.getInstance().getConfig().getCategoryInput().isAlwaysImeEnabled()) {
             return IME_TEXT.getVisualOrderText();
         }
         return currentType.getTranslatedVisualOrderText();

@@ -6,8 +6,10 @@ import com.hyfata.najoan.koreanpatch.data.gson.JsonComment;
 public class CategoryInput {
     @JsonComment(value = "Auto language type mode: ", enums = true)
     private AutoLangTypeMode autoLangTypeMode = AutoLangTypeMode.AUTO;
-    private boolean memoryLangTypePerScreen = false;
+    private boolean disableImeWhenPlaying = true;
     private boolean autoImeSwitch = true;
+    private boolean memoryLangTypePerScreen = false;
+    private boolean alwaysImeEnabled = false;
 
     public AutoLangTypeMode getAutoLangTypeMode() {
         return autoLangTypeMode;
@@ -31,5 +33,21 @@ public class CategoryInput {
 
     public void setAutoImeSwitch(boolean autoImeSwitch) {
         this.autoImeSwitch = autoImeSwitch;
+    }
+
+    public boolean isDisableImeWhenPlaying() {
+        return disableImeWhenPlaying;
+    }
+
+    public void setDisableImeWhenPlaying(boolean disableImeWhenPlaying) {
+        this.disableImeWhenPlaying = disableImeWhenPlaying;
+    }
+
+    public boolean isAlwaysImeEnabled() {
+        return alwaysImeEnabled;
+    }
+
+    public void setAlwaysImeEnabled(boolean alwaysImeEnabled) {
+        this.alwaysImeEnabled = alwaysImeEnabled;
     }
 }
