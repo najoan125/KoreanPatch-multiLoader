@@ -7,15 +7,24 @@ import net.minecraft.client.Minecraft;
 
 public class WinController implements InputController {
     private boolean focus = false;
+    private boolean fakeFocus = false;
 
     @Override
     public void setFocus(boolean focus) {
-        if (this.focus == focus) {
+        boolean alwaysIme = ConfigManager.getInstance().getConfig().getCategoryInput().isAlwaysImeEnabled();
+
+        if (!alwaysIme && !fakeFocus && this.focus == focus) {
             return;
         }
+
         this.focus = focus;
-        if (ConfigManager.getInstance().getConfig().getCategoryInput().isAlwaysImeEnabled()) {
+
+        if (alwaysIme) {
+            if (this.focus) return;
             focus = true;
+            fakeFocus = true;
+        } else {
+            fakeFocus = false;
         }
 
         WinHandle.INSTANCE.set_focus(focus ? 1 : 0);
