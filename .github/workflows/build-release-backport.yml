@@ -71,24 +71,6 @@ jobs:
           dependencies: |
             yacl(optional)
 
-      - name: Upload artifacts to Modrinth/CurseForge for NeoForge
-        uses: Kir-Antipov/mc-publish@v3.3
-        with:
-          modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
-          curseforge-token: ${{ secrets.CURSEFORGE_TOKEN }}
-          files: neoforge/build/libs/!(*-@(dev|sources|all|javadoc)).jar
-          modrinth-id: qyulnpBL
-          curseforge-id: 657742
-          modrinth-featured: false
-          name: Korean Chat Patch ${{ steps.properties.outputs.mod_version }} for NeoForge ${{ steps.properties.outputs.minecraft_version }}
-          version: mc${{ steps.properties.outputs.minecraft_version }}-${{ steps.properties.outputs.mod_version }}-neoforge
-          changelog: ${{ inputs.changelog }}
-          version-type: ${{ inputs.version-type }}
-          game-versions: ${{ steps.properties.outputs.minecraft_version_range }}
-          loaders: neoforge
-          dependencies: |
-            yacl(optional)
-
       - name: Upload artifacts to Modrinth/CurseForge for Fabric & Quilt
         uses: Kir-Antipov/mc-publish@v3.3
         with:
@@ -127,4 +109,4 @@ jobs:
           name: koreanpatch-backport-${{ steps.properties.outputs.minecraft_version }}
           path: |
             fabric/build/libs/*.jar
-            neoforge/build/libs/*.jar
+            forge/build/libs/*.jar
