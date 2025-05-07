@@ -93,7 +93,7 @@ public class IndicatorHandler {
                     RenderUtil.drawVertexSuperellipseFrame(context, x1 + radiusX, y2 - radius, radiusX, radiusY, exponent, frameColor, frame, RenderUtil.VertexDirection.BOTTOM_LEFT);
                     RenderUtil.drawVertexSuperellipseFrame(context, x2 - radiusX, y2 - radius, radiusX, radiusY, exponent, frameColor, frame, RenderUtil.VertexDirection.BOTTOM_RIGHT);
                 }
-                case null, default -> { // CIRCLE
+                default -> { // CIRCLE
                     RenderUtil.drawVertexCircleFrame(context, x1 + radius, y1 + radius, radius, frameColor, frame, RenderUtil.VertexDirection.TOP_LEFT);
                     RenderUtil.drawVertexCircleFrame(context, x2 - radius, y1 + radius, radius, frameColor, frame, RenderUtil.VertexDirection.TOP_RIGHT);
                     RenderUtil.drawVertexCircleFrame(context, x1 + radius, y2 - radius, radius, frameColor, frame, RenderUtil.VertexDirection.BOTTOM_LEFT);

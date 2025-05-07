@@ -25,7 +25,11 @@ public class KoreanPatchNeoForge {
         registerEvents(bus);
 
         if (Services.PLATFORM.isModLoaded("yet_another_config_lib_v3")) {
-            container.registerExtensionPoint(IConfigScreenFactory.class, (client, parent) -> YaclConfigScreenFactoryManager.createScreen(parent));
+            container.registerExtensionPoint(ConfigScreenHandler.ConfigScreenFactory.class,
+                    () -> new ConfigScreenHandler.ConfigScreenFactory(
+                            (client, parent) -> YaclConfigScreenFactoryManager.createScreen(parent)
+                    )
+            );
         }
     }
 
