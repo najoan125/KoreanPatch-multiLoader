@@ -1,7 +1,7 @@
 package com.hyfata.najoan.koreanpatch.mixin.indicator;
 
-import com.hyfata.najoan.koreanpatch.util.animation.AnimationUtil;
-import com.hyfata.najoan.koreanpatch.handler.Indicator;
+import com.hyfata.najoan.koreanpatch.process.handler.indicator.AnimationHandler;
+import com.hyfata.najoan.koreanpatch.process.handler.indicator.IndicatorHandler;
 import com.hyfata.najoan.koreanpatch.util.minecraft.EditBoxUtil;
 import it.unimi.dsi.fastutil.booleans.BooleanConsumer;
 import net.minecraft.client.Minecraft;
@@ -36,7 +36,7 @@ public class EditWorldScreenMixin extends Screen {
     private static Component NAME_LABEL;
 
     @Unique
-    private final AnimationUtil koreanPatch$animationUtil = new AnimationUtil();
+    private final AnimationHandler koreanPatch$animationHandler = new AnimationHandler();
 
     @Inject(method = "<init>", at = @At("TAIL"), locals = LocalCapture.CAPTURE_FAILEXCEPTION)
     private void onInit(Minecraft $$0, LevelStorageSource.LevelStorageAccess $$1, String $$2, BooleanConsumer $$3, CallbackInfo ci, Font $$4, EditBox $$5, LinearLayout $$6, Button $$7) {
@@ -48,9 +48,9 @@ public class EditWorldScreenMixin extends Screen {
         float x = EditBoxUtil.getCursorXWithText(koreanPatch$nameEdit, NAME_LABEL, koreanPatch$nameEdit.getX()) + 4;
         float y = EditBoxUtil.calculateIndicatorY(koreanPatch$nameEdit);
 
-        koreanPatch$animationUtil.init(x - 4, 0);
-        koreanPatch$animationUtil.calculateAnimation(x, 0);
+        koreanPatch$animationHandler.init(x - 4, 0);
+        koreanPatch$animationHandler.calculateAnimation(x, 0);
 
-        Indicator.showIndicator(context, koreanPatch$animationUtil.getResultX(), y);
+        IndicatorHandler.showIndicator(context, koreanPatch$animationHandler.getResultX(), y);
     }
 }

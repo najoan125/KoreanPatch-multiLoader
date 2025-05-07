@@ -13,7 +13,7 @@ minecraft {
 
 dependencies {
     compileOnly group:'org.spongepowered', name:'mixin', version:'0.8.5'
-    api "me.shedaniel.cloth:cloth-config-neoforge:${cloth_config}"
+    compileOnly "dev.isxander:yet-another-config-lib:${project.yacl_version}-neoforge"
 }
 
 configurations {

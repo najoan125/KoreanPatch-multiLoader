@@ -54,6 +54,10 @@ repositories {
         url = 'https://maven.blamejared.com'
     }
     maven { url "https://maven.shedaniel.me/" }
+    maven {
+        name = 'Xander Maven'
+        url = 'https://maven.isxander.dev/releases'
+    }
 }
 
 // Declare capabilities on the outgoing configurations.
