@@ -1,25 +1,24 @@
 package com.hyfata.najoan.koreanpatch.client;
 
-import com.hyfata.najoan.koreanpatch.config.ModConfig;
+import com.hyfata.najoan.koreanpatch.data.ConfigManager;
+import com.hyfata.najoan.koreanpatch.data.storage.InputStatusStorage;
 import com.hyfata.najoan.koreanpatch.platform.Services;
-import com.hyfata.najoan.koreanpatch.ime.controller.InputController;
-import com.hyfata.najoan.koreanpatch.ime.controller.InputManager;
-import me.shedaniel.autoconfig.AutoConfig;
+import com.hyfata.najoan.koreanpatch.process.ime.InputController;
+import com.hyfata.najoan.koreanpatch.process.ime.InputManager;
 
 public class KoreanPatchClient {
-    public static boolean IME = false;
-    public static boolean axiomEditorUIOpened = false;
-    public static boolean bypassInjection = false;
-    public static ModConfig config;
+    public static boolean loaded = false;
 
     public static void init() {
-        config = AutoConfig.getConfigHolder(ModConfig.class).getConfig();
         KeyBinds.register();
     }
 
     public static void clientStarted() {
         if (Services.PLATFORM.isModLoaded(Constants.MOD_ID)) {
             InputManager.applyController(InputController.newController());
+            ConfigManager.getInstance().init();
+            InputStatusStorage.getInstance().load();
+            loaded = true;
             Constants.LOG.info("Korean Patch Loaded");
         }
     }
