@@ -71,6 +71,8 @@ dependencies {
 
     // Forge's hack fix
     implementation('net.sf.jopt-simple:jopt-simple:5.0.4') { version { strictly '5.0.4' } }
+    api "me.shedaniel.cloth:cloth-config-forge:${cloth_config}"
+    compileOnly "maven.modrinth:yacl:${project.yacl_version}-forge"
     implementation "maven.modrinth:easy-anvils:${project.easy_anvils_version_forge}"
     compileOnly "maven.modrinth:xaeros-minimap:${project.xaeros_minimap_forge}"
     compileOnly "maven.modrinth:xaeros-world-map:${project.xaeros_world_map_forge}"

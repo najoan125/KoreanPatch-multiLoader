@@ -1,8 +1,8 @@
 package com.hyfata.najoan.koreanpatch.client;
 
-import com.hyfata.najoan.koreanpatch.config.ModConfig;
-import me.shedaniel.autoconfig.AutoConfig;
-import me.shedaniel.autoconfig.serializer.GsonConfigSerializer;
+import com.hyfata.najoan.koreanpatch.gui.yacl.YaclConfigScreenFactoryManager;
+import com.hyfata.najoan.koreanpatch.platform.Services;
+import com.hyfata.najoan.koreanpatch.process.handler.EventListener;
 import net.minecraft.client.KeyMapping;
 import net.minecraftforge.client.ConfigScreenHandler;
 import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
@@ -24,18 +24,18 @@ public class KoreanPatchForge {
     }
 
     private KoreanPatchForge(IEventBus bus) {
-        registerConfig();
         KoreanPatchClient.init();
         bus.addListener(this::registerKeys);
 
         registerEvents(bus);
-    }
 
-    public void registerConfig() {
-        AutoConfig.register(ModConfig.class, GsonConfigSerializer::new);
-        ModLoadingContext.get().registerExtensionPoint(ConfigScreenHandler.ConfigScreenFactory.class, () ->
-                new ConfigScreenHandler.ConfigScreenFactory((client, parent) ->
-                        AutoConfig.getConfigScreen(ModConfig.class, parent).get()));
+        if (Services.PLATFORM.isModLoaded("yet_another_config_lib_v3")) {
+            ModLoadingContext.get().registerExtensionPoint(ConfigScreenHandler.ConfigScreenFactory.class,
+                    () -> new ConfigScreenHandler.ConfigScreenFactory(
+                            (client, parent) -> YaclConfigScreenFactoryManager.createScreen(parent)
+                    )
+            );
+        }
     }
 
     public static void registerEvents(IEventBus bus) {

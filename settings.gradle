@@ -71,3 +71,4 @@ rootProject.name = 'KoreanPatch-multiLoader'
 include('common')
 include('fabric')
 include('neoforge')
+include('forge')

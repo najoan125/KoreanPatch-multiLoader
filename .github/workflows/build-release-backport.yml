@@ -69,7 +69,7 @@ jobs:
           game-versions: ${{ steps.properties.outputs.minecraft_version_range }}
           loaders: forge
           dependencies: |
-            cloth-config
+            yacl(optional)
 
       - name: Upload artifacts to Modrinth/CurseForge for NeoForge
         uses: Kir-Antipov/mc-publish@v3.3
