@@ -1,6 +1,6 @@
 package com.hyfata.najoan.koreanpatch.util.minecraft;
 
-import com.hyfata.najoan.koreanpatch.handler.Indicator;
+import com.hyfata.najoan.koreanpatch.process.handler.indicator.IndicatorHandler;
 import com.hyfata.najoan.koreanpatch.mixin.accessor.EditBoxAccessor;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.EditBox;
@@ -15,13 +15,13 @@ public class EditBoxUtil {
         int selectionStart = accessor.invokeGetCursorPosition();
 
         float cursorX = textField.getX() + client.font.getSplitter().stringWidth(textField.getValue().substring(firstCharacterIndex, selectionStart));
-        float endX = textField.getX() + textField.getWidth() - 1.2f * Indicator.getIndicatorWidth();
+        float endX = textField.getX() + textField.getWidth() - 1.2f * IndicatorHandler.getIndicatorWidth();
 
         return Math.min(cursorX, endX);
     }
 
     public static float calculateIndicatorY(EditBox textField) {
-        return textField.getY() - Indicator.getIndicatorHeight() / 1.5f;
+        return textField.getY() - IndicatorHandler.getIndicatorHeight() / 1.5f;
     }
 
     public static float getCursorXWithText(EditBox textField, Component text, int x) {

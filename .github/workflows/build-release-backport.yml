@@ -87,7 +87,7 @@ jobs:
           game-versions: ${{ steps.properties.outputs.minecraft_version_range }}
           loaders: neoforge
           dependencies: |
-            cloth-config
+            yacl(optional)
 
       - name: Upload artifacts to Modrinth/CurseForge for Fabric & Quilt
         uses: Kir-Antipov/mc-publish@v3.3
@@ -105,7 +105,7 @@ jobs:
           game-versions: ${{ steps.properties.outputs.minecraft_version_range }}
           loaders: fabric quilt
           dependencies: |
-            cloth-config
+            yacl(optional)
             modmenu(optional)
 
       - name: Create GitHub tag for backport

@@ -1,8 +1,8 @@
 package com.hyfata.najoan.koreanpatch.mixin.mods.modmenu;
 
 import com.hyfata.najoan.koreanpatch.util.minecraft.EditBoxUtil;
-import com.hyfata.najoan.koreanpatch.handler.Indicator;
-import com.hyfata.najoan.koreanpatch.util.animation.AnimationUtil;
+import com.hyfata.najoan.koreanpatch.process.handler.indicator.IndicatorHandler;
+import com.hyfata.najoan.koreanpatch.process.handler.indicator.AnimationHandler;
 import com.terraformersmc.modmenu.gui.ModsScreen;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.EditBox;
@@ -19,17 +19,17 @@ public class ModMenuScreenMixin {
     private EditBox searchBox;
 
     @Unique
-    private final AnimationUtil animationUtil = new AnimationUtil();
+    private final AnimationHandler animationHandler = new AnimationHandler();
 
     @Inject(at = @At("TAIL"), method = "render")
     private void render(GuiGraphics context, int mouseX, int mouseY, float delta, CallbackInfo ci) {
         float cursorX = EditBoxUtil.getCursorX(searchBox) + 4;
         float y = EditBoxUtil.calculateIndicatorY(searchBox);
 
-        animationUtil.init(cursorX - 4, 0);
-        animationUtil.calculateAnimation(cursorX, 0);
+        animationHandler.init(cursorX - 4, 0);
+        animationHandler.calculateAnimation(cursorX, 0);
 
         context.pose().translate(0.0F, 0.0F, 200.0F);
-        Indicator.showIndicator(context, animationUtil.getResultX(), y);
+        IndicatorHandler.showIndicator(context, animationHandler.getResultX(), y);
     }
 }
