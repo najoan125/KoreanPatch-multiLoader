@@ -9,6 +9,7 @@
     "mods.commandblockide.indicator.CommandBlockEditorMixin",
     "mods.commandblockide.indicator.CommandEditorMixin",
     "mods.modmenu.ModMenuScreenMixin",
+    "mods.rei.OverlaySearchFieldMixin",
     "mods.xaeros.minimap.GuiAddWaypointMixin"
   ],
   "server": [],

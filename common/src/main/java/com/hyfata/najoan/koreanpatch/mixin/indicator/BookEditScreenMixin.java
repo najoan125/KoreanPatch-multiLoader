@@ -1,8 +1,8 @@
 package com.hyfata.najoan.koreanpatch.mixin.indicator;
 
 import com.hyfata.najoan.koreanpatch.mixin.accessor.BookEditScreenDisplayCacheAccessor;
-import com.hyfata.najoan.koreanpatch.util.animation.AnimationUtil;
-import com.hyfata.najoan.koreanpatch.handler.Indicator;
+import com.hyfata.najoan.koreanpatch.process.handler.indicator.AnimationHandler;
+import com.hyfata.najoan.koreanpatch.process.handler.indicator.IndicatorHandler;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.BookEditScreen;
@@ -28,7 +28,7 @@ public abstract class BookEditScreenMixin extends Screen {
     private boolean isSigning;
 
     @Unique
-    private final AnimationUtil koreanPatch$animationUtil = new AnimationUtil();
+    private final AnimationHandler koreanPatch$animationHandler = new AnimationHandler();
 
     @Inject(at = {@At(value = "RETURN")}, method = {"render"})
     private void addCustomLabel(PoseStack context, int mouseX, int mouseY, float delta, CallbackInfo ci) {
@@ -41,10 +41,10 @@ public abstract class BookEditScreenMixin extends Screen {
             y = pageContent.getCursor().y + 32 + 4.5f; //absolutePositionToScreenPosition() + (fontHeight(9) / 2)
         }
 
-        koreanPatch$animationUtil.init(0, y - 4);
-        koreanPatch$animationUtil.calculateAnimation(0, y);
+        koreanPatch$animationHandler.init(0, y - 4);
+        koreanPatch$animationHandler.calculateAnimation(0, y);
 
-        Indicator.showCenteredIndicator(context, x + 10, koreanPatch$animationUtil.getResultY());
+        IndicatorHandler.showCenteredIndicator(context, x + 10, koreanPatch$animationHandler.getResultY());
     }
 }
 
