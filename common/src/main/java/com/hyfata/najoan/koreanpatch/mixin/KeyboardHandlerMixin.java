@@ -1,9 +1,12 @@
 package com.hyfata.najoan.koreanpatch.mixin;
 
 import com.hyfata.najoan.koreanpatch.client.KeyBinds;
-import com.hyfata.najoan.koreanpatch.client.KoreanPatchClient;
-import com.hyfata.najoan.koreanpatch.ime.controller.InputManager;
-import com.hyfata.najoan.koreanpatch.util.language.LanguageUtil;
+import com.hyfata.najoan.koreanpatch.data.ConfigManager;
+import com.hyfata.najoan.koreanpatch.data.config.category.CategoryInput;
+import com.hyfata.najoan.koreanpatch.data.storage.InputStatusStorage;
+import com.hyfata.najoan.koreanpatch.gui.GUIStatus;
+import com.hyfata.najoan.koreanpatch.process.ime.InputManager;
+import com.hyfata.najoan.koreanpatch.data.LangTypeManager;
 import net.minecraft.client.KeyboardHandler;
 import net.minecraft.client.Minecraft;
 import org.spongepowered.asm.mixin.Final;
@@ -19,13 +22,20 @@ public class KeyboardHandlerMixin {
     @Final
     private Minecraft minecraft;
 
-    @Inject(method = "keyPress", at = @At("HEAD"))
+    @Inject(method = "keyPress", at = @At("RETURN"))
     private void onInput(long window, int keyCode, int scanCode, int action, int modifiers, CallbackInfo ci) {
-        if (window == minecraft.getWindow().getWindow() && action == 1 && !KoreanPatchClient.bypassInjection) {
-            if (minecraft.screen != null && KeyBinds.getImeBinding().matches(keyCode, scanCode) && modifiers == 2) {
+        CategoryInput categoryInput = ConfigManager.getInstance().getConfig().getCategoryInput();
+
+        if (window == minecraft.getWindow().getWindow() && action == 1 && !GUIStatus.isBypassInjection()) {
+            if (KeyBinds.getImeBinding().matches(keyCode, scanCode) && modifiers == 2 && !categoryInput.isAlwaysImeEnabled()) {
                 InputManager.getController().toggleFocus();
-            } else if (KeyBinds.getLangBinding().matches(keyCode, scanCode) && !KoreanPatchClient.IME) {
-                LanguageUtil.toggleCurrentType();
+                if (categoryInput.isMemoryLangTypePerScreen())
+                    InputStatusStorage.getInstance().add(minecraft.screen);
+
+            } else if (KeyBinds.getLangBinding().matches(keyCode, scanCode)) {
+                LangTypeManager.getInstance().toggleCurrentType();
+                if (categoryInput.isMemoryLangTypePerScreen())
+                    InputStatusStorage.getInstance().add(minecraft.screen);
             }
         }
     }

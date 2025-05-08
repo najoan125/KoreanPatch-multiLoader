@@ -1,0 +1,112 @@
+# This workflow will build a Java project with Brachyra
+# For more information see: docs/development/brachyura.md
+
+name: build-release-backport
+
+on:
+  workflow_dispatch:
+    inputs:
+      version-type:
+        required: true
+        type: choice
+        default: 'release'
+        options:
+          - release
+          - beta
+          - alpha
+        description: '퍼블리싱 버전 타입'
+      changelog:
+        required: false
+        type: string
+        description: '변경 기록: 여러 줄을 입력하려면 DevTools에서 textarea로 변경 후 입력 (markdown 지원)'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Java 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+
+      - name: Make gradle wrapper executable
+        run: chmod +x ./gradlew
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v3
+        with:
+          cache-read-only: true
+
+      - name: read-properties-action
+        uses: BrycensRanch/read-properties-action@v1.0.4
+        id: properties
+        with:
+          file: gradle.properties
+          all: true
+
+      - name: Run build with Gradle Wrapper
+        run: ./gradlew build -Dbuild.release=true
+
+      # https://github.com/Kir-Antipov/mc-publish
+      - name: Upload artifacts to Modrinth/CurseForge for Forge
+        uses: Kir-Antipov/mc-publish@v3.3
+        with:
+          modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
+          curseforge-token: ${{ secrets.CURSEFORGE_TOKEN }}
+          files: forge/build/libs/!(*-@(dev|sources|all|javadoc)).jar
+          modrinth-id: qyulnpBL
+          curseforge-id: 657742
+          modrinth-featured: false
+          name: Korean Chat Patch ${{ steps.properties.outputs.mod_version }} for Forge ${{ steps.properties.outputs.minecraft_version }}
+          version: mc${{ steps.properties.outputs.minecraft_version }}-${{ steps.properties.outputs.mod_version }}-forge
+          changelog: ${{ inputs.changelog }}
+          version-type: ${{ inputs.version-type }}
+          game-versions: ${{ steps.properties.outputs.minecraft_version_range }}
+          loaders: forge
+          dependencies: |
+            yacl(optional)
+
+      - name: Upload artifacts to Modrinth/CurseForge for Fabric & Quilt
+        uses: Kir-Antipov/mc-publish@v3.3
+        with:
+          modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
+          curseforge-token: ${{ secrets.CURSEFORGE_TOKEN }}
+          files: fabric/build/libs/!(*-@(dev|sources|all|javadoc)).jar
+          modrinth-id: qyulnpBL
+          curseforge-id: 657742
+          modrinth-featured: false
+          name: Korean Chat Patch ${{ steps.properties.outputs.mod_version }} for Fabric ${{ steps.properties.outputs.minecraft_version }}
+          version: mc${{ steps.properties.outputs.minecraft_version }}-${{ steps.properties.outputs.mod_version }}-fabric
+          changelog: ${{ inputs.changelog }}
+          version-type: ${{ inputs.version-type }}
+          game-versions: ${{ steps.properties.outputs.minecraft_version_range }}
+          loaders: fabric quilt
+          dependencies: |
+            yacl(optional)
+            modmenu(optional)
+
+      - name: Create GitHub tag for backport
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const version = "mc${{ steps.properties.outputs.minecraft_version }}-${{ steps.properties.outputs.mod_version }}";
+            github.rest.git.createRef({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              ref: `refs/tags/${version}`,
+              sha: context.sha
+            });
+
+      - name: Upload backport artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: koreanpatch-backport-${{ steps.properties.outputs.minecraft_version }}
+          path: |
+            fabric/build/libs/*.jar
+            forge/build/libs/*.jar

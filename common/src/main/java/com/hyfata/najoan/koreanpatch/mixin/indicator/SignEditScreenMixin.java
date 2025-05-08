@@ -1,7 +1,7 @@
 package com.hyfata.najoan.koreanpatch.mixin.indicator;
 
-import com.hyfata.najoan.koreanpatch.util.animation.AnimationUtil;
-import com.hyfata.najoan.koreanpatch.handler.Indicator;
+import com.hyfata.najoan.koreanpatch.process.handler.indicator.AnimationHandler;
+import com.hyfata.najoan.koreanpatch.process.handler.indicator.IndicatorHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
@@ -29,7 +29,7 @@ public abstract class SignEditScreenMixin extends Screen {
     public final Minecraft koreanPatch$client = Minecraft.getInstance();
 
     @Unique
-    private final AnimationUtil koreanPatch$animationUtil = new AnimationUtil();
+    private final AnimationHandler koreanPatch$animationHandler = new AnimationHandler();
 
     protected SignEditScreenMixin(Component title) {
         super(title);
@@ -37,14 +37,14 @@ public abstract class SignEditScreenMixin extends Screen {
 
     @Inject(at = {@At(value = "TAIL")}, method = {"renderSignText"})
     public void addCustomLabel(GuiGraphics context, CallbackInfo ci) {
-        float x = -(sign.getMaxTextLineWidth() / 2f) - Indicator.getIndicatorWidth() / 2 - 5;
+        float x = -(sign.getMaxTextLineWidth() / 2f) - IndicatorHandler.getIndicatorWidth() / 2 - 5;
         int l = 4 * sign.getTextLineHeight() / 2;
         float y = line * sign.getTextLineHeight() - l + koreanPatch$client.font.lineHeight / 2f;
 
-        koreanPatch$animationUtil.init(0, y - 4);
-        koreanPatch$animationUtil.calculateAnimation(0, y);
+        koreanPatch$animationHandler.init(0, y - 4);
+        koreanPatch$animationHandler.calculateAnimation(0, y);
 
-        Indicator.showCenteredIndicator(context, x, koreanPatch$animationUtil.getResultY());
+        IndicatorHandler.showCenteredIndicator(context, x, koreanPatch$animationHandler.getResultY());
     }
 }
 
