@@ -7,15 +7,15 @@ import com.hyfata.najoan.koreanpatch.data.config.category.indicator.outline.Outl
 import com.hyfata.najoan.koreanpatch.process.ime.InputManager;
 import com.hyfata.najoan.koreanpatch.util.minecraft.RenderUtil;
 import com.hyfata.najoan.koreanpatch.data.LangTypeManager;
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
 
 public class IndicatorHandler {
     private static final Minecraft client = Minecraft.getInstance();
     private static final float frame = 1f;
     private static final float margin = 1f;
 
-    public static void showIndicator(GuiGraphics context, float x, float y) {
+    public static void showIndicator(PoseStack context, float x, float y) {
         CategoryIndicator categoryIndicator = ConfigManager.getInstance().getConfig().getCategoryIndicator();
 
         if (!categoryIndicator.isShowIndicator()) {
@@ -36,17 +36,17 @@ public class IndicatorHandler {
         );
     }
 
-    public static void showIndicator(GuiGraphics context, int x, int y) {
+    public static void showIndicator(PoseStack context, int x, int y) {
         showIndicator(context, (float) x, (float) y);
     }
 
-    public static void showCenteredIndicator(GuiGraphics context, float x, float y) {
+    public static void showCenteredIndicator(PoseStack context, float x, float y) {
         x -= getIndicatorWidth() / 2f;
         y -= getIndicatorHeight() / 2f;
         showIndicator(context, x, y);
     }
 
-    public static void showCenteredIndicator(GuiGraphics context, int x, int y) {
+    public static void showCenteredIndicator(PoseStack context, int x, int y) {
         showCenteredIndicator(context, (float) x, (float) y);
     }
 
@@ -68,7 +68,7 @@ public class IndicatorHandler {
         return ((outlineOpacity & 0xFF) << 24) | outlineRGB; // ARGB
     }
 
-    private static void renderBox(GuiGraphics context, float x1, float y1, float x2, float y2, int frameColor, int backgroundColor) {
+    private static void renderBox(PoseStack context, float x1, float y1, float x2, float y2, int frameColor, int backgroundColor) {
         OutlineConfig outlineConfig = ConfigManager.getInstance().getConfig().getCategoryIndicator().getOutlineSettings();
 
         float radius = 3.5f;

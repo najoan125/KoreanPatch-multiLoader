@@ -44,7 +44,7 @@ public class InputConfigScreenFactory extends ConfigScreenFactory {
                 )
                 .controller(option -> EnumControllerBuilder.create(option)
                 .enumClass(AutoLangTypeMode.class)
-                .formatValue(value -> Component.translatable(
+                .valueFormatter(value -> Component.translatable(
                         value.getTranslatable()
                 ))
                 ).build();

@@ -95,7 +95,7 @@ public class IndicatorConfigScreenFactory extends ConfigScreenFactory {
                 )
                 .controller(option -> EnumControllerBuilder.create(option)
                 .enumClass(OutlineType.class)
-                .formatValue(value -> Component.literal(
+                .valueFormatter(value -> Component.literal(
                         Arrays.stream(value.name().split("_"))
                                 .map(w -> w.charAt(0) + w.substring(1).toLowerCase())
                                 .collect(Collectors.joining(" ")))
@@ -146,7 +146,7 @@ public class IndicatorConfigScreenFactory extends ConfigScreenFactory {
                 .controller(option -> IntegerSliderControllerBuilder.create(option)
                         .range(0, 100)
                         .step(5)
-                        .formatValue(value -> Component.literal(String.format("%d%%", value)))
+                        .valueFormatter(value -> Component.literal(String.format("%d%%", value)))
                 )
                 .build();
 
@@ -211,7 +211,7 @@ public class IndicatorConfigScreenFactory extends ConfigScreenFactory {
                 .controller(option -> IntegerSliderControllerBuilder.create(option)
                         .range(0, 100)
                         .step(5)
-                        .formatValue(value -> Component.literal(String.format("%d%%", value)))
+                        .valueFormatter(value -> Component.literal(String.format("%d%%", value)))
                 )
                 .build();
 
@@ -274,7 +274,7 @@ public class IndicatorConfigScreenFactory extends ConfigScreenFactory {
                 .controller(option -> IntegerSliderControllerBuilder.create(option)
                         .range(0, 100)
                         .step(5)
-                        .formatValue(value -> Component.literal(String.format("%d%%", value)))
+                        .valueFormatter(value -> Component.literal(String.format("%d%%", value)))
                 )
                 .build();
 
@@ -314,7 +314,7 @@ public class IndicatorConfigScreenFactory extends ConfigScreenFactory {
                 )
                 .controller(option -> EnumControllerBuilder.create(option)
                 .enumClass(EasingFunctions.class)
-                .formatValue(value -> Component.literal(
+                .valueFormatter(value -> Component.literal(
                         Arrays.stream(value.name().split("_"))
                                 .map(w -> w.charAt(0) + w.substring(1).toLowerCase())
                                 .collect(Collectors.joining(" ")))
