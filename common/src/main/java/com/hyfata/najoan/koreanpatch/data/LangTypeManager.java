@@ -4,6 +4,7 @@ import com.hyfata.najoan.koreanpatch.data.provider.LanguageType;
 import com.hyfata.najoan.koreanpatch.process.ime.InputManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
 import net.minecraft.util.FormattedCharSequence;
 
 public class LangTypeManager {
@@ -18,7 +19,7 @@ public class LangTypeManager {
 
     private final Minecraft client = Minecraft.getInstance();
     private LanguageType currentType = LanguageType.EN;
-    private final Component IME_TEXT = Component.literal("IME");
+    private final Component IME_TEXT = new TextComponent("IME");
 
     public void setCurrentType(LanguageType type) {
         currentType = type;

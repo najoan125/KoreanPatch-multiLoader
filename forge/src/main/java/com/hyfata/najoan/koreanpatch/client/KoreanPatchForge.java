@@ -4,8 +4,8 @@ import com.hyfata.najoan.koreanpatch.data.ConfigManager;
 import com.hyfata.najoan.koreanpatch.process.handler.EventListener;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.network.chat.Component;
-import net.minecraftforge.client.ConfigScreenHandler;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraftforge.client.ConfigGuiHandler;
 import net.minecraftforge.client.ClientRegistry;
 import net.minecraftforge.client.event.ScreenEvent;
 import net.minecraftforge.common.MinecraftForge;
@@ -30,9 +30,9 @@ public class KoreanPatchForge {
 
         registerEvents(bus);
 
-        ModLoadingContext.get().registerExtensionPoint(ConfigScreenHandler.ConfigScreenFactory.class,
-                () -> new ConfigScreenHandler.ConfigScreenFactory(
-                        (client, parent) -> new Screen(Component.literal("")) {
+        ModLoadingContext.get().registerExtensionPoint(ConfigGuiHandler.ConfigGuiFactory.class,
+                () -> new ConfigGuiHandler.ConfigGuiFactory(
+                        (client, parent) -> new Screen(new TextComponent("")) {
                             @Override
                             protected void init() {
                                 ConfigManager.getInstance().openConfigFile();

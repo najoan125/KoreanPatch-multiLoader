@@ -1,6 +1,6 @@
 package com.hyfata.najoan.koreanpatch.data.provider;
 
-import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.util.FormattedCharSequence;
 
 import java.io.Serializable;
@@ -16,6 +16,6 @@ public enum LanguageType implements Serializable {
     }
 
     public FormattedCharSequence getTranslatedVisualOrderText() {
-        return Component.translatable(text).getVisualOrderText();
+        return new TranslatableComponent(text).getVisualOrderText();
     }
 }
