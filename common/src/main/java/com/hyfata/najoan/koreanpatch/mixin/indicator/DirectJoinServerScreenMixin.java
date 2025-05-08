@@ -1,8 +1,8 @@
 package com.hyfata.najoan.koreanpatch.mixin.indicator;
 
 import com.hyfata.najoan.koreanpatch.util.minecraft.EditBoxUtil;
-import com.hyfata.najoan.koreanpatch.util.animation.AnimationUtil;
-import com.hyfata.najoan.koreanpatch.handler.Indicator;
+import com.hyfata.najoan.koreanpatch.process.handler.indicator.AnimationHandler;
+import com.hyfata.najoan.koreanpatch.process.handler.indicator.IndicatorHandler;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.DirectJoinServerScreen;
@@ -21,7 +21,7 @@ public class DirectJoinServerScreenMixin extends Screen {
     private EditBox ipEdit;
 
     @Unique
-    private final AnimationUtil koreanPatch$animationUtil = new AnimationUtil();
+    private final AnimationHandler koreanPatch$animationHandler = new AnimationHandler();
 
     protected DirectJoinServerScreenMixin(Component title) {
         super(title);
@@ -32,9 +32,9 @@ public class DirectJoinServerScreenMixin extends Screen {
         float x = EditBoxUtil.getCursorX(ipEdit) + 4;
         float y = EditBoxUtil.calculateIndicatorY(ipEdit);
 
-        koreanPatch$animationUtil.init(x - 4, 0);
-        koreanPatch$animationUtil.calculateAnimation(x, 0);
+        koreanPatch$animationHandler.init(x - 4, 0);
+        koreanPatch$animationHandler.calculateAnimation(x, 0);
 
-        Indicator.showIndicator(context, koreanPatch$animationUtil.getResultX(), y);
+        IndicatorHandler.showIndicator(context, koreanPatch$animationHandler.getResultX(), y);
     }
 }

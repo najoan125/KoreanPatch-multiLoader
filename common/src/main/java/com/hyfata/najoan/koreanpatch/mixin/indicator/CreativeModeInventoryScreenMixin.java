@@ -1,6 +1,6 @@
 package com.hyfata.najoan.koreanpatch.mixin.indicator;
 
-import com.hyfata.najoan.koreanpatch.handler.Indicator;
+import com.hyfata.najoan.koreanpatch.process.handler.indicator.IndicatorHandler;
 import com.hyfata.najoan.koreanpatch.platform.Services;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.gui.components.EditBox;
@@ -35,7 +35,7 @@ public class CreativeModeInventoryScreenMixin extends Screen {
             int x = searchBox.x + searchBox.getWidth() + koreanPatch$modifier;
             int y = searchBox.y + searchBox.getHeight() / 2;
 
-            Indicator.showCenteredIndicator(context, x, y);
+            IndicatorHandler.showCenteredIndicator(context, x, y);
         }
     }
 
