@@ -1,10 +1,77 @@
 {
     "key.categories.koreanpatch": "Korean Patch",
     "key.koreanpatch.toggle_langtype": "Toggle Language Type (English/Korean)",
-    "key.koreanpatch.toggle_ime": "Toggle IME (Left Ctrl +)",
+    "key.koreanpatch.toggle_ime": "Toggle IME(Vanilla input) (Left Ctrl +)",
 
     "koreanpatch.langtype.english": "En",
     "koreanpatch.langtype.korean": "Ko",
 
-    "modmenu.descriptionTranslation.koreanpatch": "It allows you to input Hangul naturally, and the Hangul input state does not interfere with other keys."
+    "modmenu.descriptionTranslation.koreanpatch": "It allows you to input Hangul naturally, and the Hangul input state does not interfere with other keys.",
+
+    "koreanpatch.config": "Korean Patch Settings",
+    "koreanpatch.config.indicator": "Indicator",
+    "koreanpatch.config.indicator.description": "It displays Korean/English input status near the input field.",
+
+    "koreanpatch.config.indicator.general": "General",
+    "koreanpatch.config.indicator.general.description": "General settings related to the indicator.",
+    "koreanpatch.config.indicator.general.show": "Enable Indicator",
+    "koreanpatch.config.indicator.general.show.description": "It displays Korean/English input status near the input field",
+
+    "koreanpatch.config.color_opacity.ko": "Color of \"Korean\" input state",
+    "koreanpatch.config.color_opacity.ko.description": "Set the color of the %s when the input state is Korean.",
+    "koreanpatch.config.color_opacity.en": "Color of \"English\" input state",
+    "koreanpatch.config.color_opacity.en.description": "Set the color of the %s when the input state is English.",
+    "koreanpatch.config.color_opacity.ime": "Color of \"IME\" state",
+    "koreanpatch.config.color_opacity.ime.description": "Set the color of the %s when the input state is IME. (IME state means that the operating system input method is entering directly, such as vanilla Minecraft)",
+    "koreanpatch.config.color_opacity.opacity": "Opacity",
+    "koreanpatch.config.color_opacity.description": "Set the opacity of the %s color.",
+
+    "koreanpatch.config.indicator.outline.name": "outline",
+    "koreanpatch.config.indicator.outline": "Outline Settings",
+    "koreanpatch.config.indicator.outline.description": "Outline color and opacity settings.",
+    "koreanpatch.config.indicator.outline.show": "Enable indicator outline",
+    "koreanpatch.config.indicator.outline.show.description": "In the Korean/English indicator, the outline is displayed for readability.",
+    "koreanpatch.config.indicator.outline.outline_type": "Outline type",
+    "koreanpatch.config.indicator.outline.outline_type.description": "Set the outline type.\n- Rectangle: Rectangle corners\n- Circle: Circle corners\n- Superellipse: Superellipse corners",
+
+    "koreanpatch.config.indicator.background.name": "background",
+    "koreanpatch.config.indicator.background": "Background Settings",
+    "koreanpatch.config.indicator.background.description": "Background color and opacity settings.",
+
+    "koreanpatch.config.indicator.text.name": "text",
+    "koreanpatch.config.indicator.text": "Text Settings",
+    "koreanpatch.config.indicator.text.description": "Text color and opacity settings.",
+
+    "koreanpatch.config.indicator.animation": "Animation Settings",
+    "koreanpatch.config.indicator.animation.description": "These are the settings that the indicator follows the text cursor position.",
+    "koreanpatch.config.indicator.animation.show": "Enable animation",
+    "koreanpatch.config.indicator.animation.show.description": "The indicator allows you to follow the text cursor position.",
+    "koreanpatch.config.indicator.animation.easing_function": "Easing Functions",
+    "koreanpatch.config.indicator.animation.easing_function.description": "Set the Easing function used when the indicator moves.\nYou can find it more easily by referring to easings.net.",
+    "koreanpatch.config.indicator.animation.speed": "Speed",
+    "koreanpatch.config.indicator.animation.speed.description": "Set the animation speed. The larger the value, the faster you follow the cursor.",
+
+    "koreanpatch.config.input": "Input",
+    "koreanpatch.config.input.description": "Settings related to keyboard input.",
+
+    "koreanpatch.config.input.mode.auto": "Auto",
+    "koreanpatch.config.input.mode.korean": "Korean",
+    "koreanpatch.config.input.mode.english": "English",
+    "koreanpatch.config.input.mode.ime": "IME(Vanilla Input Method)",
+
+    "koreanpatch.config.input.general": "General Settings",
+    "koreanpatch.config.input.general.description": "General settings related to keyboard input.",
+    "koreanpatch.config.input.general.auto_lang_type_mode": "Auto Set Input Language",
+    "koreanpatch.config.input.general.auto_lang_type_mode.description": "Specifies the Korean/English/Vanilla Input Method (IME) state whenever a screen with an input field is opened.",
+    "koreanpatch.config.input.general.memory_lang_type": "Remember Input Language per Screen",
+    "koreanpatch.config.input.general.memory_lang_type.description": "When a screen is closed, remembers the Korean/English/Vanilla Input Method (IME) state for that screen. When the screen is reopened, it automatically sets the input language to the state it was in when last closed.\n\n- If there is already remembered data when the screen opens, the 'Auto Input Method Switch' and 'Auto Set Input Language' features are ignored, and the input method switches according to the remembered data.\n- Enabling the 'Always Enable OS Input Method' feature does not affect the remembered data.",
+
+    "koreanpatch.config.input.ime": "Input Method Settings (Advanced)",
+    "koreanpatch.config.input.ime.description": "Settings related to the operating system input method (Vanilla Minecraft) and this mod's (Korean Patch) input method. (It is recommended not to change these settings)",
+    "koreanpatch.config.input.ime.disable_ime_playing": "Disable OS Input Method While Playing",
+    "koreanpatch.config.input.ime.disable_ime_playing.description": "Automatically disables the operating system's Input Method while playing to avoid interfering with player movement (WASD).",
+    "koreanpatch.config.input.ime.auto_ime_switch": "Auto Input Method Switch",
+    "koreanpatch.config.input.ime.auto_ime_switch.description": "Automatically enables the operating system's Input Method when the mod detects it failed to inject into the current screen successfully, and automatically disables the OS Input Method when it detects successful injection.",
+    "koreanpatch.config.input.ime.always_ime_enabled": "Always Enable OS Input Method",
+    "koreanpatch.config.input.ime.always_ime_enabled.description": "Allows using the Minecraft Vanilla input method (IME) alongside the Korean Patch input method, similar to typical Korean chat mods, without disabling the patch's input features."
 }

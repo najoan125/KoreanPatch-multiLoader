@@ -1,11 +1,11 @@
 package com.hyfata.najoan.koreanpatch.mixin.indicator;
 
-import com.hyfata.najoan.koreanpatch.client.KoreanPatchClient;
+import com.hyfata.najoan.koreanpatch.gui.GUIStatus;
 import com.hyfata.najoan.koreanpatch.mixin.accessor.CreateWorldScreenGameTabAccessor;
 import com.hyfata.najoan.koreanpatch.mixin.accessor.TabNavigationBarAccessor;
 import com.hyfata.najoan.koreanpatch.util.minecraft.EditBoxUtil;
-import com.hyfata.najoan.koreanpatch.util.animation.AnimationUtil;
-import com.hyfata.najoan.koreanpatch.handler.Indicator;
+import com.hyfata.najoan.koreanpatch.process.handler.indicator.AnimationHandler;
+import com.hyfata.najoan.koreanpatch.process.handler.indicator.IndicatorHandler;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.components.tabs.Tab;
@@ -30,7 +30,7 @@ public class CreateWorldScreenMixin extends Screen {
     private TabNavigationBar tabNavigationBar;
 
     @Unique
-    private final AnimationUtil koreanPatch$animationUtil = new AnimationUtil();
+    private final AnimationHandler koreanPatch$animationHandler = new AnimationHandler();
 
     @Inject(at = {@At(value = "RETURN")}, method = {"render"})
     private void addCustomLabel(PoseStack context, int mouseX, int mouseY, float delta, CallbackInfo ci) {
@@ -38,7 +38,7 @@ public class CreateWorldScreenMixin extends Screen {
         Tab currentTab = tabInvoker.getTabManager().getCurrentTab();
 
         if (currentTab instanceof CreateWorldScreen.GameTab) {
-            KoreanPatchClient.bypassInjection = false;
+            GUIStatus.setBypassInjection(false);
             CreateWorldScreenGameTabAccessor gameTabAccessor = (CreateWorldScreenGameTabAccessor) currentTab;
             EditBox worldNameField = gameTabAccessor.getNameEdit();
             Component text = Component.translatable("selectWorld.enterName");
@@ -46,12 +46,12 @@ public class CreateWorldScreenMixin extends Screen {
             float x = EditBoxUtil.getCursorXWithText(worldNameField, text, worldNameField.getX()) + 4;
             float y = EditBoxUtil.calculateIndicatorY(worldNameField);
 
-            koreanPatch$animationUtil.init(x - 4, 0);
-            koreanPatch$animationUtil.calculateAnimation(x, 0);
+            koreanPatch$animationHandler.init(x - 4, 0);
+            koreanPatch$animationHandler.calculateAnimation(x, 0);
 
-            Indicator.showIndicator(context, koreanPatch$animationUtil.getResultX(), y);
+            IndicatorHandler.showIndicator(context, koreanPatch$animationHandler.getResultX(), y);
         } else {
-            KoreanPatchClient.bypassInjection = true;
+            GUIStatus.setBypassInjection(true);
         }
     }
 }

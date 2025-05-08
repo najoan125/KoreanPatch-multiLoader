@@ -4,7 +4,7 @@
 
 Korean Patch는 마인크래프트에서 한글 채팅을 더 원활하게 사용할 수 있도록 하는 클라이언트 사이드 모드입니다.
 
-![indicator](https://wsrv.nl/?url=https%3A%2F%2Fww1.apcl.kro.kr%2Ffile%2Funknown%2520%25281%2529.png&n=-1)
+![indicator](https://cdn.modrinth.com/data/qyulnpBL/images/57ad8ed4ff75acd2dcb88459565d50692c1809e5.png)
 
 ## 다운로드
 

@@ -1,12 +1,17 @@
 package com.hyfata.najoan.koreanpatch.client;
 
+import com.hyfata.najoan.koreanpatch.gui.yacl.YaclConfigScreenFactoryManager;
+import com.hyfata.najoan.koreanpatch.platform.Services;
+import com.hyfata.najoan.koreanpatch.process.handler.EventListener;
 import net.minecraft.client.KeyMapping;
+import net.minecraftforge.client.ConfigScreenHandler;
 import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
 import net.minecraftforge.client.event.ScreenEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 
@@ -23,6 +28,14 @@ public class KoreanPatchForge {
         bus.addListener(this::registerKeys);
 
         registerEvents(bus);
+
+        if (Services.PLATFORM.isModLoaded("yet_another_config_lib_v3")) {
+            ModLoadingContext.get().registerExtensionPoint(ConfigScreenHandler.ConfigScreenFactory.class,
+                    () -> new ConfigScreenHandler.ConfigScreenFactory(
+                            (client, parent) -> YaclConfigScreenFactoryManager.createScreen(parent)
+                    )
+            );
+        }
     }
 
     public static void registerEvents(IEventBus bus) {
@@ -36,7 +49,7 @@ public class KoreanPatchForge {
         for (KeyMapping key : KeyBinds.getKeyMappings()) {
             event.register(key);
         }
-	}
+    }
 
     @SubscribeEvent
     public static void onClientStarted(FMLClientSetupEvent event) {

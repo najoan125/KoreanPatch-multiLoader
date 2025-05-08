@@ -18,7 +18,7 @@ on:
       changelog:
         required: false
         type: string
-        description: '변경 기록: 여러 줄을 입력하려면 `\\n`을 사용 (markdown 지원)'
+        description: '변경 기록: 여러 줄을 입력하려면 DevTools에서 textarea로 변경 후 입력 (markdown 지원)'
 
 jobs:
   build:
@@ -62,12 +62,32 @@ jobs:
           modrinth-id: qyulnpBL
           curseforge-id: 657742
           modrinth-featured: false
-          name: ${{ steps.properties.outputs.mod_version }} for Forge
+          name: Korean Chat Patch ${{ steps.properties.outputs.mod_version }} for Forge ${{ steps.properties.outputs.minecraft_version }}
           version: mc${{ steps.properties.outputs.minecraft_version }}-${{ steps.properties.outputs.mod_version }}-forge
           changelog: ${{ inputs.changelog }}
           version-type: ${{ inputs.version-type }}
           game-versions: ${{ steps.properties.outputs.minecraft_version_range }}
           loaders: forge
+          dependencies: |
+            cloth-config
+
+      - name: Upload artifacts to Modrinth/CurseForge for NeoForge
+        uses: Kir-Antipov/mc-publish@v3.3
+        with:
+          modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
+          curseforge-token: ${{ secrets.CURSEFORGE_TOKEN }}
+          files: neoforge/build/libs/!(*-@(dev|sources|all|javadoc)).jar
+          modrinth-id: qyulnpBL
+          curseforge-id: 657742
+          modrinth-featured: false
+          name: Korean Chat Patch ${{ steps.properties.outputs.mod_version }} for NeoForge ${{ steps.properties.outputs.minecraft_version }}
+          version: mc${{ steps.properties.outputs.minecraft_version }}-${{ steps.properties.outputs.mod_version }}-neoforge
+          changelog: ${{ inputs.changelog }}
+          version-type: ${{ inputs.version-type }}
+          game-versions: ${{ steps.properties.outputs.minecraft_version_range }}
+          loaders: neoforge
+          dependencies: |
+            yacl(optional)
 
       - name: Upload artifacts to Modrinth/CurseForge for Fabric & Quilt
         uses: Kir-Antipov/mc-publish@v3.3
@@ -78,9 +98,24 @@ jobs:
           modrinth-id: qyulnpBL
           curseforge-id: 657742
           modrinth-featured: false
-          name: ${{ steps.properties.outputs.mod_version }} for Fabric
+          name: Korean Chat Patch ${{ steps.properties.outputs.mod_version }} for Fabric ${{ steps.properties.outputs.minecraft_version }}
           version: mc${{ steps.properties.outputs.minecraft_version }}-${{ steps.properties.outputs.mod_version }}-fabric
           changelog: ${{ inputs.changelog }}
           version-type: ${{ inputs.version-type }}
-          game-versions: ${{ steps.properties.outputs.fabric_version_range }}
+          game-versions: ${{ steps.properties.outputs.minecraft_version_range }}
           loaders: fabric quilt
+          dependencies: |
+            yacl(optional)
+            modmenu(optional)
+
+      - name: Upload artifacts to GitHub
+        uses: Kir-Antipov/mc-publish@v3.3
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          files: |
+            fabric/build/libs/!(*-@(dev|sources|all|javadoc)).jar
+            neoforge/build/libs/!(*-@(dev|sources|all|javadoc)).jar
+          name: Korean Chat Patch ${{ steps.properties.outputs.mod_version }} for Minecraft ${{ steps.properties.outputs.minecraft_version }} # release title
+          version: mc${{ steps.properties.outputs.minecraft_version }}-${{ steps.properties.outputs.mod_version }} # create tag
+          changelog: ${{ inputs.changelog }} # release desc.
+          version-type: ${{ inputs.version-type }} # release or pre-release
