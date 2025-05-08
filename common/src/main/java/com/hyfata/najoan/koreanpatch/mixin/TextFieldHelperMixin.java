@@ -1,7 +1,7 @@
 package com.hyfata.najoan.koreanpatch.mixin;
 
-import com.hyfata.najoan.koreanpatch.client.KoreanPatchClient;
-import com.hyfata.najoan.koreanpatch.handler.mixin.TextFieldHelperHandler;
+import com.hyfata.najoan.koreanpatch.gui.GUIStatus;
+import com.hyfata.najoan.koreanpatch.process.controller.mixin.TextFieldHelperController;
 import com.hyfata.najoan.koreanpatch.mixin.accessor.TextFieldHelperAccessor;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.font.TextFieldHelper;
@@ -15,7 +15,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(value = {TextFieldHelper.class})
 public abstract class TextFieldHelperMixin {
     @Unique
-    private final TextFieldHelperHandler koreanPatch$handler = new TextFieldHelperHandler((TextFieldHelperAccessor) this);
+    private final TextFieldHelperController koreanPatch$handler = new TextFieldHelperController((TextFieldHelperAccessor) this);
 
     @Inject(at = {@At(value = "HEAD")}, method = {"charTyped(C)Z"}, cancellable = true)
     public void insertChar(char chr, CallbackInfoReturnable<Boolean> cir) {
@@ -30,7 +30,7 @@ public abstract class TextFieldHelperMixin {
     @Inject(at = {@At(value = "HEAD")}, method = {"removeCharsFromCursor(I)V"}, cancellable = true)
     public void delete(int offset, CallbackInfo ci) {
         Minecraft client = Minecraft.getInstance();
-        if (client.screen != null && !KoreanPatchClient.bypassInjection) {
+        if (client.screen != null && !GUIStatus.isBypassInjection()) {
             if (koreanPatch$handler.onBackspaceKeyPressed()) {
                 ci.cancel();
             }

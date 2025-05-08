@@ -1,9 +1,9 @@
 package com.hyfata.najoan.koreanpatch.mixin.mods.easy_anvils;
 
-import com.hyfata.najoan.koreanpatch.client.KoreanPatchClient;
-import com.hyfata.najoan.koreanpatch.handler.mixin.EditBoxHandler;
+import com.hyfata.najoan.koreanpatch.data.LangTypeManager;
+import com.hyfata.najoan.koreanpatch.gui.GUIStatus;
 import com.hyfata.najoan.koreanpatch.mixin.accessor.EditBoxAccessor;
-import com.hyfata.najoan.koreanpatch.util.language.LanguageUtil;
+import com.hyfata.najoan.koreanpatch.process.controller.mixin.EditBoxController;
 import fuzs.easyanvils.client.gui.components.OpenEditBox;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
@@ -26,12 +26,12 @@ public abstract class FormattableEditBoxMixin extends EditBox {
     private final Minecraft _$client = Minecraft.getInstance();
 
     @Unique
-    private final EditBoxHandler _$handler = new EditBoxHandler((EditBoxAccessor) this);
+    private final EditBoxController _$handler = new EditBoxController((EditBoxAccessor) this);
 
     @Inject(at = {@At(value = "HEAD")}, method = {"m_5534_"}, cancellable = true, remap = false)
     public void charTyped(char chr, int modifiers, CallbackInfoReturnable<Boolean> cir) {
-        if (this._$client.screen != null && !KoreanPatchClient.bypassInjection &&
-                LanguageUtil.isKorean() && this.isEditable && Character.charCount(chr) == 1) {
+        if (this._$client.screen != null && !GUIStatus.isBypassInjection() &&
+                LangTypeManager.getInstance().isKorean() && this.isEditable && Character.charCount(chr) == 1) {
             _$handler.typedTextField(chr, modifiers, cir);
         }
     }
@@ -40,7 +40,7 @@ public abstract class FormattableEditBoxMixin extends EditBox {
     @Override
     public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
         Minecraft client = Minecraft.getInstance();
-        if (client.screen != null && !KoreanPatchClient.bypassInjection) {
+        if (client.screen != null && !GUIStatus.isBypassInjection()) {
             if (keyCode == GLFW.GLFW_KEY_BACKSPACE) {
                 if (_$handler.onBackspaceKeyPressed()) {
                     return true;

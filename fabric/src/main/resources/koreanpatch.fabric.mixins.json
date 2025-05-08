@@ -16,6 +16,7 @@
     "mods.easy_anvils.FormattableEditBoxMixin",
     "mods.easy_anvils.NameTagEditScreenMixin",
     "mods.modmenu.ModMenuScreenMixin",
+    "mods.rei.OverlaySearchFieldMixin",
     "mods.xaeros.minimap.GuiAddWaypointMixin"
   ],
   "server": [],
