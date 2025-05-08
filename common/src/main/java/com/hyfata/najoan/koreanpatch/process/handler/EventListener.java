@@ -16,8 +16,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.font.TextFieldHelper;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.gui.screens.controls.ControlsScreen;
 import net.minecraft.client.gui.screens.inventory.*;
-import net.minecraft.client.gui.screens.controls.KeyBindsScreen;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -37,7 +37,7 @@ public class EventListener {
                 "xaero.map.gui.GuiMap"
         };
         Class<?>[] imeDisabledClasses = {
-                KeyBindsScreen.class,
+                ControlsScreen.class,
                 ContainerScreen.class,
                 InventoryScreen.class,
                 FurnaceScreen.class,
