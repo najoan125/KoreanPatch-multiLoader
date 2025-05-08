@@ -1,8 +1,8 @@
 package com.hyfata.najoan.koreanpatch.mixin.indicator;
 
 import com.hyfata.najoan.koreanpatch.util.minecraft.EditBoxUtil;
-import com.hyfata.najoan.koreanpatch.util.animation.AnimationUtil;
-import com.hyfata.najoan.koreanpatch.handler.Indicator;
+import com.hyfata.najoan.koreanpatch.process.handler.indicator.AnimationHandler;
+import com.hyfata.najoan.koreanpatch.process.handler.indicator.IndicatorHandler;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.Screen;
@@ -22,7 +22,7 @@ public class SelectWorldScreenMixin extends Screen {
     protected EditBox searchBox;
 
     @Unique
-    private final AnimationUtil koreanPatch$animationUtil = new AnimationUtil();
+    private final AnimationHandler koreanPatch$animationHandler = new AnimationHandler();
 
     protected SelectWorldScreenMixin(Component title) {
         super(title);
@@ -33,10 +33,10 @@ public class SelectWorldScreenMixin extends Screen {
         float x = EditBoxUtil.getCursorX(searchBox);
         float y = EditBoxUtil.calculateIndicatorY(searchBox);
 
-        koreanPatch$animationUtil.init((float) this.width / 2 - 105, 0);
-        koreanPatch$animationUtil.calculateAnimation(x, 0);
+        koreanPatch$animationHandler.init((float) this.width / 2 - 105, 0);
+        koreanPatch$animationHandler.calculateAnimation(x, 0);
 
         context.translate(0.0F, 0.0F, 200.0F);
-        Indicator.showIndicator(context, koreanPatch$animationUtil.getResultX() + 4, y);
+        IndicatorHandler.showIndicator(context, koreanPatch$animationHandler.getResultX() + 4, y);
     }
 }
