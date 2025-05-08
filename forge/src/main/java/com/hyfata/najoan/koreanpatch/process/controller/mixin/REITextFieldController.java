@@ -50,7 +50,7 @@ public class REITextFieldController implements IMixinCommon {
             return;
         }
 
-        if (accessor.m_93696_()) {
+        if (accessor.isFocused()) {
             cir.setReturnValue(Boolean.TRUE);
         } else {
             cir.setReturnValue(Boolean.FALSE);

@@ -1,9 +1,10 @@
 package com.hyfata.najoan.koreanpatch.client;
 
-import com.hyfata.najoan.koreanpatch.gui.yacl.YaclConfigScreenFactoryManager;
-import com.hyfata.najoan.koreanpatch.platform.Services;
+import com.hyfata.najoan.koreanpatch.data.ConfigManager;
 import com.hyfata.najoan.koreanpatch.process.handler.EventListener;
 import net.minecraft.client.KeyMapping;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.network.chat.Component;
 import net.minecraftforge.client.ConfigScreenHandler;
 import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
 import net.minecraftforge.client.event.ScreenEvent;
@@ -29,13 +30,17 @@ public class KoreanPatchForge {
 
         registerEvents(bus);
 
-        if (Services.PLATFORM.isModLoaded("yet_another_config_lib_v3")) {
-            ModLoadingContext.get().registerExtensionPoint(ConfigScreenHandler.ConfigScreenFactory.class,
-                    () -> new ConfigScreenHandler.ConfigScreenFactory(
-                            (client, parent) -> YaclConfigScreenFactoryManager.createScreen(parent)
-                    )
-            );
-        }
+        ModLoadingContext.get().registerExtensionPoint(ConfigScreenHandler.ConfigScreenFactory.class,
+                () -> new ConfigScreenHandler.ConfigScreenFactory(
+                        (client, parent) -> new Screen(Component.literal("")) {
+                            @Override
+                            protected void init() {
+                                ConfigManager.getInstance().openConfigFile();
+                                client.setScreen(parent);
+                            }
+                        }
+                )
+        );
     }
 
     public static void registerEvents(IEventBus bus) {

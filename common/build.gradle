@@ -13,7 +13,6 @@ minecraft {
 
 dependencies {
     compileOnly group:'org.spongepowered', name:'mixin', version:'0.8.5'
-    compileOnly "maven.modrinth:yacl:${project.yacl_version}-forge"
 }
 
 configurations {

@@ -10,6 +10,7 @@ import com.hyfata.najoan.koreanpatch.data.gson.adapter.EasingFunctionsAdapter;
 import com.hyfata.najoan.koreanpatch.data.gson.adapter.OutlineTypeAdapter;
 import com.hyfata.najoan.koreanpatch.data.provider.EasingFunctions;
 import com.hyfata.najoan.koreanpatch.data.provider.OutlineType;
+import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
 
 import java.awt.*;
@@ -73,5 +74,9 @@ public class ConfigManager {
         } catch (IOException e) {
             Constants.LOG.error("Failed to write config file: {}", CONFIG_FILE.toString(), e);
         }
+    }
+
+    public void openConfigFile() {
+        Util.getPlatform().openFile(CONFIG_FILE);
     }
 }
