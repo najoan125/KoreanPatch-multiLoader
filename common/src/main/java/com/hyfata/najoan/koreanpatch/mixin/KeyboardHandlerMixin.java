@@ -22,7 +22,7 @@ public class KeyboardHandlerMixin {
     @Final
     private Minecraft minecraft;
 
-    @Inject(method = "keyPress", at = @At("RETURN"))
+    @Inject(method = "keyPress", at = @At("HEAD"))
     private void onInput(long window, int keyCode, int scanCode, int action, int modifiers, CallbackInfo ci) {
         CategoryInput categoryInput = ConfigManager.getInstance().getConfig().getCategoryInput();
 
