@@ -295,7 +295,7 @@ public class IndicatorConfigScreenFactory extends ConfigScreenFactory {
 
         Option<Boolean> showOption = Option.<Boolean>createBuilder()
                 .name(createTranslatableComponent("animation.show"))
-                .description(YACLUtil.descWithImage(createTranslationKey("animation.show.description"), "animation"))
+                .description(OptionDescription.of(createTranslatableComponent("animation.show.description")))
                 .binding(
                         animation.isShowAnimation(),
                         animation::isShowAnimation,
