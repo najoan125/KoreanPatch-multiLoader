@@ -8,6 +8,7 @@ import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModContainer;
+import net.neoforged.fml.ModLoadingContext;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.neoforge.client.event.ClientTickEvent;
@@ -26,7 +27,9 @@ public class KoreanPatchNeoForge {
         registerEvents(bus);
 
         if (Services.PLATFORM.isModLoaded("yet_another_config_lib_v3")) {
-            container.registerExtensionPoint(IConfigScreenFactory.class, (client, parent) -> YaclConfigScreenFactoryManager.createScreen(parent));
+            ModLoadingContext.get().registerExtensionPoint(
+                    IConfigScreenFactory.class,
+                    () -> (client, parent) -> YaclConfigScreenFactoryManager.createScreen(parent));
         }
     }
 
