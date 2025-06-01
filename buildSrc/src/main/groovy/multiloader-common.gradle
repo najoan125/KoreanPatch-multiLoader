@@ -26,15 +26,6 @@ repositories {
         filter { includeGroupAndSubgroups('org.spongepowered') }
     }
     exclusiveContent {
-        forRepositories(
-                maven {
-                    name = 'ParchmentMC'
-                    url = 'https://maven.parchmentmc.org/'
-                }
-        )
-        filter { includeGroup('org.parchmentmc.data') }
-    }
-    exclusiveContent {
         forRepository {
             maven {
                 name = "Modrinth"
