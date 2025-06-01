@@ -47,7 +47,6 @@ dependencies {
     compileOnly "maven.modrinth:rei:${project.rei_neo}"
 }
 
-compileJava.options.encoding = 'UTF-8'
 tasks.withType(JavaCompile).configureEach {
-    options.encoding = 'UTF-8'
+    options.encoding = 'UTF-8' // Use the UTF-8 charset for Java compilation
 }
