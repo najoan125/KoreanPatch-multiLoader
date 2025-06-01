@@ -17,7 +17,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(value = {EditBox.class})
 public abstract class EditBoxMixin {
     @Shadow
-    public abstract boolean isEditable();
+    protected abstract boolean isEditable();
 
     @Unique
     private final Minecraft koreanPatch$client = Minecraft.getInstance();
