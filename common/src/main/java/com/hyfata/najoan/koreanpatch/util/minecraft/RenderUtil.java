@@ -1,14 +1,12 @@
 package com.hyfata.najoan.koreanpatch.util.minecraft;
 
-import com.hyfata.najoan.koreanpatch.mixin.accessor.GuiGraphicsAccessor;
-import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.util.Mth;
+import org.joml.Matrix3x2f;
+import org.joml.Matrix3x2fStack;
 import org.joml.Matrix4f;
 
 public class RenderUtil {
@@ -31,35 +29,36 @@ public class RenderUtil {
     }
 
     public static void drawText(GuiGraphics context, FormattedCharSequence text, float x, float y, int color) {
-        GuiGraphicsAccessor guiGraphicsAccessor = (GuiGraphicsAccessor) context;
-        Font textRenderer = client.font;
-        Matrix4f matrix = context.pose().last().pose();
-        MultiBufferSource vertexConsumers = guiGraphicsAccessor.getBufferSource();
-        textRenderer.drawInBatch(text, x, y, color, false, matrix, vertexConsumers, Font.DisplayMode.NORMAL, 0, 15728880);
+        context.drawString(client.font, text, (int) x, (int) y, color);
+//        GuiGraphicsAccessor guiGraphicsAccessor = (GuiGraphicsAccessor) context;
+//        Font textRenderer = client.font;
+//        Matrix4f matrix = getMatrix4f(context.pose());
+//        MultiBufferSource vertexConsumers = guiGraphicsAccessor.getBufferSource();
+//        textRenderer.drawInBatch(text, x, y, color, false, matrix, vertexConsumers, Font.DisplayMode.NORMAL, 0, 15728880);
     }
 
     public static void fill(GuiGraphics context, float x1, float y1, float x2, float y2, int color) {
-        GuiGraphicsAccessor guiGraphicsAccessor = (GuiGraphicsAccessor) context;
-        Matrix4f matrix = context.pose().last().pose();
-        float i;
-        if (x1 < x2) {
-            i = x1;
-            x1 = x2;
-            x2 = i;
-        }
-
-        if (y1 < y2) {
-            i = y1;
-            y1 = y2;
-            y2 = i;
-        }
-
-        VertexConsumer vertexConsumer = guiGraphicsAccessor.getBufferSource().getBuffer(RenderType.gui());
-        vertexConsumer.addVertex(matrix, x1, y1, 0f).setColor(color);
-        vertexConsumer.addVertex(matrix, x1, y2, 0f).setColor(color);
-        vertexConsumer.addVertex(matrix, x2, y2, 0f).setColor(color);
-        vertexConsumer.addVertex(matrix, x2, y1, 0f).setColor(color);
-        context.flush();
+        context.fill((int) x1, (int) y1, (int) x2, (int) y2, color);
+//        GuiGraphicsAccessor guiGraphicsAccessor = (GuiGraphicsAccessor) context;
+//        Matrix4f matrix = getMatrix4f(context.pose());
+//        float i;
+//        if (x1 < x2) {
+//            i = x1;
+//            x1 = x2;
+//            x2 = i;
+//        }
+//
+//        if (y1 < y2) {
+//            i = y1;
+//            y1 = y2;
+//            y2 = i;
+//        }
+//
+//        VertexConsumer vertexConsumer = guiGraphicsAccessor.getBufferSource().getBuffer(RenderType.LINES);
+//        vertexConsumer.addVertex(matrix, x1, y1, 0f).setColor(color);
+//        vertexConsumer.addVertex(matrix, x1, y2, 0f).setColor(color);
+//        vertexConsumer.addVertex(matrix, x2, y2, 0f).setColor(color);
+//        vertexConsumer.addVertex(matrix, x2, y1, 0f).setColor(color);
     }
 
     public static void drawVertexCircleFrame(GuiGraphics context, float centerX, float centerY, float radius, int frameColor, float frameThickness, VertexDirection direction) {
@@ -148,5 +147,23 @@ public class RenderUtil {
         TOP_RIGHT,
         BOTTOM_LEFT,
         BOTTOM_RIGHT
+    }
+
+    private static Matrix4f getMatrix4f(Matrix3x2fStack stack) {
+        Matrix3x2f matrix3x2f = new Matrix3x2f(stack);
+        Matrix4f matrix = new Matrix4f();
+        matrix.m00(matrix3x2f.m00());
+        matrix.m01(matrix3x2f.m01());
+
+        matrix.m10(matrix3x2f.m10());
+        matrix.m11(matrix3x2f.m11());
+
+        matrix.m22(1.0f);
+
+        matrix.m30(matrix3x2f.m20());
+        matrix.m31(matrix3x2f.m21());
+        matrix.m32(0.0f);
+        matrix.m33(1.0f);
+        return matrix;
     }
 }

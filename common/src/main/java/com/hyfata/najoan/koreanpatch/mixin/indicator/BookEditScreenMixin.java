@@ -1,6 +1,5 @@
 package com.hyfata.najoan.koreanpatch.mixin.indicator;
 
-import com.hyfata.najoan.koreanpatch.mixin.accessor.BookEditScreenDisplayCacheAccessor;
 import com.hyfata.najoan.koreanpatch.process.handler.indicator.AnimationHandler;
 import com.hyfata.najoan.koreanpatch.process.handler.indicator.IndicatorHandler;
 import net.minecraft.client.gui.GuiGraphics;
@@ -21,30 +20,30 @@ public abstract class BookEditScreenMixin extends Screen {
         super(title);
     }
 
-    @Shadow
-    protected abstract BookEditScreen.DisplayCache getDisplayCache();
-
-    @Shadow
-    private boolean isSigning;
-
-    @Unique
-    private final AnimationHandler koreanPatch$animationHandler = new AnimationHandler();
-
-    @Inject(at = {@At(value = "RETURN")}, method = {"render"})
-    private void addCustomLabel(GuiGraphics context, int mouseX, int mouseY, float delta, CallbackInfo ci) {
-        float x = (this.width - 192) / 2f; // int i = (this.width - 192) / 2; in render() method
-        float y;
-        if (isSigning) {
-            y = 50 + 4.5f;
-        } else {
-            BookEditScreenDisplayCacheAccessor pageContent = (BookEditScreenDisplayCacheAccessor) getDisplayCache();
-            y = pageContent.getCursor().y + 32 + 4.5f; //absolutePositionToScreenPosition() + (fontHeight(9) / 2)
-        }
-
-        koreanPatch$animationHandler.init(0, y - 4);
-        koreanPatch$animationHandler.calculateAnimation(0, y);
-
-        IndicatorHandler.showCenteredIndicator(context, x + 10, koreanPatch$animationHandler.getResultY());
-    }
+//    @Shadow
+//    protected abstract BookEditScreen.DisplayCache getDisplayCache();
+//
+//    @Shadow
+//    private boolean isSigning;
+//
+//    @Unique
+//    private final AnimationHandler koreanPatch$animationHandler = new AnimationHandler();
+//
+//    @Inject(at = {@At(value = "RETURN")}, method = {"render"})
+//    private void addCustomLabel(GuiGraphics context, int mouseX, int mouseY, float delta, CallbackInfo ci) {
+//        float x = (this.width - 192) / 2f; // int i = (this.width - 192) / 2; in render() method
+//        float y;
+//        if (isSigning) {
+//            y = 50 + 4.5f;
+//        } else {
+//            BookEditScreenDisplayCacheAccessor pageContent = (BookEditScreenDisplayCacheAccessor) getDisplayCache();
+//            y = pageContent.getCursor().y + 32 + 4.5f; //absolutePositionToScreenPosition() + (fontHeight(9) / 2)
+//        }
+//
+//        koreanPatch$animationHandler.init(0, y - 4);
+//        koreanPatch$animationHandler.calculateAnimation(0, y);
+//
+//        IndicatorHandler.showCenteredIndicator(context, x + 10, koreanPatch$animationHandler.getResultY());
+//    }
 }
 
