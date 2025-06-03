@@ -13,6 +13,7 @@
     "accessor.CreateWorldScreenGameTabAccessor",
     "accessor.CreativeModeInventoryScreenInvoker",
     "accessor.EditBoxAccessor",
+    "accessor.GuiGraphicsAccessor",
     "accessor.TabNavigationBarAccessor",
     "accessor.TextFieldHelperAccessor",
     "indicator.AnvilScreenMixin",
