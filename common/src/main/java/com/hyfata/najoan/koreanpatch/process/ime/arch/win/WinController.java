@@ -4,6 +4,7 @@ import com.hyfata.najoan.koreanpatch.client.Constants;
 import com.hyfata.najoan.koreanpatch.data.ConfigManager;
 import com.hyfata.najoan.koreanpatch.process.ime.InputController;
 import net.minecraft.client.Minecraft;
+import org.lwjgl.glfw.GLFWNativeWin32;
 
 public class WinController implements InputController {
     private boolean focus = false;
@@ -41,10 +42,11 @@ public class WinController implements InputController {
     }
 
     public WinController() {
-        WinHandle.PreeditCallback pc = (str, cursor, length) -> {};
-        WinHandle.DoneCallback dc = (str) -> {};
-        WinHandle.RectCallback rc = ret -> 1;
+        long window = Minecraft.getInstance().getWindow().getWindow();
+        WinHandle.LogInfoCallback info = log -> Constants.LOG.info("[Native|C] {}", log);
+        WinHandle.LogErrorCallback error = log -> Constants.LOG.error("[Native|C] {}", log);
+        WinHandle.LogDebugCallback debug = log -> Constants.LOG.debug("[Native|C] {}", log);
 
-        WinHandle.INSTANCE.initialize(org.lwjgl.glfw.GLFWNativeWin32.glfwGetWin32Window(Minecraft.getInstance().getWindow().getWindow()), pc, dc,rc, (log) -> Constants.LOG.info("[Native|C] {}", log), (log) -> Constants.LOG.error("[Native|C] {}", log), (log) -> Constants.LOG.debug("[Native|C] {}", log));
+        WinHandle.INSTANCE.initialize(GLFWNativeWin32.glfwGetWin32Window(window), info, error, debug);
     }
 }
