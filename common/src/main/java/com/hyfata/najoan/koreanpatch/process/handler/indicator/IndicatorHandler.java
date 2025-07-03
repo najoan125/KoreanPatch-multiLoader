@@ -65,7 +65,7 @@ public class IndicatorHandler {
                         colorOpacityConfig.getKoreanColor().getRGB() :
                         colorOpacityConfig.getEnColor().getRGB();
         int outlineOpacity = colorOpacityConfig.getOpacity() * 255 / 100; // N% * (0 to 255)/100
-        return ((outlineOpacity & 0xFF) << 24) | outlineRGB; // ARGB
+        return ((outlineOpacity & 0xFF) << 24) | (outlineRGB & 0x00ffffff); // ARGB
     }
 
     private static void renderBox(PoseStack context, float x1, float y1, float x2, float y2, int frameColor, int backgroundColor) {
