@@ -45,6 +45,10 @@ public class ConfigManager {
         CONFIG_FILE = Minecraft.getInstance().gameDirectory.toPath()
                 .resolve("config").resolve(CONFIG_FILE_NAME).toFile();
 
+        if (!CONFIG_FILE.getParentFile().exists()) {
+            boolean ignored = CONFIG_FILE.getParentFile().mkdirs();
+        }
+
         if (CONFIG_FILE.exists()) {
             loadFromFile();
         }
