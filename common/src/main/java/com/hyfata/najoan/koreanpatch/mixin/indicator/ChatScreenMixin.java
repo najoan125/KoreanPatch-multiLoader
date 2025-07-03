@@ -58,7 +58,6 @@ public abstract class ChatScreenMixin extends Screen {
         koreanPatch$animationHandler.init(0, 0);
         koreanPatch$animationHandler.calculateAnimation(indicatorX, 0);
 
-        context.pose().translate(0.0F, 0.0F, 200.0F);
         IndicatorHandler.showIndicator(context, koreanPatch$animationHandler.getResultX(), indicatorY);
     }
 }

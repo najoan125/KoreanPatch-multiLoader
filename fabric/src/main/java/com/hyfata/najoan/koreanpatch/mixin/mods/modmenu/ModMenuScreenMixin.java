@@ -29,7 +29,6 @@ public class ModMenuScreenMixin {
         animationHandler.init(cursorX - 4, 0);
         animationHandler.calculateAnimation(cursorX, 0);
 
-        context.pose().translate(0.0F, 0.0F, 200.0F);
         IndicatorHandler.showIndicator(context, animationHandler.getResultX(), y);
     }
 }
