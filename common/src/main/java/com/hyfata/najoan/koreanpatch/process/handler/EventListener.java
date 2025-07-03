@@ -14,7 +14,6 @@ import com.hyfata.najoan.koreanpatch.process.ime.InputManager;
 import com.hyfata.najoan.koreanpatch.util.ReflectionFieldChecker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.EditBox;
-import net.minecraft.client.gui.components.MultiLineEditBox;
 import net.minecraft.client.gui.font.TextFieldHelper;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.*;
@@ -150,8 +149,7 @@ public class EventListener {
 
     private static boolean hasTextField(Screen screen) {
         boolean hasTextFieldWidget = ReflectionFieldChecker.hasFieldOfType(screen, EditBox.class);
-        boolean hasMultilineEditBox = ReflectionFieldChecker.hasFieldOfType(screen, MultiLineEditBox.class);
         boolean hasSelectionManager = ReflectionFieldChecker.hasFieldOfType(screen, TextFieldHelper.class);
-        return hasTextFieldWidget || hasMultilineEditBox || hasSelectionManager;
+        return hasTextFieldWidget || hasSelectionManager;
     }
 }

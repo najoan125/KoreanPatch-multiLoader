@@ -36,6 +36,7 @@ public class SelectWorldScreenMixin extends Screen {
         koreanPatch$animationHandler.init((float) this.width / 2 - 105, 0);
         koreanPatch$animationHandler.calculateAnimation(x, 0);
 
+        context.pose().translate(0.0F, 0.0F, 200.0F);
         IndicatorHandler.showIndicator(context, koreanPatch$animationHandler.getResultX() + 4, y);
     }
 }

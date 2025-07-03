@@ -1,18 +1,15 @@
 package com.hyfata.najoan.koreanpatch.util.minecraft;
 
 import com.hyfata.najoan.koreanpatch.mixin.accessor.GuiGraphicsAccessor;
-import com.hyfata.najoan.koreanpatch.util.minecraft.gui.FloatRenderState;
-import com.hyfata.najoan.koreanpatch.util.minecraft.gui.FloatTextRenderState;
-import com.mojang.blaze3d.pipeline.RenderPipeline;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.render.TextureSetup;
-import net.minecraft.client.renderer.RenderPipelines;
-import net.minecraft.util.ARGB;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.util.Mth;
-import org.joml.Matrix3x2f;
+import org.joml.Matrix4f;
 
 public class RenderUtil {
     private static final Minecraft client = Minecraft.getInstance();
@@ -34,17 +31,16 @@ public class RenderUtil {
     }
 
     public static void drawText(GuiGraphics context, FormattedCharSequence text, float x, float y, int color) {
-        if (ARGB.alpha(color) != 0) {
-            GuiGraphicsAccessor accessor = (GuiGraphicsAccessor) context;
-            accessor.getGuiRenderState().submitText(
-                    new FloatTextRenderState(
-                            client.font, text, new Matrix3x2f(context.pose()), x, y, color, 0, true, accessor.getScissorStack().peek()
-                    )
-            );
-        }
+        GuiGraphicsAccessor guiGraphicsAccessor = (GuiGraphicsAccessor) context;
+        Font textRenderer = client.font;
+        Matrix4f matrix = context.pose().last().pose();
+        MultiBufferSource vertexConsumers = guiGraphicsAccessor.getBufferSource();
+        textRenderer.drawInBatch(text, x, y, color, false, matrix, vertexConsumers, Font.DisplayMode.NORMAL, 0, 15728880);
     }
 
     public static void fill(GuiGraphics context, float x1, float y1, float x2, float y2, int color) {
+        GuiGraphicsAccessor guiGraphicsAccessor = (GuiGraphicsAccessor) context;
+        Matrix4f matrix = context.pose().last().pose();
         float i;
         if (x1 < x2) {
             i = x1;
@@ -58,22 +54,12 @@ public class RenderUtil {
             y2 = i;
         }
 
-        submitColoredRectangle(context, RenderPipelines.GUI, TextureSetup.noTexture(), x1, y1, x2, y2, color, null);
-    }
-
-    private static void submitColoredRectangle(GuiGraphics context, RenderPipeline pipeline, TextureSetup textureSetup, float x0, float y0, float x1, float y1, int col1, Integer col2) {
-        GuiGraphicsAccessor accessor = (GuiGraphicsAccessor) context;
-        accessor.getGuiRenderState().submitGuiElement(
-                new FloatRenderState(
-                        pipeline,
-                        textureSetup,
-                        new Matrix3x2f(context.pose()),
-                        x0, y0, x1, y1,
-                        col1,
-                        col2 != null ? col2 : col1,
-                        accessor.getScissorStack().peek()
-                )
-        );
+        VertexConsumer vertexConsumer = guiGraphicsAccessor.getBufferSource().getBuffer(RenderType.gui());
+        vertexConsumer.addVertex(matrix, x1, y1, 0f).setColor(color);
+        vertexConsumer.addVertex(matrix, x1, y2, 0f).setColor(color);
+        vertexConsumer.addVertex(matrix, x2, y2, 0f).setColor(color);
+        vertexConsumer.addVertex(matrix, x2, y1, 0f).setColor(color);
+        context.flush();
     }
 
     public static void drawVertexCircleFrame(GuiGraphics context, float centerX, float centerY, float radius, int frameColor, float frameThickness, VertexDirection direction) {
