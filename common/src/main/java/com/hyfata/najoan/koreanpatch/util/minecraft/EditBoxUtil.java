@@ -9,13 +9,22 @@ import net.minecraft.network.chat.Component;
 public class EditBoxUtil {
     private static final Minecraft client = Minecraft.getInstance();
 
-    public static float getCursorX(EditBox textField) {
-        EditBoxAccessor accessor = (EditBoxAccessor) textField;
+    public static float getCursorX(EditBox editbox) {
+        EditBoxAccessor accessor = (EditBoxAccessor) editbox;
         int firstCharacterIndex = accessor.getDisplayPos();
         int selectionStart = accessor.invokeGetCursorPosition();
+        String value = editbox.getValue();
+        int valueLength = value.length();
 
-        float cursorX = textField.x + client.font.getSplitter().stringWidth(textField.getValue().substring(firstCharacterIndex, selectionStart));
-        float endX = textField.x + textField.getWidth() - 1.2f * IndicatorHandler.getIndicatorWidth();
+        int safeFirstCharacterIndex = Math.max(0, Math.min(firstCharacterIndex, valueLength));
+        int safeSelectionStart = Math.max(0, Math.min(selectionStart, valueLength));
+
+        if (safeFirstCharacterIndex > safeSelectionStart) {
+            safeFirstCharacterIndex = safeSelectionStart;
+        }
+
+        float cursorX = editbox.x + client.font.getSplitter().stringWidth(value.substring(safeFirstCharacterIndex, safeSelectionStart));
+        float endX = editbox.x + editbox.getWidth() - 1.2f * IndicatorHandler.getIndicatorWidth();
 
         return Math.min(cursorX, endX);
     }
