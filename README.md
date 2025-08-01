@@ -4,6 +4,8 @@
 
 Korean Patch는 마인크래프트에서 한글 채팅을 더 원활하게 사용할 수 있도록 하는 클라이언트 사이드 모드입니다.
 
+이 모드는 수정된 [CocoaInput-lib](https://github.com/najoan125/CocoaInput-lib)을 사용합니다.
+
 ![indicator](https://cdn.modrinth.com/data/qyulnpBL/images/57ad8ed4ff75acd2dcb88459565d50692c1809e5.png)
 
 ## 다운로드
@@ -35,11 +37,8 @@ Korean Patch는 마인크래프트에서 한글 채팅을 더 원활하게 사�
 
 ## References
 
-- https://github.com/najoan125/fabric-koreanchat
-
 - https://github.com/sokcuri/NaraeChat
-
-- https://www.curseforge.com/minecraft/mc-mods/koreanchat
+- https://github.com/LemonCaramel/caramelChat
 
 ## License
 
