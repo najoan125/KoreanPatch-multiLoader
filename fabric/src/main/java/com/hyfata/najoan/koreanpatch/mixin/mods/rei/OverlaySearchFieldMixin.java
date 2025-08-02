@@ -1,8 +1,8 @@
 package com.hyfata.najoan.koreanpatch.mixin.mods.rei;
 
-import com.hyfata.najoan.koreanpatch.gui.GUIStatus;
-import com.hyfata.najoan.koreanpatch.process.controller.mixin.REITextFieldController;
-import com.hyfata.najoan.koreanpatch.data.LangTypeManager;
+import com.hyfata.najoan.koreanpatch.client.GUIStatus;
+import com.hyfata.najoan.koreanpatch.wrapper.WrapperREITextField;
+import com.hyfata.najoan.koreanpatch.process.LangTypeManager;
 import me.shedaniel.math.Rectangle;
 import me.shedaniel.rei.impl.client.gui.widget.basewidgets.TextFieldWidget;
 import me.shedaniel.rei.impl.client.gui.widget.search.OverlaySearchField;
@@ -24,7 +24,7 @@ public abstract class OverlaySearchFieldMixin extends TextFieldWidget {
     private final Minecraft koreanPatch$client = Minecraft.getInstance();
 
     @Unique
-    private final REITextFieldController koreanPatch$handler = new REITextFieldController(this);
+    private final WrapperREITextField koreanPatch$handler = new WrapperREITextField(this);
 
     @Inject(at = @At("HEAD"), method = "charTyped", cancellable = true)
     public void charTyped(char chr, int modifiers, CallbackInfoReturnable<Boolean> cir) {

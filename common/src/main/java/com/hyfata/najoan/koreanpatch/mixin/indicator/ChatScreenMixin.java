@@ -1,8 +1,8 @@
 package com.hyfata.najoan.koreanpatch.mixin.indicator;
 
 import com.hyfata.najoan.koreanpatch.mixin.accessor.CommandSuggestionsAccessor;
-import com.hyfata.najoan.koreanpatch.process.handler.indicator.AnimationHandler;
-import com.hyfata.najoan.koreanpatch.process.handler.indicator.IndicatorHandler;
+import com.hyfata.najoan.koreanpatch.indicator.AnimationHandler;
+import com.hyfata.najoan.koreanpatch.indicator.IndicatorHandler;
 import com.hyfata.najoan.koreanpatch.util.minecraft.EditBoxUtil;
 import com.mojang.brigadier.suggestion.Suggestions;
 import net.minecraft.client.gui.GuiGraphics;

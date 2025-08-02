@@ -1,10 +1,10 @@
 package com.hyfata.najoan.koreanpatch.mixin.mods.bettercommand;
 
 import bettercommandblockui.main.ui.MultiLineTextFieldWidget;
-import com.hyfata.najoan.koreanpatch.gui.GUIStatus;
+import com.hyfata.najoan.koreanpatch.client.GUIStatus;
 import com.hyfata.najoan.koreanpatch.mixin.accessor.EditBoxAccessor;
-import com.hyfata.najoan.koreanpatch.data.LangTypeManager;
-import com.hyfata.najoan.koreanpatch.process.controller.mixin.EditBoxController;
+import com.hyfata.najoan.koreanpatch.process.LangTypeManager;
+import com.hyfata.najoan.koreanpatch.wrapper.WrapperEditBox;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.components.EditBox;
@@ -23,14 +23,14 @@ public abstract class MultiLineEditBoxMixin extends EditBox {
     }
 
     @Unique
-    private final EditBoxController handler = new EditBoxController((EditBoxAccessor) this);
+    private final WrapperEditBox handler = new WrapperEditBox((EditBoxAccessor) this);
 
     @Inject(method = "charTyped", at = @At("HEAD"), cancellable = true)
     private void charTyped(char chr, int modifiers, CallbackInfoReturnable<Boolean> cir) {
         Minecraft client = Minecraft.getInstance();
         if (client.screen != null && !GUIStatus.isBypassInjection() &&
                 LangTypeManager.getInstance().isKorean() && this.isEditable() && Character.charCount(chr) == 1) {
-            handler.typedTextField(chr, modifiers, cir);
+            handler.charTyped(chr, modifiers, cir);
         }
     }
 

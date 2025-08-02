@@ -1,9 +1,9 @@
 package com.hyfata.najoan.koreanpatch.mixin;
 
-import com.hyfata.najoan.koreanpatch.data.LangTypeManager;
-import com.hyfata.najoan.koreanpatch.gui.GUIStatus;
+import com.hyfata.najoan.koreanpatch.process.LangTypeManager;
+import com.hyfata.najoan.koreanpatch.client.GUIStatus;
 import com.hyfata.najoan.koreanpatch.mixin.accessor.MultilineTextFieldAccessor;
-import com.hyfata.najoan.koreanpatch.process.controller.mixin.MultilineTextFieldController;
+import com.hyfata.najoan.koreanpatch.wrapper.WrapperMultilineTextField;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.components.AbstractTextAreaWidget;
@@ -28,10 +28,10 @@ public abstract class MultilineEditBoxMixin extends AbstractTextAreaWidget {
     private MultilineTextField textField;
 
     @Unique
-    private final Minecraft _$client = Minecraft.getInstance();
+    private final Minecraft koreanPatch$mc = Minecraft.getInstance();
 
     @Unique
-    private MultilineTextFieldController _$controller;
+    private WrapperMultilineTextField koreanPatch$wrapper;
 
     public MultilineEditBoxMixin(int p_388859_, int p_387520_, int p_387683_, int p_387659_, Component p_386737_) {
         super(p_388859_, p_387520_, p_387683_, p_387659_, p_386737_);
@@ -39,16 +39,16 @@ public abstract class MultilineEditBoxMixin extends AbstractTextAreaWidget {
 
     @Inject(at = {@At(value = "TAIL")}, method = {"<init>"})
     public void init(Font font, int x, int y, int width, int height, Component placeholder, Component message, int p_421931_, boolean p_421976_, int p_422714_, boolean p_422534_, boolean p_422133_, CallbackInfo ci) {
-        _$controller = new MultilineTextFieldController((MultilineTextFieldAccessor) this.textField);
+        koreanPatch$wrapper = new WrapperMultilineTextField((MultilineTextFieldAccessor) this.textField);
     }
 
     @Inject(at = {@At(value = "HEAD")}, method = {"charTyped(CI)Z"}, cancellable = true)
     public void charTyped(char chr, int modifiers, CallbackInfoReturnable<Boolean> cir) {
-        if (this._$client.screen != null && !GUIStatus.isBypassInjection() &&
+        if (this.koreanPatch$mc.screen != null && !GUIStatus.isBypassInjection() &&
                 LangTypeManager.getInstance().isKorean() && Character.charCount(chr) == 1 &&
                 this.visible && this.isFocused() && StringUtil.isAllowedChatCharacter(chr)
         ) {
-            _$controller.typedTextField(chr, modifiers, cir);
+            koreanPatch$wrapper.charTyped(chr, modifiers, cir);
         }
     }
 
@@ -57,7 +57,7 @@ public abstract class MultilineEditBoxMixin extends AbstractTextAreaWidget {
         Minecraft client = Minecraft.getInstance();
         if (client.screen != null && !GUIStatus.isBypassInjection()) {
             if (keyCode == GLFW.GLFW_KEY_BACKSPACE) {
-                if (_$controller.onBackspaceKeyPressed()) {
+                if (koreanPatch$wrapper.onBackspaceKeyPressed()) {
                     callbackInfo.setReturnValue(Boolean.TRUE);
                 }
             }

@@ -1,12 +1,12 @@
 package com.hyfata.najoan.koreanpatch.mixin;
 
 import com.hyfata.najoan.koreanpatch.client.KeyBinds;
-import com.hyfata.najoan.koreanpatch.data.ConfigManager;
-import com.hyfata.najoan.koreanpatch.data.config.category.CategoryInput;
-import com.hyfata.najoan.koreanpatch.data.storage.InputStatusStorage;
-import com.hyfata.najoan.koreanpatch.gui.GUIStatus;
-import com.hyfata.najoan.koreanpatch.process.ime.InputManager;
-import com.hyfata.najoan.koreanpatch.data.LangTypeManager;
+import com.hyfata.najoan.koreanpatch.config.ConfigManager;
+import com.hyfata.najoan.koreanpatch.config.category.CategoryInput;
+import com.hyfata.najoan.koreanpatch.storage.InputStatusStorage;
+import com.hyfata.najoan.koreanpatch.client.GUIStatus;
+import com.hyfata.najoan.koreanpatch.driver.InputManager;
+import com.hyfata.najoan.koreanpatch.process.LangTypeManager;
 import net.minecraft.client.KeyboardHandler;
 import net.minecraft.client.Minecraft;
 import org.spongepowered.asm.mixin.Final;

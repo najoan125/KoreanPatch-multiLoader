@@ -1,6 +1,6 @@
 package com.hyfata.najoan.koreanpatch.mixin.mods.axiom;
 
-import com.hyfata.najoan.koreanpatch.gui.GUIStatus;
+import com.hyfata.najoan.koreanpatch.client.GUIStatus;
 import com.moulberry.axiom.editor.EditorUI;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
