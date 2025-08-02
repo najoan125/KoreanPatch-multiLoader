@@ -30,7 +30,7 @@ public abstract class FormattableEditBoxMixin extends AdvancedEditBox {
 
     @Inject(at = {@At(value = "HEAD")}, method = {"charTyped(CI)Z"}, cancellable = true)
     public void charTyped(char chr, int modifiers, CallbackInfoReturnable<Boolean> cir) {
-        if (this._$client.screen != null && !GUIStatus.isBypassInjection() &&
+        if (this._$client.screen != null && !GUIStatus.getInstance().isBypassInjection() &&
                 LangTypeManager.getInstance().isKorean() && this.isEditable && Character.charCount(chr) == 1) {
             _$handler.charTyped(chr, modifiers, cir);
         }
@@ -40,7 +40,7 @@ public abstract class FormattableEditBoxMixin extends AdvancedEditBox {
     @Override
     public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
         Minecraft client = Minecraft.getInstance();
-        if (client.screen != null && !GUIStatus.isBypassInjection()) {
+        if (client.screen != null && !GUIStatus.getInstance().isBypassInjection()) {
             if (keyCode == GLFW.GLFW_KEY_BACKSPACE) {
                 if (_$handler.onBackspaceKeyPressed()) {
                     return true;

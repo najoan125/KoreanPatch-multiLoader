@@ -27,7 +27,7 @@ public abstract class EditBoxMixin {
 
     @Inject(at = {@At(value = "HEAD")}, method = {"charTyped(CI)Z"}, cancellable = true)
     public void charTyped(char chr, int modifiers, CallbackInfoReturnable<Boolean> cir) {
-        if (this.koreanPatch$mc.screen != null && !GUIStatus.isBypassInjection() &&
+        if (this.koreanPatch$mc.screen != null && !GUIStatus.getInstance().isBypassInjection() &&
                 LangTypeManager.getInstance().isKorean() && this.isEditable() && Character.charCount(chr) == 1) {
             koreanPatch$wrapper.charTyped(chr, modifiers, cir);
         }
@@ -36,7 +36,7 @@ public abstract class EditBoxMixin {
     @Inject(at = {@At(value = "HEAD")}, method = {"keyPressed(III)Z"}, cancellable = true)
     private void keyPressed(int keyCode, int scanCode, int modifiers, CallbackInfoReturnable<Boolean> callbackInfo) {
         Minecraft client = Minecraft.getInstance();
-        if (client.screen != null && !GUIStatus.isBypassInjection()) {
+        if (client.screen != null && !GUIStatus.getInstance().isBypassInjection()) {
             if (keyCode == GLFW.GLFW_KEY_BACKSPACE) {
                 if (koreanPatch$wrapper.onBackspaceKeyPressed()) {
                     callbackInfo.setReturnValue(Boolean.TRUE);

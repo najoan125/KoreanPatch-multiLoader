@@ -26,7 +26,7 @@ public class KeyboardHandlerMixin {
     private void onInput(long window, int keyCode, int scanCode, int action, int modifiers, CallbackInfo ci) {
         CategoryInput categoryInput = ConfigManager.getInstance().getConfig().getCategoryInput();
 
-        if (window == minecraft.getWindow().getWindow() && action == 1 && !GUIStatus.isBypassInjection()) {
+        if (window == minecraft.getWindow().getWindow() && action == 1 && !GUIStatus.getInstance().isBypassInjection()) {
             if (KeyBinds.getImeBinding().matches(keyCode, scanCode) && modifiers == 2 && !categoryInput.isAlwaysImeEnabled()) {
                 InputManager.getController().toggleFocus();
                 if (categoryInput.isMemoryLangTypePerScreen())

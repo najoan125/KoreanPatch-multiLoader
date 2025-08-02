@@ -11,6 +11,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class EditorUIMixin {
     @Inject(method = "drawOverlay", at = @At("TAIL"), remap = false)
     private static void drawOverlay(CallbackInfo ci) {
-        GUIStatus.setShouldUseIME(EditorUI.isEnabled());
+        GUIStatus.getInstance().setShouldUseIME(EditorUI.isEnabled());
     }
 }

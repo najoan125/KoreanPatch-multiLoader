@@ -1,22 +1,27 @@
 package com.hyfata.najoan.koreanpatch.client;
 
 public class GUIStatus {
-    private static boolean shouldUseIME = false;
-    private static boolean bypassInjection = false;
+    private static final GUIStatus instance = new GUIStatus();
+    public static GUIStatus getInstance() {
+        return instance;
+    }
 
-    public static boolean isShouldUseIME() {
+    private boolean shouldUseIME = false;
+    private boolean bypassInjection = false;
+
+    public boolean isShouldUseIME() {
         return shouldUseIME;
     }
 
-    public static void setShouldUseIME(boolean shouldUseIME) {
-        GUIStatus.shouldUseIME = shouldUseIME;
+    public void setShouldUseIME(boolean shouldUseIME) {
+        this.shouldUseIME = shouldUseIME;
     }
 
-    public static boolean isBypassInjection() {
+    public boolean isBypassInjection() {
         return bypassInjection;
     }
 
-    public static void setBypassInjection(boolean bypassInjection) {
-        GUIStatus.bypassInjection = bypassInjection;
+    public void setBypassInjection(boolean bypassInjection) {
+        this.bypassInjection = bypassInjection;
     }
 }

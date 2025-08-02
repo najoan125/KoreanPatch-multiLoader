@@ -30,7 +30,7 @@ public abstract class TextFieldHelperMixin {
     @Inject(at = {@At(value = "HEAD")}, method = {"removeCharsFromCursor(I)V"}, cancellable = true)
     public void delete(int offset, CallbackInfo ci) {
         Minecraft client = Minecraft.getInstance();
-        if (client.screen != null && !GUIStatus.isBypassInjection()) {
+        if (client.screen != null && !GUIStatus.getInstance().isBypassInjection()) {
             if (koreanPatch$wrapper.onBackspaceKeyPressed()) {
                 ci.cancel();
             }

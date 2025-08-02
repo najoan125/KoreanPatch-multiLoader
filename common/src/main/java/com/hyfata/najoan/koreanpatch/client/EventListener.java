@@ -64,7 +64,7 @@ public class EventListener {
         Screen screen = Minecraft.getInstance().screen;
         if (screen == null || !KoreanPatchClient.loaded) return;
 
-        GUIStatus.setBypassInjection(isInjectionBypassScreen(screen));
+        GUIStatus.getInstance().setBypassInjection(isInjectionBypassScreen(screen));
 
         boolean hasTextInput = isScreenPatched(screen) || hasTextField(screen);
         InputController controller = InputManager.getController();
@@ -82,9 +82,9 @@ public class EventListener {
         CategoryInput categoryInput = ConfigManager.getInstance().getConfig().getCategoryInput();
         Minecraft client = Minecraft.getInstance();
 
-        if (client.screen == null && !GUIStatus.isShouldUseIME() && categoryInput.isDisableImeWhenPlaying()) {
+        if (client.screen == null && !GUIStatus.getInstance().isShouldUseIME() && categoryInput.isDisableImeWhenPlaying()) {
             InputManager.getController().setFocus(false);
-        } else if (GUIStatus.isShouldUseIME()) {
+        } else if (GUIStatus.getInstance().isShouldUseIME()) {
             InputManager.getController().setFocus(true);
         }
     }
