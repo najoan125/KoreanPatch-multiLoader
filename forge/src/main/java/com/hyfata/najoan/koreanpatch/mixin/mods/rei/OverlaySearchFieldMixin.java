@@ -1,8 +1,8 @@
 package com.hyfata.najoan.koreanpatch.mixin.mods.rei;
 
-import com.hyfata.najoan.koreanpatch.data.LangTypeManager;
-import com.hyfata.najoan.koreanpatch.gui.GUIStatus;
-import com.hyfata.najoan.koreanpatch.process.controller.mixin.REITextFieldController;
+import com.hyfata.najoan.koreanpatch.client.GUIStatus;
+import com.hyfata.najoan.koreanpatch.process.LangTypeManager;
+import com.hyfata.najoan.koreanpatch.wrapper.WrapperREITextField;
 import me.shedaniel.math.Rectangle;
 import me.shedaniel.rei.impl.client.gui.widget.basewidgets.TextFieldWidget;
 import me.shedaniel.rei.impl.client.gui.widget.search.OverlaySearchField;
@@ -24,11 +24,11 @@ public abstract class OverlaySearchFieldMixin extends TextFieldWidget {
     private final Minecraft koreanPatch$client = Minecraft.getInstance();
 
     @Unique
-    private final REITextFieldController koreanPatch$handler = new REITextFieldController(this);
+    private final WrapperREITextField koreanPatch$handler = new WrapperREITextField(this);
 
     @Inject(at = @At("HEAD"), method = "m_5534_", cancellable = true, remap = false)
     public void charTyped(char chr, int modifiers, CallbackInfoReturnable<Boolean> cir) {
-        if (this.koreanPatch$client.screen != null && !GUIStatus.isBypassInjection() &&
+        if (this.koreanPatch$client.screen != null && !GUIStatus.getInstance().isBypassInjection() &&
                 LangTypeManager.getInstance().isKorean() && Character.charCount(chr) == 1) {
             koreanPatch$handler.typedTextField(chr, modifiers, cir);
         }
@@ -37,7 +37,7 @@ public abstract class OverlaySearchFieldMixin extends TextFieldWidget {
     @Inject(at = @At("HEAD"), method = "m_7933_", cancellable = true, remap = false)
     public void keyPressed(int keyCode, int scanCode, int modifiers, CallbackInfoReturnable<Boolean> cir) {
         Minecraft client = Minecraft.getInstance();
-        if (client.screen != null && !GUIStatus.isBypassInjection()) {
+        if (client.screen != null && !GUIStatus.getInstance().isBypassInjection()) {
             if (keyCode == GLFW.GLFW_KEY_BACKSPACE) {
                 if (koreanPatch$handler.onBackspaceKeyPressed()) {
                     cir.setReturnValue(Boolean.TRUE);
