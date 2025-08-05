@@ -1,8 +1,7 @@
 package com.hyfata.najoan.koreanpatch.client;
 
-import com.hyfata.najoan.koreanpatch.gui.yacl.YaclConfigScreenFactoryManager;
+import com.hyfata.najoan.koreanpatch.config.yacl.YaclConfigScreenFactoryManager;
 import com.hyfata.najoan.koreanpatch.platform.Services;
-import com.hyfata.najoan.koreanpatch.process.handler.EventListener;
 import net.minecraft.client.KeyMapping;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
