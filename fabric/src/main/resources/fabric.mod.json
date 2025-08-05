@@ -22,7 +22,7 @@
             "com.hyfata.najoan.koreanpatch.client.KoreanPatchFabric"
         ],
         "modmenu": [
-            "com.hyfata.najoan.koreanpatch.gui.ModMenuIntegration"
+            "com.hyfata.najoan.koreanpatch.config.ModMenuIntegration"
         ]
     },
     "mixins": [
