@@ -1,6 +1,6 @@
 package com.hyfata.najoan.koreanpatch.mixin.mods.easy_anvils;
 
-import com.hyfata.najoan.koreanpatch.process.handler.indicator.IndicatorHandler;
+import com.hyfata.najoan.koreanpatch.indicator.IndicatorHandler;
 import com.mojang.blaze3d.vertex.PoseStack;
 import fuzs.easyanvils.client.gui.screens.inventory.NameTagEditScreen;
 import net.minecraft.client.gui.components.EditBox;

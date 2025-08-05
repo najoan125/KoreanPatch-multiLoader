@@ -1,7 +1,7 @@
 package com.hyfata.najoan.koreanpatch.mixin.mods.bettercommand;
 
 import bettercommandblockui.main.ui.screen.AbstractBetterCommandBlockScreen;
-import com.hyfata.najoan.koreanpatch.process.handler.indicator.IndicatorHandler;
+import com.hyfata.najoan.koreanpatch.indicator.IndicatorHandler;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.gui.components.EditBox;
 import org.spongepowered.asm.mixin.Mixin;
