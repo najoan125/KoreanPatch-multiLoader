@@ -4,10 +4,10 @@ plugins {
 }
 
 repositories {
-	maven {
-		name = "Terraformers"
-		url = "https://maven.terraformersmc.com/"
-	}
+    maven {
+        name = "Terraformers"
+        url = "https://maven.terraformersmc.com/"
+    }
 }
 
 dependencies {
@@ -35,8 +35,8 @@ dependencies {
     modImplementation "dev.isxander:yet-another-config-lib:${project.yacl_version}-fabric" // To test modImplementation
 
     modImplementation "com.terraformersmc:modmenu:${project.modmenu_version}"
-	modCompileOnly "maven.modrinth:command-block-ide:${project.command_block_ide_version}"
-	modCompileOnly "maven.modrinth:bettercommandblockui:${project.better_command_block_ui_version}"
+    modCompileOnly "maven.modrinth:command-block-ide:${project.command_block_ide_version}"
+    modCompileOnly "maven.modrinth:bettercommandblockui:${project.better_command_block_ui_version}"
     modCompileOnly "maven.modrinth:easy-anvils:${project.easy_anvils_version_fabric}"
     modCompileOnly "maven.modrinth:axiom:${project.axiom_version}"
     modCompileOnly "maven.modrinth:xaeros-minimap:${project.xaeros_minimap_fabric}"
