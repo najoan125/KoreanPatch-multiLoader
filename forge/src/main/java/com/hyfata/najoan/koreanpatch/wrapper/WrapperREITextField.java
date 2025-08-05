@@ -1,17 +1,16 @@
-package com.hyfata.najoan.koreanpatch.process.controller.mixin;
+package com.hyfata.najoan.koreanpatch.wrapper;
 
-import com.hyfata.najoan.koreanpatch.data.provider.keyboard.KeyboardLayout;
-import com.hyfata.najoan.koreanpatch.process.controller.mixin.common.IMixinCommon;
-import com.hyfata.najoan.koreanpatch.process.controller.mixin.common.MixinCommonController;
-import com.hyfata.najoan.koreanpatch.process.handler.hangul.HangulProcessor;
+import com.hyfata.najoan.koreanpatch.process.HangulProcessor;
+import com.hyfata.najoan.koreanpatch.process.keyboard.KeyboardLayout;
 import com.hyfata.najoan.koreanpatch.util.HangulUtil;
+import com.hyfata.najoan.koreanpatch.wrapper.handler.IMEWrapperHandler;
 import me.shedaniel.rei.api.client.gui.widgets.TextField;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-public class REITextFieldController implements IMixinCommon {
+public class WrapperREITextField implements InterfaceIMEWrapper {
     private final TextField accessor;
 
-    public REITextFieldController(TextField accessor) {
+    public WrapperREITextField(TextField accessor) {
         this.accessor = accessor;
     }
 
@@ -36,11 +35,11 @@ public class REITextFieldController implements IMixinCommon {
         }
 
         int cursorPosition = accessor.getCursor();
-        return MixinCommonController.onBackspaceKeyPressed(this, cursorPosition, accessor.getText());
+        return IMEWrapperHandler.onBackspaceKeyPressed(this, cursorPosition, accessor.getText());
     }
 
     public boolean onHangulCharTyped(int keyCode, int modifiers) {
-        return MixinCommonController.onHangulCharTyped(this, keyCode, modifiers, accessor.getText(), accessor.getSelectedText().isEmpty());
+        return IMEWrapperHandler.onHangulCharTyped(this, keyCode, modifiers, accessor.getText(), accessor.getSelectedText().isEmpty());
     }
 
     public void typedTextField(char chr, int modifiers, CallbackInfoReturnable<Boolean> cir) {
