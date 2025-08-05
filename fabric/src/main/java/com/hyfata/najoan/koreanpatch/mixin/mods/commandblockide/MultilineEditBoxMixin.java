@@ -27,7 +27,7 @@ public abstract class MultilineEditBoxMixin extends EditBox {
     @Inject(at = @At(value = "HEAD"), method = "keyPressed", cancellable = true)
     public void keyPressed(int keyCode, int scanCode, int modifiers, CallbackInfoReturnable<Boolean> cir) {
         Minecraft client = Minecraft.getInstance();
-        if (client.screen != null && !GUIStatus.isBypassInjection()) {
+        if (client.screen != null && !GUIStatus.getInstance().isBypassInjection()) {
             if (keyCode == GLFW.GLFW_KEY_BACKSPACE) {
                 if (handler.onBackspaceKeyPressed()) {
                     cir.setReturnValue(Boolean.TRUE);
