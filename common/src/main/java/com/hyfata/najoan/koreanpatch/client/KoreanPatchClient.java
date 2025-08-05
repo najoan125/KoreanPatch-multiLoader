@@ -1,10 +1,10 @@
 package com.hyfata.najoan.koreanpatch.client;
 
-import com.hyfata.najoan.koreanpatch.data.ConfigManager;
-import com.hyfata.najoan.koreanpatch.data.storage.InputStatusStorage;
+import com.hyfata.najoan.koreanpatch.config.ConfigManager;
+import com.hyfata.najoan.koreanpatch.storage.InputStatusStorage;
 import com.hyfata.najoan.koreanpatch.platform.Services;
-import com.hyfata.najoan.koreanpatch.process.ime.InputController;
-import com.hyfata.najoan.koreanpatch.process.ime.InputManager;
+import com.hyfata.najoan.koreanpatch.driver.InputController;
+import com.hyfata.najoan.koreanpatch.driver.InputManager;
 
 public class KoreanPatchClient {
     public static boolean loaded = false;

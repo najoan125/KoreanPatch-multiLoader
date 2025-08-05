@@ -1,7 +1,6 @@
 package com.hyfata.najoan.koreanpatch.client;
 
-import com.hyfata.najoan.koreanpatch.data.ConfigManager;
-import com.hyfata.najoan.koreanpatch.process.handler.EventListener;
+import com.hyfata.najoan.koreanpatch.config.ConfigManager;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
