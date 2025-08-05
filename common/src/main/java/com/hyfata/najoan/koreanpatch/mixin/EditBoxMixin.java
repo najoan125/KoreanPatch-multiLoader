@@ -1,9 +1,9 @@
 package com.hyfata.najoan.koreanpatch.mixin;
 
-import com.hyfata.najoan.koreanpatch.gui.GUIStatus;
+import com.hyfata.najoan.koreanpatch.client.GUIStatus;
 import com.hyfata.najoan.koreanpatch.mixin.accessor.EditBoxAccessor;
-import com.hyfata.najoan.koreanpatch.data.LangTypeManager;
-import com.hyfata.najoan.koreanpatch.process.controller.mixin.EditBoxController;
+import com.hyfata.najoan.koreanpatch.process.LangTypeManager;
+import com.hyfata.najoan.koreanpatch.wrapper.WrapperEditBox;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.EditBox;
 import org.lwjgl.glfw.GLFW;
@@ -20,25 +20,25 @@ public abstract class EditBoxMixin {
     public abstract boolean isEditable();
 
     @Unique
-    private final Minecraft koreanPatch$client = Minecraft.getInstance();
+    private final Minecraft koreanPatch$mc = Minecraft.getInstance();
 
     @Unique
-    private final EditBoxController koreanPatch$handler = new EditBoxController((EditBoxAccessor) this);
+    private final WrapperEditBox koreanPatch$wrapper = new WrapperEditBox((EditBoxAccessor) this);
 
     @Inject(at = {@At(value = "HEAD")}, method = {"charTyped(CI)Z"}, cancellable = true)
     public void charTyped(char chr, int modifiers, CallbackInfoReturnable<Boolean> cir) {
-        if (this.koreanPatch$client.screen != null && !GUIStatus.isBypassInjection() &&
+        if (this.koreanPatch$mc.screen != null && !GUIStatus.getInstance().isBypassInjection() &&
                 LangTypeManager.getInstance().isKorean() && this.isEditable() && Character.charCount(chr) == 1) {
-            koreanPatch$handler.typedTextField(chr, modifiers, cir);
+            koreanPatch$wrapper.charTyped(chr, modifiers, cir);
         }
     }
 
     @Inject(at = {@At(value = "HEAD")}, method = {"keyPressed(III)Z"}, cancellable = true)
     private void keyPressed(int keyCode, int scanCode, int modifiers, CallbackInfoReturnable<Boolean> callbackInfo) {
         Minecraft client = Minecraft.getInstance();
-        if (client.screen != null && !GUIStatus.isBypassInjection()) {
+        if (client.screen != null && !GUIStatus.getInstance().isBypassInjection()) {
             if (keyCode == GLFW.GLFW_KEY_BACKSPACE) {
-                if (koreanPatch$handler.onBackspaceKeyPressed()) {
+                if (koreanPatch$wrapper.onBackspaceKeyPressed()) {
                     callbackInfo.setReturnValue(Boolean.TRUE);
                 }
             }

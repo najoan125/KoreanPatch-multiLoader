@@ -1,9 +1,9 @@
 package com.hyfata.najoan.koreanpatch.mixin.indicator;
 
-import com.hyfata.najoan.koreanpatch.gui.GUIStatus;
+import com.hyfata.najoan.koreanpatch.client.GUIStatus;
 import com.hyfata.najoan.koreanpatch.util.minecraft.EditBoxUtil;
-import com.hyfata.najoan.koreanpatch.process.handler.indicator.AnimationHandler;
-import com.hyfata.najoan.koreanpatch.process.handler.indicator.IndicatorHandler;
+import com.hyfata.najoan.koreanpatch.indicator.AnimationHandler;
+import com.hyfata.najoan.koreanpatch.indicator.IndicatorHandler;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.Screen;
@@ -35,7 +35,7 @@ public class CreateWorldScreenMixin extends Screen {
     @Inject(at = {@At(value = "RETURN")}, method = {"render"})
     private void addCustomLabel(PoseStack context, int mouseX, int mouseY, float delta, CallbackInfo ci) {
         if (!worldGenSettingsVisible) {
-            GUIStatus.setBypassInjection(false);
+            GUIStatus.getInstance().setBypassInjection(false);
             Component text = new TranslatableComponent("selectWorld.enterName");
 
             float x = EditBoxUtil.getCursorXWithText(nameEdit, text, nameEdit.x) + 4;
@@ -46,7 +46,7 @@ public class CreateWorldScreenMixin extends Screen {
 
             IndicatorHandler.showIndicator(context, koreanPatch$animationHandler.getResultX(), y);
         } else {
-            GUIStatus.setBypassInjection(true);
+            GUIStatus.getInstance().setBypassInjection(true);
         }
     }
 }

@@ -1,12 +1,12 @@
 package com.hyfata.najoan.koreanpatch.mixin;
 
 import com.hyfata.najoan.koreanpatch.client.KeyBinds;
-import com.hyfata.najoan.koreanpatch.data.ConfigManager;
-import com.hyfata.najoan.koreanpatch.data.config.category.CategoryInput;
-import com.hyfata.najoan.koreanpatch.data.storage.InputStatusStorage;
-import com.hyfata.najoan.koreanpatch.gui.GUIStatus;
-import com.hyfata.najoan.koreanpatch.process.ime.InputManager;
-import com.hyfata.najoan.koreanpatch.data.LangTypeManager;
+import com.hyfata.najoan.koreanpatch.config.ConfigManager;
+import com.hyfata.najoan.koreanpatch.config.category.CategoryInput;
+import com.hyfata.najoan.koreanpatch.storage.InputStatusStorage;
+import com.hyfata.najoan.koreanpatch.client.GUIStatus;
+import com.hyfata.najoan.koreanpatch.driver.InputManager;
+import com.hyfata.najoan.koreanpatch.process.LangTypeManager;
 import net.minecraft.client.KeyboardHandler;
 import net.minecraft.client.Minecraft;
 import org.spongepowered.asm.mixin.Final;
@@ -26,7 +26,7 @@ public class KeyboardHandlerMixin {
     private void onInput(long window, int keyCode, int scanCode, int action, int modifiers, CallbackInfo ci) {
         CategoryInput categoryInput = ConfigManager.getInstance().getConfig().getCategoryInput();
 
-        if (window == minecraft.getWindow().getWindow() && action == 1 && !GUIStatus.isBypassInjection()) {
+        if (window == minecraft.getWindow().getWindow() && action == 1 && !GUIStatus.getInstance().isBypassInjection()) {
             if (KeyBinds.getImeBinding().matches(keyCode, scanCode) && modifiers == 2 && !categoryInput.isAlwaysImeEnabled()) {
                 InputManager.getController().toggleFocus();
                 if (categoryInput.isMemoryLangTypePerScreen())
