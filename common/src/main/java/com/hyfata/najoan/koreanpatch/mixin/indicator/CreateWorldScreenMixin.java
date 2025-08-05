@@ -1,11 +1,11 @@
 package com.hyfata.najoan.koreanpatch.mixin.indicator;
 
-import com.hyfata.najoan.koreanpatch.gui.GUIStatus;
+import com.hyfata.najoan.koreanpatch.client.GUIStatus;
 import com.hyfata.najoan.koreanpatch.mixin.accessor.CreateWorldScreenGameTabAccessor;
 import com.hyfata.najoan.koreanpatch.mixin.accessor.TabNavigationBarAccessor;
 import com.hyfata.najoan.koreanpatch.util.minecraft.EditBoxUtil;
-import com.hyfata.najoan.koreanpatch.process.handler.indicator.AnimationHandler;
-import com.hyfata.najoan.koreanpatch.process.handler.indicator.IndicatorHandler;
+import com.hyfata.najoan.koreanpatch.indicator.AnimationHandler;
+import com.hyfata.najoan.koreanpatch.indicator.IndicatorHandler;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.components.tabs.Tab;
@@ -38,7 +38,7 @@ public class CreateWorldScreenMixin extends Screen {
         Tab currentTab = tabInvoker.getTabManager().getCurrentTab();
 
         if (currentTab instanceof CreateWorldScreen.GameTab) {
-            GUIStatus.setBypassInjection(false);
+            GUIStatus.getInstance().setBypassInjection(false);
             CreateWorldScreenGameTabAccessor gameTabAccessor = (CreateWorldScreenGameTabAccessor) currentTab;
             EditBox worldNameField = gameTabAccessor.getNameEdit();
             Component text = Component.translatable("selectWorld.enterName");
@@ -51,7 +51,7 @@ public class CreateWorldScreenMixin extends Screen {
 
             IndicatorHandler.showIndicator(context, koreanPatch$animationHandler.getResultX(), y);
         } else {
-            GUIStatus.setBypassInjection(true);
+            GUIStatus.getInstance().setBypassInjection(true);
         }
     }
 }
