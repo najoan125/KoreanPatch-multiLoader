@@ -3,13 +3,10 @@ package com.hyfata.najoan.koreanpatch.config;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.hyfata.najoan.koreanpatch.client.Constants;
-import com.hyfata.najoan.koreanpatch.config.ModConfig;
 import com.hyfata.najoan.koreanpatch.config.gson.JsonCommentProcessor;
 import com.hyfata.najoan.koreanpatch.config.gson.adapter.ColorAdapter;
 import com.hyfata.najoan.koreanpatch.config.gson.adapter.EasingFunctionsAdapter;
 import com.hyfata.najoan.koreanpatch.config.gson.adapter.OutlineTypeAdapter;
-import com.hyfata.najoan.koreanpatch.config.provider.EasingFunctions;
-import com.hyfata.najoan.koreanpatch.config.provider.OutlineType;
 import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
 
