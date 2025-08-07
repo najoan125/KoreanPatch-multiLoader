@@ -21,11 +21,12 @@ public class WinController implements InputController {
         this.focus = focus;
 
         if (alwaysIme) {
-            if (this.focus) return;
+            if (fakeFocus) return;
             focus = true;
             fakeFocus = true;
-        } else {
+        } else if (fakeFocus) {
             fakeFocus = false;
+            if (focus) return;
         }
 
         WinHandle.INSTANCE.set_focus(focus ? 1 : 0);
