@@ -1,4 +1,4 @@
-package com.hyfata.najoan.koreanpatch.mixin.helper;
+package com.hyfata.najoan.koreanpatch.helper;
 
 import com.hyfata.najoan.koreanpatch.indicator.AnimationHandler;
 

@@ -1,6 +1,6 @@
 package com.hyfata.najoan.koreanpatch.mixin.indicator;
 
-import com.hyfata.najoan.koreanpatch.mixin.helper.BookScreenVar;
+import com.hyfata.najoan.koreanpatch.helper.BookScreenVar;
 import com.hyfata.najoan.koreanpatch.mixin.accessor.MultilineEditBoxAccessor;
 import com.hyfata.najoan.koreanpatch.indicator.AnimationHandler;
 import com.hyfata.najoan.koreanpatch.indicator.IndicatorHandler;
