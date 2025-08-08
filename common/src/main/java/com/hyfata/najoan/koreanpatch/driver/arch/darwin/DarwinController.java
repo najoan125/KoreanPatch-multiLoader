@@ -3,11 +3,23 @@ package com.hyfata.najoan.koreanpatch.driver.arch.darwin;
 import com.hyfata.najoan.koreanpatch.client.Constants;
 import com.hyfata.najoan.koreanpatch.config.ConfigManager;
 import com.hyfata.najoan.koreanpatch.driver.InputController;
+import com.sun.jna.Library;
+import com.sun.jna.Native;
 
 public class DarwinController implements InputController {
     private final String GLOBAL_WINDOW_UUID = "minecraft_global_context";
     private boolean focus = false;
     private boolean fakeFocus = false;
+
+    // macOS Core Graphics framework
+    // for Caps Lock detection
+    public interface CoreGraphics extends Library {
+        CoreGraphics INSTANCE = Native.load("CoreGraphics", CoreGraphics.class);
+        long CGEventSourceFlagsState(int stateID);
+    }
+    
+    private static final long kCGEventFlagMaskAlphaShift = 0x00010000L; // Caps Lock
+    private static final int kCGEventSourceStateHIDSystemState = 0;
 
     public DarwinController() {
         DarwinHandle.LogInfoCallback info = log -> Constants.LOG.info("[Native|C] {}", log);
@@ -15,8 +27,17 @@ public class DarwinController implements InputController {
         DarwinHandle.LogDebugCallback debug = log -> Constants.LOG.debug("[Native|C] {}", log);
 
         DarwinHandle.INSTANCE.initialize(info, error, debug);
-
         DarwinHandle.INSTANCE.addInstance(GLOBAL_WINDOW_UUID, null, null, null);
+    }
+
+    public boolean isCapsLockOn() {
+        try {
+            long flags = CoreGraphics.INSTANCE.CGEventSourceFlagsState(kCGEventSourceStateHIDSystemState);
+            return (flags & kCGEventFlagMaskAlphaShift) != 0;
+        } catch (Exception e) {
+            Constants.LOG.debug("Failed to get Caps Lock state: {}", e.getMessage());
+            return false;
+        }
     }
 
     @Override
