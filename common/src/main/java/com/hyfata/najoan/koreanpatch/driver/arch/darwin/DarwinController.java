@@ -7,7 +7,6 @@ import com.sun.jna.Library;
 import com.sun.jna.Native;
 
 public class DarwinController implements InputController {
-    private final String GLOBAL_WINDOW_UUID = "minecraft_global_context";
     private boolean focus = false;
     private boolean fakeFocus = false;
 
@@ -27,7 +26,6 @@ public class DarwinController implements InputController {
         DarwinHandle.LogDebugCallback debug = log -> Constants.LOG.debug("[Native|C] {}", log);
 
         DarwinHandle.INSTANCE.initialize(info, error, debug);
-        DarwinHandle.INSTANCE.addInstance(GLOBAL_WINDOW_UUID, null, null, null);
     }
 
     public boolean isCapsLockOn() {
@@ -59,7 +57,7 @@ public class DarwinController implements InputController {
             if (focus) return;
         }
 
-        DarwinHandle.INSTANCE.setIfReceiveEvent(GLOBAL_WINDOW_UUID, (focus ? 1 : 0));
+        DarwinHandle.INSTANCE.setFocused(focus ? 1 : 0);
     }
 
     @Override
