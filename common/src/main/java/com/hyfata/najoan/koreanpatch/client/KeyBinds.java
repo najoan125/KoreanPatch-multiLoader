@@ -11,11 +11,11 @@ public class KeyBinds {
     private static final ArrayList<KeyMapping> keyMappings = new ArrayList<>();
 
     public static void register() {
-        int keycode;
+        int keycode = GLFW.GLFW_KEY_LEFT_CONTROL;
         if (Platform.isWindows()) {
             keycode = GLFW.GLFW_KEY_RIGHT_ALT;
-        } else {
-            keycode = GLFW.GLFW_KEY_LEFT_CONTROL;
+        } else if (Platform.isMac()) {
+            keycode = GLFW.GLFW_KEY_CAPS_LOCK;
         }
 
         // 0: lang binding
