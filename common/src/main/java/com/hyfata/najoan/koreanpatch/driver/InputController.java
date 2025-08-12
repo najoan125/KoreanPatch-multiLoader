@@ -3,7 +3,7 @@ package com.hyfata.najoan.koreanpatch.driver;
 import com.hyfata.najoan.koreanpatch.driver.arch.darwin.DarwinController;
 import com.hyfata.najoan.koreanpatch.driver.arch.unknown.EmptyController;
 import com.hyfata.najoan.koreanpatch.driver.arch.win.WinController;
-import org.lwjgl.glfw.GLFW;
+import com.sun.jna.Platform;
 
 public interface InputController {
     void setFocus(final boolean focus);
@@ -11,11 +11,9 @@ public interface InputController {
     boolean isFocused();
 
     static InputController newController() {
-        int platform = GLFW.glfwGetPlatform();
-
-        if (platform == GLFW.GLFW_PLATFORM_WIN32) {
+        if (Platform.isWindows()) {
             return new WinController(); // Windows
-        } else if (platform == GLFW.GLFW_PLATFORM_COCOA) {
+        } else if (Platform.isMac()) {
             return new DarwinController(); // MacOS
         }
 
