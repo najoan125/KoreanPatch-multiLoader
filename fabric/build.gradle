@@ -36,7 +36,7 @@ dependencies {
     addEmbeddedFabricModule "fabric-screen-api-v1"
 
     modApi "me.shedaniel.cloth:cloth-config-fabric:${cloth_config}"
-    modCompileOnly "maven.modrinth:yacl:${project.yacl_version}-fabric" // To test modImplementation
+    modImplementation "maven.modrinth:yacl:${project.yacl_version}-fabric" // To test modImplementation
 
     modImplementation "com.terraformersmc:modmenu:${project.modmenu_version}"
 	modCompileOnly "maven.modrinth:command-block-ide:${project.command_block_ide_version}"
