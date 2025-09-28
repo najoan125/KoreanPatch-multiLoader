@@ -27,8 +27,8 @@
     "indicator.CreateWorldScreenMixin",
     "indicator.CreativeModeInventoryScreenMixin",
     "indicator.DirectJoinServerScreenMixin",
-    "indicator.EditServerScreenMixin",
     "indicator.EditWorldScreenMixin",
+    "indicator.ManageServerScreenMixin",
     "indicator.SelectWorldScreenMixin",
     "indicator.SignEditScreenMixin"
   ],

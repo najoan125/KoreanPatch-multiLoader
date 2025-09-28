@@ -1,11 +1,11 @@
 package com.hyfata.najoan.koreanpatch.mixin.indicator;
 
-import com.hyfata.najoan.koreanpatch.util.minecraft.EditBoxUtil;
 import com.hyfata.najoan.koreanpatch.indicator.AnimationHandler;
 import com.hyfata.najoan.koreanpatch.indicator.IndicatorHandler;
+import com.hyfata.najoan.koreanpatch.util.minecraft.EditBoxUtil;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.EditBox;
-import net.minecraft.client.gui.screens.EditServerScreen;
+import net.minecraft.client.gui.screens.ManageServerScreen;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import org.spongepowered.asm.mixin.Final;
@@ -16,9 +16,9 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin(value = {EditServerScreen.class})
-public class EditServerScreenMixin extends Screen {
-    protected EditServerScreenMixin(Component title) {
+@Mixin(value = {ManageServerScreen.class})
+public class ManageServerScreenMixin extends Screen {
+    protected ManageServerScreenMixin(Component title) {
         super(title);
     }
 
@@ -40,7 +40,7 @@ public class EditServerScreenMixin extends Screen {
     private final AnimationHandler koreanPatch$animationHandler = new AnimationHandler();
 
     @Inject(at = {@At(value = "TAIL")}, method = {"render"})
-    private void addCustomLabel(GuiGraphics context, int mouseX, int mouseY, float delta, CallbackInfo ci) {
+    private void addCustomLabel(GuiGraphics context, int p_446346_, int p_445945_, float p_445468_, CallbackInfo ci) {
         float x;
         float y;
         int textX = this.width / 2 - 100 + 1;

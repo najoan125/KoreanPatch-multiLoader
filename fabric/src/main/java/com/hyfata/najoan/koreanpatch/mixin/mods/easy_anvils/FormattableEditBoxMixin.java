@@ -8,6 +8,8 @@ import fuzs.easyanvils.client.gui.components.AdvancedEditBox;
 import fuzs.easyanvils.client.gui.components.FormattableEditBox;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
+import net.minecraft.client.input.CharacterEvent;
+import net.minecraft.client.input.KeyEvent;
 import net.minecraft.network.chat.Component;
 import org.lwjgl.glfw.GLFW;
 import org.spongepowered.asm.mixin.Mixin;
@@ -28,25 +30,14 @@ public abstract class FormattableEditBoxMixin extends AdvancedEditBox {
     @Unique
     private final WrapperEditBox koreanPatch$handler = new WrapperEditBox((EditBoxAccessor) this);
 
-    @Inject(at = {@At(value = "HEAD")}, method = {"charTyped(CI)Z"}, cancellable = true)
-    public void charTyped(char chr, int modifiers, CallbackInfoReturnable<Boolean> cir) {
-        if (this.koreanPatch$client.screen != null && !GUIStatus.getInstance().isBypassInjection() &&
-                LangTypeManager.getInstance().isKorean() && this.isEditable() && Character.charCount(chr) == 1) {
-            koreanPatch$handler.charTyped(chr, modifiers, cir);
-        }
-    }
-
-    @Unique
-    @Override
-    public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
-        Minecraft client = Minecraft.getInstance();
-        if (client.screen != null && !GUIStatus.getInstance().isBypassInjection()) {
-            if (keyCode == GLFW.GLFW_KEY_BACKSPACE) {
-                if (koreanPatch$handler.onBackspaceKeyPressed()) {
-                    return true;
-                }
-            }
-        }
-        return super.keyPressed(keyCode, scanCode, modifiers);
-    }
+//    @Inject(at = {@At(value = "HEAD")}, method = {"charTyped(CI)Z"}, cancellable = true)
+//    public void charTyped(char chr, int modifiers, CallbackInfoReturnable<Boolean> cir) {
+//        koreanPatch$handler.charTyped(chr, modifiers, cir);
+//    }
+//
+//    @Unique
+//    @Override
+//    public boolean keyPressed(KeyEvent keyEvent) {
+//        return koreanPatch$handler.keyPressed(keyEvent, () -> super.keyPressed(keyEvent));
+//    }
 }

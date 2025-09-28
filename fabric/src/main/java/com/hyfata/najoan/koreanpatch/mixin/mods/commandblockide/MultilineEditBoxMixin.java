@@ -24,15 +24,15 @@ public abstract class MultilineEditBoxMixin extends EditBox {
     @Unique
     private final WrapperEditBox handler = new WrapperEditBox((EditBoxAccessor) this);
 
-    @Inject(at = @At(value = "HEAD"), method = "keyPressed", cancellable = true)
-    public void keyPressed(int keyCode, int scanCode, int modifiers, CallbackInfoReturnable<Boolean> cir) {
-        Minecraft client = Minecraft.getInstance();
-        if (client.screen != null && !GUIStatus.getInstance().isBypassInjection()) {
-            if (keyCode == GLFW.GLFW_KEY_BACKSPACE) {
-                if (handler.onBackspaceKeyPressed()) {
-                    cir.setReturnValue(Boolean.TRUE);
-                }
-            }
-        }
-    }
+//    @Inject(at = @At(value = "HEAD"), method = "keyPressed", cancellable = true)
+//    public void keyPressed(int keyCode, int scanCode, int modifiers, CallbackInfoReturnable<Boolean> cir) {
+//        Minecraft client = Minecraft.getInstance();
+//        if (client.screen != null && !GUIStatus.getInstance().isBypassInjection()) {
+//            if (keyCode == GLFW.GLFW_KEY_BACKSPACE) {
+//                if (handler.onBackspaceKeyPressed()) {
+//                    cir.setReturnValue(Boolean.TRUE);
+//                }
+//            }
+//        }
+//    }
 }

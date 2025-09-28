@@ -1,10 +1,15 @@
 package com.hyfata.najoan.koreanpatch.wrapper;
 
+import com.hyfata.najoan.koreanpatch.client.GUIStatus;
 import com.hyfata.najoan.koreanpatch.process.keyboard.KeyboardLayout;
 import com.hyfata.najoan.koreanpatch.mixin.accessor.MultilineTextFieldAccessor;
 import com.hyfata.najoan.koreanpatch.wrapper.handler.IMEWrapperHandler;
 import com.hyfata.najoan.koreanpatch.process.HangulProcessor;
 import com.hyfata.najoan.koreanpatch.util.HangulUtil;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.input.CharacterEvent;
+import net.minecraft.client.input.KeyEvent;
+import org.lwjgl.glfw.GLFW;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 public class WrapperMultilineTextField implements InterfaceIMEWrapper {
@@ -43,7 +48,26 @@ public class WrapperMultilineTextField implements InterfaceIMEWrapper {
         return IMEWrapperHandler.onHangulCharTyped(this, keyCode, modifiers, accessor.getValue(), !accessor.invokeHasSelection());
     }
 
-    public void charTyped(char chr, int modifiers, CallbackInfoReturnable<Boolean> cir) {
+    private boolean validateKeyPressed(KeyEvent keyEvent) {
+        Minecraft client = Minecraft.getInstance();
+        if (client.screen != null &&
+                !GUIStatus.getInstance().isBypassInjection() &&
+                keyEvent.key() == GLFW.GLFW_KEY_BACKSPACE) {
+            return onBackspaceKeyPressed();
+        }
+        return false;
+    }
+
+    public void keyPressed(KeyEvent keyEvent, CallbackInfoReturnable<Boolean> callbackInfo) {
+        if (validateKeyPressed(keyEvent)) {
+            callbackInfo.setReturnValue(Boolean.TRUE);
+        }
+    }
+
+    public void charTyped(CharacterEvent event, CallbackInfoReturnable<Boolean> cir) {
+        char chr = (char) event.codepoint();
+        int modifiers = event.modifiers();
+
         int qwertyIndex = KeyboardLayout.INSTANCE.getQwertyIndexCodePoint(chr);
         if (qwertyIndex == -1) {
             KeyboardLayout.INSTANCE.assemblePosition = -1;

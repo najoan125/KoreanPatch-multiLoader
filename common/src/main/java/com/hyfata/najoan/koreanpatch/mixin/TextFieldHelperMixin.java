@@ -5,6 +5,7 @@ import com.hyfata.najoan.koreanpatch.wrapper.WrapperTextFieldHelper;
 import com.hyfata.najoan.koreanpatch.mixin.accessor.TextFieldHelperAccessor;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.font.TextFieldHelper;
+import net.minecraft.client.input.CharacterEvent;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -17,9 +18,9 @@ public abstract class TextFieldHelperMixin {
     @Unique
     private final WrapperTextFieldHelper koreanPatch$wrapper = new WrapperTextFieldHelper((TextFieldHelperAccessor) this);
 
-    @Inject(at = {@At(value = "HEAD")}, method = {"charTyped(C)Z"}, cancellable = true)
-    public void insertChar(char chr, CallbackInfoReturnable<Boolean> cir) {
-        koreanPatch$wrapper.insertChar(chr, cir);
+    @Inject(at = {@At(value = "HEAD")}, method = {"charTyped"}, cancellable = true)
+    public void insertChar(CharacterEvent event, CallbackInfoReturnable<Boolean> cir) {
+        koreanPatch$wrapper.insertChar((char) event.codepoint(), cir);
     }
 
     @Inject(at = {@At(value = "HEAD")}, method = {"insertText(Ljava/lang/String;)V"}, cancellable = true)

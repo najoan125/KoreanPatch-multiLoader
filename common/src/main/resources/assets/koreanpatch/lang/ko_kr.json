@@ -1,5 +1,5 @@
 {
-    "key.categories.koreanpatch": "Korean Patch",
+    "key.category.koreanpatch.keybinds": "Korean Patch",
     "key.koreanpatch.toggle_langtype": "언어 타입 전환 (영문/한글)",
     "key.koreanpatch.toggle_ime": "IME(바닐라 입력) 전환 (왼쪽 Ctrl +)",
 

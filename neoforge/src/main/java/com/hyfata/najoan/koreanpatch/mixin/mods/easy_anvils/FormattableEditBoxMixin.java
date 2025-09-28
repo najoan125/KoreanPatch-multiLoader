@@ -22,31 +22,31 @@ public abstract class FormattableEditBoxMixin extends AdvancedEditBox {
         super(font, x, y, width, height, message);
     }
 
-    @Unique
-    private final Minecraft _$client = Minecraft.getInstance();
-
-    @Unique
-    private final WrapperEditBox _$handler = new WrapperEditBox((EditBoxAccessor) this);
-
-    @Inject(at = {@At(value = "HEAD")}, method = {"charTyped(CI)Z"}, cancellable = true)
-    public void charTyped(char chr, int modifiers, CallbackInfoReturnable<Boolean> cir) {
-        if (this._$client.screen != null && !GUIStatus.getInstance().isBypassInjection() &&
-                LangTypeManager.getInstance().isKorean() && this.isEditable && Character.charCount(chr) == 1) {
-            _$handler.charTyped(chr, modifiers, cir);
-        }
-    }
-
-    @Unique
-    @Override
-    public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
-        Minecraft client = Minecraft.getInstance();
-        if (client.screen != null && !GUIStatus.getInstance().isBypassInjection()) {
-            if (keyCode == GLFW.GLFW_KEY_BACKSPACE) {
-                if (_$handler.onBackspaceKeyPressed()) {
-                    return true;
-                }
-            }
-        }
-        return super.keyPressed(keyCode, scanCode, modifiers);
-    }
+//    @Unique
+//    private final Minecraft _$client = Minecraft.getInstance();
+//
+//    @Unique
+//    private final WrapperEditBox _$handler = new WrapperEditBox((EditBoxAccessor) this);
+//
+//    @Inject(at = {@At(value = "HEAD")}, method = {"charTyped(CI)Z"}, cancellable = true)
+//    public void charTyped(char chr, int modifiers, CallbackInfoReturnable<Boolean> cir) {
+//        if (this._$client.screen != null && !GUIStatus.getInstance().isBypassInjection() &&
+//                LangTypeManager.getInstance().isKorean() && this.isEditable && Character.charCount(chr) == 1) {
+//            _$handler.charTyped(chr, modifiers, cir);
+//        }
+//    }
+//
+//    @Unique
+//    @Override
+//    public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
+//        Minecraft client = Minecraft.getInstance();
+//        if (client.screen != null && !GUIStatus.getInstance().isBypassInjection()) {
+//            if (keyCode == GLFW.GLFW_KEY_BACKSPACE) {
+//                if (_$handler.onBackspaceKeyPressed()) {
+//                    return true;
+//                }
+//            }
+//        }
+//        return super.keyPressed(keyCode, scanCode, modifiers);
+//    }
 }
