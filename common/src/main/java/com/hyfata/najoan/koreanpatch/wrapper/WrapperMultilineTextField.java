@@ -1,6 +1,7 @@
 package com.hyfata.najoan.koreanpatch.wrapper;
 
 import com.hyfata.najoan.koreanpatch.client.GUIStatus;
+import com.hyfata.najoan.koreanpatch.process.LangTypeManager;
 import com.hyfata.najoan.koreanpatch.process.keyboard.KeyboardLayout;
 import com.hyfata.najoan.koreanpatch.mixin.accessor.MultilineTextFieldAccessor;
 import com.hyfata.najoan.koreanpatch.wrapper.handler.IMEWrapperHandler;
@@ -11,6 +12,8 @@ import net.minecraft.client.input.CharacterEvent;
 import net.minecraft.client.input.KeyEvent;
 import org.lwjgl.glfw.GLFW;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+
+import java.util.concurrent.Callable;
 
 public class WrapperMultilineTextField implements InterfaceIMEWrapper {
     private final MultilineTextFieldAccessor accessor;
@@ -64,9 +67,55 @@ public class WrapperMultilineTextField implements InterfaceIMEWrapper {
         }
     }
 
-    public void charTyped(CharacterEvent event, CallbackInfoReturnable<Boolean> cir) {
+    public boolean keyPressed(KeyEvent keyEvent, Callable<Boolean> callable) {
+        if (validateKeyPressed(keyEvent)) {
+            return true;
+        }
+
+        return returnCallable(callable);
+    }
+
+    private boolean validateCharTyped(CharacterEvent event, boolean visible, boolean focused) {
+        char chr = (char) event.codepoint();
+        return Minecraft.getInstance().screen != null &&
+                !GUIStatus.getInstance().isBypassInjection() &&
+                LangTypeManager.getInstance().isKorean() &&
+                visible && focused &&
+                event.isAllowedChatCharacter() &&
+                Character.charCount(chr) == 1;
+    }
+
+    public boolean charTyped(CharacterEvent charEvent, boolean visible, boolean focused, Callable<Boolean> callable) {
+        char chr = (char) charEvent.codepoint();
+        int modifiers = charEvent.modifiers();
+
+        if (!validateCharTyped(charEvent, visible, focused)) {
+            return returnCallable(callable);
+        }
+
+        int qwertyIndex = KeyboardLayout.INSTANCE.getQwertyIndexCodePoint(chr);
+        if (qwertyIndex == -1) {
+            KeyboardLayout.INSTANCE.assemblePosition = -1;
+            return returnCallable(callable);
+        }
+
+        char curr = KeyboardLayout.INSTANCE.layout.toCharArray()[qwertyIndex];
+        if (this.getCursor() == 0 || !HangulProcessor.isHangulCharacter(curr) || !onHangulCharTyped(chr, modifiers)) {
+
+            this.writeText(String.valueOf(HangulUtil.getFixedHangulChar(modifiers, chr, curr)));
+            KeyboardLayout.INSTANCE.assemblePosition = HangulProcessor.isHangulCharacter((curr)) ? this.getCursor() : -1;
+        }
+
+        return true;
+    }
+
+    public void charTyped(CharacterEvent event, CallbackInfoReturnable<Boolean> cir, boolean visible, boolean focused) {
         char chr = (char) event.codepoint();
         int modifiers = event.modifiers();
+
+        if (!validateCharTyped(event, visible, focused)) {
+            return;
+        }
 
         int qwertyIndex = KeyboardLayout.INSTANCE.getQwertyIndexCodePoint(chr);
         if (qwertyIndex == -1) {
@@ -81,6 +130,14 @@ public class WrapperMultilineTextField implements InterfaceIMEWrapper {
 
             this.writeText(String.valueOf(HangulUtil.getFixedHangulChar(modifiers, chr, curr)));
             KeyboardLayout.INSTANCE.assemblePosition = HangulProcessor.isHangulCharacter((curr)) ? this.getCursor() : -1;
+        }
+    }
+
+    private boolean returnCallable(Callable<Boolean> callable) {
+        try {
+            return callable.call();
+        } catch (Exception e) {
+            return false;
         }
     }
 }

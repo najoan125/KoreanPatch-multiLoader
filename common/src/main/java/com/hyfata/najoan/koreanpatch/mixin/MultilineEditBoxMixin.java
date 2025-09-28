@@ -38,7 +38,7 @@ public abstract class MultilineEditBoxMixin extends AbstractTextAreaWidget {
 
     @Inject(at = {@At(value = "HEAD")}, method = {"charTyped"}, cancellable = true)
     public void charTyped(CharacterEvent event, CallbackInfoReturnable<Boolean> cir) {
-        koreanPatch$wrapper.charTyped(event, cir);
+        koreanPatch$wrapper.charTyped(event, cir, this.visible, this.isFocused());
     }
 
     @Inject(at = {@At(value = "HEAD")}, method = {"keyPressed"}, cancellable = true)
