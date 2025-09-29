@@ -25,24 +25,24 @@ public abstract class MultiLineEditBoxMixin extends EditBox {
     @Unique
     private final WrapperEditBox handler = new WrapperEditBox((EditBoxAccessor) this);
 
-//    @Inject(method = "charTyped", at = @At("HEAD"), cancellable = true)
-//    private void charTyped(char chr, int modifiers, CallbackInfoReturnable<Boolean> cir) {
-//        Minecraft client = Minecraft.getInstance();
-//        if (client.screen != null && !GUIStatus.getInstance().isBypassInjection() &&
-//                LangTypeManager.getInstance().isKorean() && this.isEditable() && Character.charCount(chr) == 1) {
-//            handler.charTyped(chr, modifiers, cir);
-//        }
-//    }
-//
-//    @Inject(at = @At(value = "HEAD"), method = "keyPressed", cancellable = true)
-//    public void keyPressed(int keyCode, int scanCode, int modifiers, CallbackInfoReturnable<Boolean> cir) {
-//        Minecraft client = Minecraft.getInstance();
-//        if (client.screen != null && !GUIStatus.getInstance().isBypassInjection()) {
-//            if (keyCode == GLFW.GLFW_KEY_BACKSPACE) {
-//                if (handler.onBackspaceKeyPressed()) {
-//                    cir.setReturnValue(Boolean.TRUE);
-//                }
-//            }
-//        }
-//    }
+    @Inject(method = "charTyped", at = @At("HEAD"), cancellable = true)
+    private void charTyped(char chr, int modifiers, CallbackInfoReturnable<Boolean> cir) {
+        Minecraft client = Minecraft.getInstance();
+        if (client.screen != null && !GUIStatus.getInstance().isBypassInjection() &&
+                LangTypeManager.getInstance().isKorean() && this.isEditable() && Character.charCount(chr) == 1) {
+            handler.charTyped(chr, modifiers, cir);
+        }
+    }
+
+    @Inject(at = @At(value = "HEAD"), method = "keyPressed", cancellable = true)
+    public void keyPressed(int keyCode, int scanCode, int modifiers, CallbackInfoReturnable<Boolean> cir) {
+        Minecraft client = Minecraft.getInstance();
+        if (client.screen != null && !GUIStatus.getInstance().isBypassInjection()) {
+            if (keyCode == GLFW.GLFW_KEY_BACKSPACE) {
+                if (handler.onBackspaceKeyPressed()) {
+                    cir.setReturnValue(Boolean.TRUE);
+                }
+            }
+        }
+    }
 }

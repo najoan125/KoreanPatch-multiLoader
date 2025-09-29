@@ -12,14 +12,14 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(AbstractBetterCommandBlockScreen.class)
 public class AbstractBetterCommandBlockScreenMixin {
-//    @Shadow
-//    protected EditBox consoleCommandTextField;
-//
-//    @Inject(method = "render", at = @At("TAIL"))
-//    public void render(GuiGraphics context, int mouseX, int mouseY, float delta, CallbackInfo ci) {
-//        int x = (int) (consoleCommandTextField.getX() - IndicatorHandler.getIndicatorWidth() - 10);
-//        int y = consoleCommandTextField.getY();
-//
-//        IndicatorHandler.showIndicator(context, x, y);
-//    }
+    @Shadow
+    protected EditBox consoleCommandTextField;
+
+    @Inject(method = "render", at = @At("TAIL"))
+    public void render(GuiGraphics context, int mouseX, int mouseY, float delta, CallbackInfo ci) {
+        int x = (int) (consoleCommandTextField.getX() - IndicatorHandler.getIndicatorWidth() - 10);
+        int y = consoleCommandTextField.getY();
+
+        IndicatorHandler.showIndicator(context, x, y);
+    }
 }

@@ -15,17 +15,17 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(CommandBlockEditor.class)
 public abstract class CommandBlockEditorMixin extends CommandEditor {
+    @Shadow
+    @Final
+    private EditBox lastOutputField;
+
     public CommandBlockEditorMixin(Screen screen, Font textRenderer, int x, int y, int width, int height, int leftPadding, int rightPadding, int index) {
         super(screen, textRenderer, x, y, width, height, leftPadding, rightPadding, index);
     }
 
-//    @Shadow
-//    @Final
-//    private EditBox lastOutputField;
-//
-//    @Inject(method = "renderCommandField", at = @At("HEAD"))
-//    private void renderCommandField(GuiGraphics context, int mouseX, int mouseY, float delta, CallbackInfo ci) {
-//        lastOutputField.setX(this.commandField.getX());
-//        lastOutputField.setWidth(this.commandField.getWidth());
-//    }
+    @Inject(method = "renderCommandField", at = @At("HEAD"))
+    private void renderCommandField(GuiGraphics context, int mouseX, int mouseY, float delta, CallbackInfo ci) {
+        lastOutputField.setX(this.commandField.getX());
+        lastOutputField.setWidth(this.commandField.getWidth());
+    }
 }

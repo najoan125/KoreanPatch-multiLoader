@@ -13,7 +13,6 @@ import com.hyfata.najoan.koreanpatch.process.LangTypeManager;
 import com.sun.jna.Platform;
 import net.minecraft.client.KeyboardHandler;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.input.KeyEvent;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -34,15 +33,12 @@ public class KeyboardHandlerMixin {
      *  - 2: repeat
      */
     @Inject(method = "keyPress", at = @At("HEAD"))
-    private void onInput(long window, int action, KeyEvent keyEvent, CallbackInfo ci) {
-        int keyCode = keyEvent.key();
-        int scanCode = keyEvent.scancode();
-        int modifiers = keyEvent.modifiers();
+    private void onInput(long window, int keyCode, int scanCode, int action, int modifiers, CallbackInfo ci) {
         CategoryInput categoryInput = ConfigManager.getInstance().getConfig().getCategoryInput();
 
-        if (window == minecraft.getWindow().handle() && !GUIStatus.getInstance().isBypassInjection() && KoreanPatchClient.loaded) {
+        if (window == minecraft.getWindow().getWindow() && !GUIStatus.getInstance().isBypassInjection() && KoreanPatchClient.loaded) {
             // ime key
-            if (KeyBinds.getImeBinding().matches(keyEvent) && action == 1 && modifiers == 2 &&
+            if (KeyBinds.getImeBinding().matches(keyCode, scanCode) && action == 1 && modifiers == 2 &&
                     !categoryInput.isAlwaysImeEnabled()) {
                 InputManager.getController().toggleFocus();
                 if (categoryInput.isMemoryLangTypePerScreen())
@@ -50,7 +46,7 @@ public class KeyboardHandlerMixin {
             }
 
             // lang key
-            else if (KeyBinds.getLangBinding().matches(keyEvent) && action == 1 &&
+            else if (KeyBinds.getLangBinding().matches(keyCode, scanCode) && action == 1 &&
                     (!Platform.isMac() || modifiers != 1)) {
                 LangTypeManager.getInstance().toggleCurrentType();
                 if (categoryInput.isMemoryLangTypePerScreen())

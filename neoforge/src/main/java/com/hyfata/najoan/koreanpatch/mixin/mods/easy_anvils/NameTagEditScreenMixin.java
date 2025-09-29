@@ -12,13 +12,13 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(value = {NameTagEditScreen.class})
 public class NameTagEditScreenMixin {
-//    @Shadow private EditBox name;
-//
-//    @Inject(at = @At("TAIL"), method = "render")
-//    private void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick, CallbackInfo ci) {
-//        float x = name.getX() - IndicatorHandler.getIndicatorWidth() / 2f - 5f;
-//        float y = name.getY() + name.getHeight() / 2f - 2f;
-//
-//        IndicatorHandler.showCenteredIndicator(guiGraphics, x, y);
-//    }
+    @Shadow private EditBox name;
+
+    @Inject(at = @At("TAIL"), method = "render")
+    private void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick, CallbackInfo ci) {
+        float x = name.getX() - IndicatorHandler.getIndicatorWidth() / 2f - 5f;
+        float y = name.getY() + name.getHeight() / 2f - 2f;
+
+        IndicatorHandler.showCenteredIndicator(guiGraphics, x, y);
+    }
 }

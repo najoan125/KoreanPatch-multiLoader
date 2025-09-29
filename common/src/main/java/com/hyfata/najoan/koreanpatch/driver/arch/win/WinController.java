@@ -43,7 +43,7 @@ public class WinController implements InputController {
     }
 
     public WinController() {
-        long window = Minecraft.getInstance().getWindow().handle();
+        long window = Minecraft.getInstance().getWindow().getWindow();
         WinHandle.LogInfoCallback info = log -> Constants.LOG.info("[Native|C] {}", log);
         WinHandle.LogErrorCallback error = log -> Constants.LOG.error("[Native|C] {}", log);
         WinHandle.LogDebugCallback debug = log -> Constants.LOG.debug("[Native|C] {}", log);

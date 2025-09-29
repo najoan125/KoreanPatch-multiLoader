@@ -15,20 +15,20 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(ModsScreen.class)
 public class ModMenuScreenMixin {
-//    @Shadow
-//    private EditBox searchBox;
-//
-//    @Unique
-//    private final AnimationHandler animationHandler = new AnimationHandler();
-//
-//    @Inject(at = @At("TAIL"), method = "render")
-//    private void render(GuiGraphics context, int mouseX, int mouseY, float delta, CallbackInfo ci) {
-//        float cursorX = EditBoxUtil.getCursorX(searchBox) + 4;
-//        float y = EditBoxUtil.calculateIndicatorY(searchBox);
-//
-//        animationHandler.init(cursorX - 4, 0);
-//        animationHandler.calculateAnimation(cursorX, 0);
-//
-//        IndicatorHandler.showIndicator(context, animationHandler.getResultX(), y);
-//    }
+    @Shadow
+    private EditBox searchBox;
+
+    @Unique
+    private final AnimationHandler animationHandler = new AnimationHandler();
+
+    @Inject(at = @At("TAIL"), method = "render")
+    private void render(GuiGraphics context, int mouseX, int mouseY, float delta, CallbackInfo ci) {
+        float cursorX = EditBoxUtil.getCursorX(searchBox) + 4;
+        float y = EditBoxUtil.calculateIndicatorY(searchBox);
+
+        animationHandler.init(cursorX - 4, 0);
+        animationHandler.calculateAnimation(cursorX, 0);
+
+        IndicatorHandler.showIndicator(context, animationHandler.getResultX(), y);
+    }
 }
