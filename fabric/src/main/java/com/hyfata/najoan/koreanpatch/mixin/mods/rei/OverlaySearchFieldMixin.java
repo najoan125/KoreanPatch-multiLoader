@@ -26,23 +26,23 @@ public abstract class OverlaySearchFieldMixin extends TextFieldWidget {
     @Unique
     private final WrapperREITextField koreanPatch$handler = new WrapperREITextField(this);
 
-    @Inject(at = @At("HEAD"), method = "charTyped", cancellable = true)
-    public void charTyped(char chr, int modifiers, CallbackInfoReturnable<Boolean> cir) {
-        if (this.koreanPatch$client.screen != null && !GUIStatus.getInstance().isBypassInjection() &&
-                LangTypeManager.getInstance().isKorean() && Character.charCount(chr) == 1) {
-            koreanPatch$handler.typedTextField(chr, modifiers, cir);
-        }
-    }
-
-    @Inject(at = @At("HEAD"), method = "keyPressed", cancellable = true)
-    public void keyPressed(int keyCode, int scanCode, int modifiers, CallbackInfoReturnable<Boolean> cir) {
-        Minecraft client = Minecraft.getInstance();
-        if (client.screen != null && !GUIStatus.getInstance().isBypassInjection()) {
-            if (keyCode == GLFW.GLFW_KEY_BACKSPACE) {
-                if (koreanPatch$handler.onBackspaceKeyPressed()) {
-                    cir.setReturnValue(Boolean.TRUE);
-                }
-            }
-        }
-    }
+//    @Inject(at = @At("HEAD"), method = "charTyped", cancellable = true)
+//    public void charTyped(char chr, int modifiers, CallbackInfoReturnable<Boolean> cir) {
+//        if (this.koreanPatch$client.screen != null && !GUIStatus.getInstance().isBypassInjection() &&
+//                LangTypeManager.getInstance().isKorean() && Character.charCount(chr) == 1) {
+//            koreanPatch$handler.typedTextField(chr, modifiers, cir);
+//        }
+//    }
+//
+//    @Inject(at = @At("HEAD"), method = "keyPressed", cancellable = true)
+//    public void keyPressed(int keyCode, int scanCode, int modifiers, CallbackInfoReturnable<Boolean> cir) {
+//        Minecraft client = Minecraft.getInstance();
+//        if (client.screen != null && !GUIStatus.getInstance().isBypassInjection()) {
+//            if (keyCode == GLFW.GLFW_KEY_BACKSPACE) {
+//                if (koreanPatch$handler.onBackspaceKeyPressed()) {
+//                    cir.setReturnValue(Boolean.TRUE);
+//                }
+//            }
+//        }
+//    }
 }

@@ -1,17 +1,14 @@
 package com.hyfata.najoan.koreanpatch.mixin;
 
-import com.hyfata.najoan.koreanpatch.process.LangTypeManager;
-import com.hyfata.najoan.koreanpatch.client.GUIStatus;
 import com.hyfata.najoan.koreanpatch.mixin.accessor.MultilineTextFieldAccessor;
 import com.hyfata.najoan.koreanpatch.wrapper.WrapperMultilineTextField;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.components.AbstractTextAreaWidget;
 import net.minecraft.client.gui.components.MultiLineEditBox;
 import net.minecraft.client.gui.components.MultilineTextField;
+import net.minecraft.client.input.CharacterEvent;
+import net.minecraft.client.input.KeyEvent;
 import net.minecraft.network.chat.Component;
-import net.minecraft.util.StringUtil;
-import org.lwjgl.glfw.GLFW;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -28,9 +25,6 @@ public abstract class MultilineEditBoxMixin extends AbstractTextAreaWidget {
     private MultilineTextField textField;
 
     @Unique
-    private final Minecraft koreanPatch$mc = Minecraft.getInstance();
-
-    @Unique
     private WrapperMultilineTextField koreanPatch$wrapper;
 
     public MultilineEditBoxMixin(int p_388859_, int p_387520_, int p_387683_, int p_387659_, Component p_386737_) {
@@ -42,25 +36,13 @@ public abstract class MultilineEditBoxMixin extends AbstractTextAreaWidget {
         koreanPatch$wrapper = new WrapperMultilineTextField((MultilineTextFieldAccessor) this.textField);
     }
 
-    @Inject(at = {@At(value = "HEAD")}, method = {"charTyped(CI)Z"}, cancellable = true)
-    public void charTyped(char chr, int modifiers, CallbackInfoReturnable<Boolean> cir) {
-        if (this.koreanPatch$mc.screen != null && !GUIStatus.getInstance().isBypassInjection() &&
-                LangTypeManager.getInstance().isKorean() && Character.charCount(chr) == 1 &&
-                this.visible && this.isFocused() && StringUtil.isAllowedChatCharacter(chr)
-        ) {
-            koreanPatch$wrapper.charTyped(chr, modifiers, cir);
-        }
+    @Inject(at = {@At(value = "HEAD")}, method = {"charTyped"}, cancellable = true)
+    public void charTyped(CharacterEvent event, CallbackInfoReturnable<Boolean> cir) {
+        koreanPatch$wrapper.charTyped(event, cir, this.visible, this.isFocused());
     }
 
-    @Inject(at = {@At(value = "HEAD")}, method = {"keyPressed(III)Z"}, cancellable = true)
-    private void keyPressed(int keyCode, int scanCode, int modifiers, CallbackInfoReturnable<Boolean> callbackInfo) {
-        Minecraft client = Minecraft.getInstance();
-        if (client.screen != null && !GUIStatus.getInstance().isBypassInjection()) {
-            if (keyCode == GLFW.GLFW_KEY_BACKSPACE) {
-                if (koreanPatch$wrapper.onBackspaceKeyPressed()) {
-                    callbackInfo.setReturnValue(Boolean.TRUE);
-                }
-            }
-        }
+    @Inject(at = {@At(value = "HEAD")}, method = {"keyPressed"}, cancellable = true)
+    private void keyPressed(KeyEvent event, CallbackInfoReturnable<Boolean> cir) {
+        koreanPatch$wrapper.keyPressed(event, cir);
     }
 }

@@ -1,5 +1,5 @@
 {
-    "key.categories.koreanpatch": "Korean Patch",
+    "key.category.koreanpatch.keybinds": "Korean Patch",
     "key.koreanpatch.toggle_langtype": "Toggle Language Type (English/Korean)",
     "key.koreanpatch.toggle_ime": "Toggle IME(Vanilla input) (Left Ctrl +)",
 

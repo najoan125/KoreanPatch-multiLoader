@@ -12,11 +12,12 @@ public record FloatRenderState(RenderPipeline pipeline, TextureSetup textureSetu
         this(pipeline, textureSetup, pose, x0, y0, x1, y1, col1, col2, scissorArea, getBounds((int) x0, (int) y0, (int) x1, (int) y1, pose, scissorArea));
     }
 
-    public void buildVertices(VertexConsumer vertexConsumer, float z) {
-        vertexConsumer.addVertexWith2DPose(this.pose(), this.x0(), this.y0(), z).setColor(this.col1());
-        vertexConsumer.addVertexWith2DPose(this.pose(), this.x0(), this.y1(), z).setColor(this.col2());
-        vertexConsumer.addVertexWith2DPose(this.pose(), this.x1(), this.y1(), z).setColor(this.col2());
-        vertexConsumer.addVertexWith2DPose(this.pose(), this.x1(), this.y0(), z).setColor(this.col1());
+    @Override
+    public void buildVertices(VertexConsumer vertexConsumer) {
+        vertexConsumer.addVertexWith2DPose(this.pose(), this.x0(), this.y0()).setColor(this.col1());
+        vertexConsumer.addVertexWith2DPose(this.pose(), this.x0(), this.y1()).setColor(this.col2());
+        vertexConsumer.addVertexWith2DPose(this.pose(), this.x1(), this.y1()).setColor(this.col2());
+        vertexConsumer.addVertexWith2DPose(this.pose(), this.x1(), this.y0()).setColor(this.col1());
     }
 
     private static ScreenRectangle getBounds(int x0, int y0, int x1, int y1, Matrix3x2f pose, ScreenRectangle scissorArea) {
