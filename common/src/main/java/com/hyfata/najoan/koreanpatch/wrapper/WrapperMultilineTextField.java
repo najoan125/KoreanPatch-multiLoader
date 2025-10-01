@@ -38,7 +38,7 @@ public class WrapperMultilineTextField implements InterfaceIMEWrapper {
         this.writeText(String.valueOf(Character.toChars(ch)));
     }
 
-    public boolean onBackspaceKeyPressed() {
+    private boolean onBackspaceKeyPressed() {
         if (accessor.invokeHasSelection()) {
             return false;
         }
@@ -47,7 +47,7 @@ public class WrapperMultilineTextField implements InterfaceIMEWrapper {
         return IMEWrapperHandler.onBackspaceKeyPressed(this, cursorPosition, accessor.getValue());
     }
 
-    public boolean onHangulCharTyped(int keyCode, int modifiers) {
+    private boolean onHangulCharTyped(int keyCode, int modifiers) {
         return IMEWrapperHandler.onHangulCharTyped(this, keyCode, modifiers, accessor.getValue(), !accessor.invokeHasSelection());
     }
 

@@ -1,5 +1,6 @@
 package com.hyfata.najoan.koreanpatch.wrapper;
 
+import com.hyfata.najoan.koreanpatch.client.GUIStatus;
 import com.hyfata.najoan.koreanpatch.wrapper.handler.IMEWrapperHandler;
 import com.hyfata.najoan.koreanpatch.mixin.accessor.TextFieldHelperAccessor;
 import com.hyfata.najoan.koreanpatch.process.keyboard.KeyboardLayout;
@@ -42,11 +43,11 @@ public class WrapperTextFieldHelper implements InterfaceIMEWrapper {
         accessor.runInsert(this.getText(), str);
     }
 
-    public boolean onBackspaceKeyPressed() {
+    private boolean onBackspaceKeyPressed() {
         return IMEWrapperHandler.onBackspaceKeyPressed(this, getCursor(), this.getText());
     }
 
-    public int getModifiers() {
+    private int getModifiers() {
         boolean shift = InputConstants.isKeyDown(client.getWindow(), GLFW.GLFW_KEY_LEFT_SHIFT) ||
                 InputConstants.isKeyDown(client.getWindow(), GLFW.GLFW_KEY_RIGHT_SHIFT);
         if (shift) {
@@ -55,22 +56,31 @@ public class WrapperTextFieldHelper implements InterfaceIMEWrapper {
         return 0;
     }
 
-    public String getText() {
+    private String getText() {
         return accessor.getStringGetter().get();
     }
 
-    public void setText(String str) {
+    private void setText(String str) {
         if (accessor.getStringFilter().test(str)) {
             accessor.getStringSetter().accept(str);
         }
     }
 
-    public boolean onHangulCharTyped(int keyCode, int modifiers) {
+    private boolean onHangulCharTyped(int keyCode, int modifiers) {
         String text = this.getText();
         if (text.isEmpty()) {
             return false;
         }
         return IMEWrapperHandler.onHangulCharTyped(this, keyCode, modifiers, text, accessor.selectedText(text).isEmpty());
+    }
+
+    public void deleteCharsFromCursor(CallbackInfo ci) {
+        Minecraft client = Minecraft.getInstance();
+        if (client.screen != null && !GUIStatus.getInstance().isBypassInjection()) {
+            if (onBackspaceKeyPressed()) {
+                ci.cancel();
+            }
+        }
     }
 
     public void insertChar(char chr, CallbackInfoReturnable<Boolean> cir) {

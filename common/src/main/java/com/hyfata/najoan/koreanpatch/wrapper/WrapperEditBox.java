@@ -36,6 +36,14 @@ public class WrapperEditBox implements InterfaceIMEWrapper {
         updateScreen();
     }
 
+    @Override
+    public void modifyText(char ch) {
+        int cursorPosition = accessor.invokeGetCursorPosition();
+        accessor.invokeMoveCursorTo(cursorPosition - 1, false);
+        accessor.invokeDeleteChars(1);
+        this.writeText(String.valueOf(Character.toChars(ch)));
+    }
+
     private void updateScreen() {
         if (this.client.screen == null) {
             return;
@@ -43,14 +51,6 @@ public class WrapperEditBox implements InterfaceIMEWrapper {
         if (this.client.screen instanceof CreativeModeInventoryScreen && !accessor.invokeGetValue().isEmpty()) {
             ((CreativeModeInventoryScreenInvoker) this.client.screen).updateCreativeSearch();
         }
-    }
-
-    @Override
-    public void modifyText(char ch) {
-        int cursorPosition = accessor.invokeGetCursorPosition();
-        accessor.invokeMoveCursorTo(cursorPosition - 1, false);
-        accessor.invokeDeleteChars(1);
-        this.writeText(String.valueOf(Character.toChars(ch)));
     }
 
     private boolean onBackspaceKeyPressed() {

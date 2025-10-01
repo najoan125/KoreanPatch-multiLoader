@@ -1,9 +1,7 @@
 package com.hyfata.najoan.koreanpatch.mixin;
 
-import com.hyfata.najoan.koreanpatch.client.GUIStatus;
 import com.hyfata.najoan.koreanpatch.wrapper.WrapperTextFieldHelper;
 import com.hyfata.najoan.koreanpatch.mixin.accessor.TextFieldHelperAccessor;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.font.TextFieldHelper;
 import net.minecraft.client.input.CharacterEvent;
 import org.spongepowered.asm.mixin.Mixin;
@@ -30,12 +28,7 @@ public abstract class TextFieldHelperMixin {
 
     @Inject(at = {@At(value = "HEAD")}, method = {"removeCharsFromCursor(I)V"}, cancellable = true)
     public void delete(int offset, CallbackInfo ci) {
-        Minecraft client = Minecraft.getInstance();
-        if (client.screen != null && !GUIStatus.getInstance().isBypassInjection()) {
-            if (koreanPatch$wrapper.onBackspaceKeyPressed()) {
-                ci.cancel();
-            }
-        }
+        koreanPatch$wrapper.deleteCharsFromCursor(ci);
     }
 }
 
