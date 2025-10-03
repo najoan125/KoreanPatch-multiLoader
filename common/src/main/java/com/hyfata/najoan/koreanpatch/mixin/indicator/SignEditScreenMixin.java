@@ -36,7 +36,7 @@ public abstract class SignEditScreenMixin extends Screen {
     }
 
     @Inject(at = {@At(value = "TAIL")}, method = {"renderSignText"})
-    public void addCustomLabel(GuiGraphics context, CallbackInfo ci) {
+    public void addCustomLabel(GuiGraphics guiGraphics, CallbackInfo ci) {
         float x = -(sign.getMaxTextLineWidth() / 2f) - IndicatorHandler.getIndicatorWidth() / 2 - 5;
         int l = 4 * sign.getTextLineHeight() / 2;
         float y = line * sign.getTextLineHeight() - l + koreanPatch$client.font.lineHeight / 2f;
@@ -44,7 +44,7 @@ public abstract class SignEditScreenMixin extends Screen {
         koreanPatch$animationHandler.init(0, y - 4);
         koreanPatch$animationHandler.calculateAnimation(0, y);
 
-        IndicatorHandler.showCenteredIndicator(context, x, koreanPatch$animationHandler.getResultY());
+        IndicatorHandler.showCenteredIndicator(guiGraphics, x, koreanPatch$animationHandler.getResultY());
     }
 }
 

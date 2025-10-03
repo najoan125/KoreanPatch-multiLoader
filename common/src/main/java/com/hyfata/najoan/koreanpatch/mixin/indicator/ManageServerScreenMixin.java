@@ -40,7 +40,7 @@ public class ManageServerScreenMixin extends Screen {
     private final AnimationHandler koreanPatch$animationHandler = new AnimationHandler();
 
     @Inject(at = {@At(value = "TAIL")}, method = {"render"})
-    private void addCustomLabel(GuiGraphics context, int p_446346_, int p_445945_, float p_445468_, CallbackInfo ci) {
+    private void addCustomLabel(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick, CallbackInfo ci) {
         float x;
         float y;
         int textX = this.width / 2 - 100 + 1;
@@ -58,6 +58,6 @@ public class ManageServerScreenMixin extends Screen {
         koreanPatch$animationHandler.init(x - 4, 0);
         koreanPatch$animationHandler.calculateAnimation(x, 0);
 
-        IndicatorHandler.showIndicator(context, koreanPatch$animationHandler.getResultX() + 4, y);
+        IndicatorHandler.showIndicator(guiGraphics, koreanPatch$animationHandler.getResultX() + 4, y);
     }
 }
