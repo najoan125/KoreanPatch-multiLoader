@@ -17,34 +17,34 @@ import org.joml.Matrix3x2f;
 public class RenderUtil {
     private static final Minecraft client = Minecraft.getInstance();
 
-    public static void drawCenteredText(GuiGraphics context, FormattedCharSequence text, float x, float y) {
-        drawCenteredText(context, text, x, y, -1);
+    public static void drawCenteredText(GuiGraphics guiGraphics, FormattedCharSequence text, float x, float y) {
+        drawCenteredText(guiGraphics, text, x, y, -1);
     }
 
-    public static void drawCenteredText(GuiGraphics context, FormattedCharSequence text, float x, float y, int color) {
+    public static void drawCenteredText(GuiGraphics guiGraphics, FormattedCharSequence text, float x, float y, int color) {
         Font textRenderer = client.font;
         float textWidth = textRenderer.width(text);
         float xPosition = x - textWidth / 2.0f;
         float yPosition = y - client.font.lineHeight / 2.0f;
-        drawText(context, text, xPosition, yPosition, color);
+        drawText(guiGraphics, text, xPosition, yPosition, color);
     }
 
-    public static void drawText(GuiGraphics context, FormattedCharSequence text, float x, float y) {
-        drawText(context, text, x, y, -1);
+    public static void drawText(GuiGraphics guiGraphics, FormattedCharSequence text, float x, float y) {
+        drawText(guiGraphics, text, x, y, -1);
     }
 
-    public static void drawText(GuiGraphics context, FormattedCharSequence text, float x, float y, int color) {
+    public static void drawText(GuiGraphics guiGraphics, FormattedCharSequence text, float x, float y, int color) {
         if (ARGB.alpha(color) != 0) {
-            GuiGraphicsAccessor accessor = (GuiGraphicsAccessor) context;
+            GuiGraphicsAccessor accessor = (GuiGraphicsAccessor) guiGraphics;
             accessor.getGuiRenderState().submitText(
                     new FloatTextRenderState(
-                            client.font, text, new Matrix3x2f(context.pose()), x, y, color, 0, true, accessor.getScissorStack().peek()
+                            client.font, text, new Matrix3x2f(guiGraphics.pose()), x, y, color, 0, true, accessor.getScissorStack().peek()
                     )
             );
         }
     }
 
-    public static void fill(GuiGraphics context, float x1, float y1, float x2, float y2, int color) {
+    public static void fill(GuiGraphics guiGraphics, float x1, float y1, float x2, float y2, int color) {
         float i;
         if (x1 < x2) {
             i = x1;
@@ -58,16 +58,16 @@ public class RenderUtil {
             y2 = i;
         }
 
-        submitColoredRectangle(context, RenderPipelines.GUI, TextureSetup.noTexture(), x1, y1, x2, y2, color, null);
+        submitColoredRectangle(guiGraphics, RenderPipelines.GUI, TextureSetup.noTexture(), x1, y1, x2, y2, color, null);
     }
 
-    private static void submitColoredRectangle(GuiGraphics context, RenderPipeline pipeline, TextureSetup textureSetup, float x0, float y0, float x1, float y1, int col1, Integer col2) {
-        GuiGraphicsAccessor accessor = (GuiGraphicsAccessor) context;
+    private static void submitColoredRectangle(GuiGraphics guiGraphics, RenderPipeline pipeline, TextureSetup textureSetup, float x0, float y0, float x1, float y1, int col1, Integer col2) {
+        GuiGraphicsAccessor accessor = (GuiGraphicsAccessor) guiGraphics;
         accessor.getGuiRenderState().submitGuiElement(
                 new FloatRenderState(
                         pipeline,
                         textureSetup,
-                        new Matrix3x2f(context.pose()),
+                        new Matrix3x2f(guiGraphics.pose()),
                         x0, y0, x1, y1,
                         col1,
                         col2 != null ? col2 : col1,
@@ -76,7 +76,7 @@ public class RenderUtil {
         );
     }
 
-    public static void drawVertexCircleFrame(GuiGraphics context, float centerX, float centerY, float radius, int frameColor, float frameThickness, VertexDirection direction) {
+    public static void drawVertexCircleFrame(GuiGraphics guiGraphics, float centerX, float centerY, float radius, int frameColor, float frameThickness, VertexDirection direction) {
         // radius = outerRadius
         float innerRadius = radius - frameThickness;
         if (innerRadius < 0) {
@@ -99,11 +99,11 @@ public class RenderUtil {
             float[] innerPoint = calculateVertexDirectionPoint(centerX, centerY, innerRadius, cos, sin, direction);
             float[] outerPoint = calculateVertexDirectionPoint(centerX, centerY, radius, cos, sin, direction);
 
-            RenderUtil.fill(context, innerPoint[0], innerPoint[1], outerPoint[0], outerPoint[1], frameColor);
+            RenderUtil.fill(guiGraphics, innerPoint[0], innerPoint[1], outerPoint[0], outerPoint[1], frameColor);
         }
     }
 
-    public static void drawVertexSuperellipseFrame(GuiGraphics context, float centerX, float centerY, float radiusX, float radiusY, float exponent, int frameColor, float frameThickness, VertexDirection direction) {
+    public static void drawVertexSuperellipseFrame(GuiGraphics guiGraphics, float centerX, float centerY, float radiusX, float radiusY, float exponent, int frameColor, float frameThickness, VertexDirection direction) {
         int steps = 36;
         float angleStep = Mth.PI / 2f / steps;
 
@@ -125,7 +125,7 @@ public class RenderUtil {
             float[] innerPoint = calculateVertexDirectionPoint(centerX, centerY, radiusX - frameThickness, radiusY - frameThickness, projX, projY, direction);
             float[] outerPoint = calculateVertexDirectionPoint(centerX, centerY, radiusX, radiusY, projX, projY, direction);
 
-            RenderUtil.fill(context, innerPoint[0], innerPoint[1], outerPoint[0], outerPoint[1], frameColor);
+            RenderUtil.fill(guiGraphics, innerPoint[0], innerPoint[1], outerPoint[0], outerPoint[1], frameColor);
         }
     }
 

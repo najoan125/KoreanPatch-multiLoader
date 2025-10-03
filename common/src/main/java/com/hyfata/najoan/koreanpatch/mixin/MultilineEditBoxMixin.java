@@ -25,12 +25,12 @@ public abstract class MultilineEditBoxMixin extends AbstractTextAreaWidget {
     @Unique
     private WrapperMultilineTextField koreanPatch$wrapper;
 
-    public MultilineEditBoxMixin(int p_388859_, int p_387520_, int p_387683_, int p_387659_, Component p_386737_) {
-        super(p_388859_, p_387520_, p_387683_, p_387659_, p_386737_);
+    public MultilineEditBoxMixin(int x, int y, int width, int height, Component message) {
+        super(x, y, width, height, message);
     }
 
     @Inject(at = {@At(value = "TAIL")}, method = {"<init>"})
-    public void init(Font font, int x, int y, int width, int height, Component placeholder, Component message, int p_421931_, boolean p_421976_, int p_422714_, boolean p_422534_, boolean p_422133_, CallbackInfo ci) {
+    public void init(Font font, int x, int y, int width, int height, Component placeholder, Component message, int textColor, boolean textShadow, int cursorColor, boolean showBackground, boolean showDecorations, CallbackInfo ci) {
         koreanPatch$wrapper = new WrapperMultilineTextField((MultilineTextFieldAccessor) this.textField);
     }
 

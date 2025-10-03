@@ -29,13 +29,13 @@ public class SelectWorldScreenMixin extends Screen {
     }
 
     @Inject(at = {@At(value = "TAIL")}, method = {"render"})
-    private void addCustomLabel(GuiGraphics context, int mouseX, int mouseY, float delta, CallbackInfo ci){
+    private void addCustomLabel(GuiGraphics guiGraphics, int mouseX, int mouseY, float delta, CallbackInfo ci){
         float x = EditBoxUtil.getCursorX(searchBox);
         float y = EditBoxUtil.calculateIndicatorY(searchBox);
 
         koreanPatch$animationHandler.init((float) this.width / 2 - 105, 0);
         koreanPatch$animationHandler.calculateAnimation(x, 0);
 
-        IndicatorHandler.showIndicator(context, koreanPatch$animationHandler.getResultX() + 4, y);
+        IndicatorHandler.showIndicator(guiGraphics, koreanPatch$animationHandler.getResultX() + 4, y);
     }
 }

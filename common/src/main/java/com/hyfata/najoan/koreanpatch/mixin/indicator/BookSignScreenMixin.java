@@ -18,11 +18,11 @@ public abstract class BookSignScreenMixin extends Screen {
     }
 
     @Inject(at = @At("TAIL"), method = "render")
-    public void render(GuiGraphics context, int p_421651_, int p_421594_, float p_422678_, CallbackInfo ci) {
+    public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick, CallbackInfo ci) {
         float x = (this.width - 192) / 2f;
         float y = 50 + 4.5f;
 
         BookScreenVar.animationHandler.calculateAnimation(0, y);
-        IndicatorHandler.showCenteredIndicator(context, x + 10, BookScreenVar.animationHandler.getResultY());
+        IndicatorHandler.showCenteredIndicator(guiGraphics, x + 10, BookScreenVar.animationHandler.getResultY());
     }
 }

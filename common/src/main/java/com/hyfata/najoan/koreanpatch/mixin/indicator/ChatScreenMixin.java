@@ -35,7 +35,7 @@ public abstract class ChatScreenMixin extends Screen {
 
 
     @Inject(at = {@At(value = "TAIL")}, method = {"render"})
-    private void addCustomLabel(GuiGraphics context, int mouseX, int mouseY, float delta, CallbackInfo ci) {
+    private void addCustomLabel(GuiGraphics guiGraphics, int mouseX, int mouseY, float delta, CallbackInfo ci) {
         CommandSuggestionsAccessor accessor = (CommandSuggestionsAccessor) commandSuggestions;
         int suggestorHeight = 0;
         int messagesY = 0;
@@ -58,6 +58,6 @@ public abstract class ChatScreenMixin extends Screen {
         koreanPatch$animationHandler.init(0, 0);
         koreanPatch$animationHandler.calculateAnimation(indicatorX, 0);
 
-        IndicatorHandler.showIndicator(context, koreanPatch$animationHandler.getResultX(), indicatorY);
+        IndicatorHandler.showIndicator(guiGraphics, koreanPatch$animationHandler.getResultX(), indicatorY);
     }
 }

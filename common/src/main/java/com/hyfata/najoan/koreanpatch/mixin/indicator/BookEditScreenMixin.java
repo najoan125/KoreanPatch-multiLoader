@@ -34,7 +34,7 @@ public abstract class BookEditScreenMixin extends Screen {
     }
 
     @Inject(at = {@At(value = "RETURN")}, method = {"render"})
-    private void addCustomLabel(GuiGraphics context, int mouseX, int mouseY, float delta, CallbackInfo ci) {
+    private void addCustomLabel(GuiGraphics guiGraphics, int mouseX, int mouseY, float delta, CallbackInfo ci) {
         MultilineEditBoxAccessor accessor = (MultilineEditBoxAccessor) this.page;
         float x = (this.width - 192) / 2f; // int i = (this.width - 192) / 2; in render() method
 
@@ -45,7 +45,7 @@ public abstract class BookEditScreenMixin extends Screen {
         BookScreenVar.animationHandler.init(0, y - 4);
         BookScreenVar.animationHandler.calculateAnimation(0, y);
 
-        IndicatorHandler.showCenteredIndicator(context, x + 10, BookScreenVar.animationHandler.getResultY());
+        IndicatorHandler.showCenteredIndicator(guiGraphics, x + 10, BookScreenVar.animationHandler.getResultY());
     }
 }
 

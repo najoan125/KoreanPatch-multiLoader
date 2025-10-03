@@ -23,10 +23,10 @@ public class AnvilScreenMixin extends Screen {
     }
 
     @Inject(at = {@At(value = "TAIL")}, method = {"renderBg"})
-    private void customLabel(GuiGraphics context, float p_283412_, int p_282871_, int p_281306_, CallbackInfo ci) {
+    private void customLabel(GuiGraphics guiGraphics, float partialTick, int mouseX, int mouseY, CallbackInfo ci) {
         float x = name.getX() + name.getWidth() - IndicatorHandler.getIndicatorWidth();
         float y = name.getY() - IndicatorHandler.getIndicatorHeight() - 6;
 
-        IndicatorHandler.showIndicator(context, x, y);
+        IndicatorHandler.showIndicator(guiGraphics, x, y);
     }
 }
