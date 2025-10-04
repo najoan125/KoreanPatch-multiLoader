@@ -44,13 +44,13 @@ public class EditWorldScreenMixin extends Screen {
     }
 
     @Inject(at = {@At(value = "TAIL")}, method = {"render"})
-    public void addCustomLabel(GuiGraphics context, int mouseX, int mouseY, float delta, CallbackInfo ci) {
+    public void addCustomLabel(GuiGraphics guiGraphics, int mouseX, int mouseY, float delta, CallbackInfo ci) {
         float x = EditBoxUtil.getCursorXWithText(koreanPatch$nameEdit, NAME_LABEL, koreanPatch$nameEdit.getX()) + 4;
         float y = EditBoxUtil.calculateIndicatorY(koreanPatch$nameEdit);
 
         koreanPatch$animationHandler.init(x - 4, 0);
         koreanPatch$animationHandler.calculateAnimation(x, 0);
 
-        IndicatorHandler.showIndicator(context, koreanPatch$animationHandler.getResultX(), y);
+        IndicatorHandler.showIndicator(guiGraphics, koreanPatch$animationHandler.getResultX(), y);
     }
 }
