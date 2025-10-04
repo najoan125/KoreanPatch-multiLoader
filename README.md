@@ -1,4 +1,6 @@
 # Korean Patch
+[modrinth](https://modrinth.com/mod/korean-chat-patch)<br>
+[curseforge](https://www.curseforge.com/minecraft/mc-mods/korean-patch-fabric)
 
 ## 이 모드는 어떤 모드인가요? What mod is this?
 
