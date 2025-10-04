@@ -31,7 +31,7 @@ public abstract class BookEditScreenMixin extends Screen {
     private final AnimationHandler koreanPatch$animationHandler = new AnimationHandler();
 
     @Inject(at = {@At(value = "RETURN")}, method = {"render"})
-    private void addCustomLabel(PoseStack context, int mouseX, int mouseY, float delta, CallbackInfo ci) {
+    private void addCustomLabel(PoseStack poseStack, int mouseX, int mouseY, float delta, CallbackInfo ci) {
         float x = (this.width - 192) / 2f; // int i = (this.width - 192) / 2; in render() method
         float y;
         if (isSigning) {
@@ -44,7 +44,7 @@ public abstract class BookEditScreenMixin extends Screen {
         koreanPatch$animationHandler.init(0, y - 4);
         koreanPatch$animationHandler.calculateAnimation(0, y);
 
-        IndicatorHandler.showCenteredIndicator(context, x + 10, koreanPatch$animationHandler.getResultY());
+        IndicatorHandler.showCenteredIndicator(poseStack, x + 10, koreanPatch$animationHandler.getResultY());
     }
 }
 

@@ -32,7 +32,7 @@ public class CreateWorldScreenMixin extends Screen {
     private final AnimationHandler koreanPatch$animationHandler = new AnimationHandler();
 
     @Inject(at = {@At(value = "RETURN")}, method = {"render"})
-    private void addCustomLabel(PoseStack context, int mouseX, int mouseY, float delta, CallbackInfo ci) {
+    private void addCustomLabel(PoseStack poseStack, int mouseX, int mouseY, float delta, CallbackInfo ci) {
         if (!worldGenSettingsVisible) {
             GUIStatus.getInstance().setBypassInjection(false);
             Component text = Component.translatable("selectWorld.enterName");
@@ -43,7 +43,7 @@ public class CreateWorldScreenMixin extends Screen {
             koreanPatch$animationHandler.init(x - 4, 0);
             koreanPatch$animationHandler.calculateAnimation(x, 0);
 
-            IndicatorHandler.showIndicator(context, koreanPatch$animationHandler.getResultX(), y);
+            IndicatorHandler.showIndicator(poseStack, koreanPatch$animationHandler.getResultX(), y);
         } else {
             GUIStatus.getInstance().setBypassInjection(true);
         }
