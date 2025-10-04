@@ -30,12 +30,12 @@ public class CreativeModeInventoryScreenMixin extends Screen {
     int koreanPatch$modifier = 19;
 
     @Inject(method = {"render"}, at = @At(value = "TAIL", shift = At.Shift.BY, by = -3))
-    private void addCustomLabel(PoseStack context, int mouseX, int mouseY, float delta, CallbackInfo ci) {
+    private void addCustomLabel(PoseStack poseStack, int mouseX, int mouseY, float delta, CallbackInfo ci) {
         if (koreanPatch$search) {
             int x = searchBox.x + searchBox.getWidth() + koreanPatch$modifier;
             int y = searchBox.y + searchBox.getHeight() / 2;
 
-            IndicatorHandler.showCenteredIndicator(context, x, y);
+            IndicatorHandler.showCenteredIndicator(poseStack, x, y);
         }
     }
 

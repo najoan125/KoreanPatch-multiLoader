@@ -28,13 +28,13 @@ public class DirectJoinServerScreenMixin extends Screen {
     }
 
     @Inject(at = {@At(value = "TAIL")}, method = {"render"})
-    private void addCustomLabel(PoseStack context, int mouseX, int mouseY, float delta, CallbackInfo ci) {
+    private void addCustomLabel(PoseStack poseStack, int mouseX, int mouseY, float delta, CallbackInfo ci) {
         float x = EditBoxUtil.getCursorX(ipEdit) + 4;
         float y = EditBoxUtil.calculateIndicatorY(ipEdit);
 
         koreanPatch$animationHandler.init(x - 4, 0);
         koreanPatch$animationHandler.calculateAnimation(x, 0);
 
-        IndicatorHandler.showIndicator(context, koreanPatch$animationHandler.getResultX(), y);
+        IndicatorHandler.showIndicator(poseStack, koreanPatch$animationHandler.getResultX(), y);
     }
 }
