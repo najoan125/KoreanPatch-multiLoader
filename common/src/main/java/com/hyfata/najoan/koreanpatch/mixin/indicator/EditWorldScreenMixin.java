@@ -30,13 +30,13 @@ public class EditWorldScreenMixin extends Screen {
     private final AnimationHandler koreanPatch$animationHandler = new AnimationHandler();
 
     @Inject(at = {@At(value = "TAIL")}, method = {"render"})
-    public void addCustomLabel(PoseStack context, int mouseX, int mouseY, float delta, CallbackInfo ci) {
+    public void addCustomLabel(PoseStack poseStack, int mouseX, int mouseY, float delta, CallbackInfo ci) {
         float x = EditBoxUtil.getCursorXWithText(nameEdit, NAME_LABEL, nameEdit.x) + 4;
         float y = EditBoxUtil.calculateIndicatorY(nameEdit);
 
         koreanPatch$animationHandler.init(x - 4, 0);
         koreanPatch$animationHandler.calculateAnimation(x, 0);
 
-        IndicatorHandler.showIndicator(context, koreanPatch$animationHandler.getResultX(), y);
+        IndicatorHandler.showIndicator(poseStack, koreanPatch$animationHandler.getResultX(), y);
     }
 }
