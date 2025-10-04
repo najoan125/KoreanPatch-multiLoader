@@ -14,33 +14,33 @@ import org.joml.Matrix4f;
 public class RenderUtil {
     private static final Minecraft client = Minecraft.getInstance();
 
-    public static void drawCenteredText(GuiGraphics context, FormattedCharSequence text, float x, float y) {
-        drawCenteredText(context, text, x, y, -1);
+    public static void drawCenteredText(GuiGraphics guiGraphics, FormattedCharSequence text, float x, float y) {
+        drawCenteredText(guiGraphics, text, x, y, -1);
     }
 
-    public static void drawCenteredText(GuiGraphics context, FormattedCharSequence text, float x, float y, int color) {
+    public static void drawCenteredText(GuiGraphics guiGraphics, FormattedCharSequence text, float x, float y, int color) {
         Font textRenderer = client.font;
         float textWidth = textRenderer.width(text);
         float xPosition = x - textWidth / 2.0f;
         float yPosition = y - client.font.lineHeight / 2.0f;
-        drawText(context, text, xPosition, yPosition, color);
+        drawText(guiGraphics, text, xPosition, yPosition, color);
     }
 
-    public static void drawText(GuiGraphics context, FormattedCharSequence text, float x, float y) {
-        drawText(context, text, x, y, -1);
+    public static void drawText(GuiGraphics guiGraphics, FormattedCharSequence text, float x, float y) {
+        drawText(guiGraphics, text, x, y, -1);
     }
 
-    public static void drawText(GuiGraphics context, FormattedCharSequence text, float x, float y, int color) {
+    public static void drawText(GuiGraphics guiGraphics, FormattedCharSequence text, float x, float y, int color) {
         Font textRenderer = client.font;
-        Matrix4f matrix = context.pose().last().pose();
-        MultiBufferSource vertexConsumers = context.bufferSource();
+        Matrix4f matrix = guiGraphics.pose().last().pose();
+        MultiBufferSource vertexConsumers = guiGraphics.bufferSource();
         RenderSystem.enableBlend();
         textRenderer.drawInBatch(text, x, y, color, false, matrix, vertexConsumers, Font.DisplayMode.NORMAL, 0, 15728880);
         RenderSystem.disableBlend();
     }
 
-    public static void fill(GuiGraphics context, float x1, float y1, float x2, float y2, int color) {
-        Matrix4f matrix = context.pose().last().pose();
+    public static void fill(GuiGraphics guiGraphics, float x1, float y1, float x2, float y2, int color) {
+        Matrix4f matrix = guiGraphics.pose().last().pose();
         float i;
         if (x1 < x2) {
             i = x1;
@@ -55,16 +55,16 @@ public class RenderUtil {
         }
 
         RenderSystem.enableBlend();
-        VertexConsumer vertexConsumer = context.bufferSource().getBuffer(RenderType.gui());
+        VertexConsumer vertexConsumer = guiGraphics.bufferSource().getBuffer(RenderType.gui());
         vertexConsumer.vertex(matrix, x1, y1, 0f).color(color).endVertex();
         vertexConsumer.vertex(matrix, x1, y2, 0f).color(color).endVertex();
         vertexConsumer.vertex(matrix, x2, y2, 0f).color(color).endVertex();
         vertexConsumer.vertex(matrix, x2, y1, 0f).color(color).endVertex();
-        context.flush();
+        guiGraphics.flush();
         RenderSystem.disableBlend();
     }
 
-    public static void drawVertexCircleFrame(GuiGraphics context, float centerX, float centerY, float radius, int frameColor, float frameThickness, VertexDirection direction) {
+    public static void drawVertexCircleFrame(GuiGraphics guiGraphics, float centerX, float centerY, float radius, int frameColor, float frameThickness, VertexDirection direction) {
         // radius = outerRadius
         float innerRadius = radius - frameThickness;
         if (innerRadius < 0) {
@@ -87,11 +87,11 @@ public class RenderUtil {
             float[] innerPoint = calculateVertexDirectionPoint(centerX, centerY, innerRadius, cos, sin, direction);
             float[] outerPoint = calculateVertexDirectionPoint(centerX, centerY, radius, cos, sin, direction);
 
-            RenderUtil.fill(context, innerPoint[0], innerPoint[1], outerPoint[0], outerPoint[1], frameColor);
+            RenderUtil.fill(guiGraphics, innerPoint[0], innerPoint[1], outerPoint[0], outerPoint[1], frameColor);
         }
     }
 
-    public static void drawVertexSuperellipseFrame(GuiGraphics context, float centerX, float centerY, float radiusX, float radiusY, float exponent, int frameColor, float frameThickness, VertexDirection direction) {
+    public static void drawVertexSuperellipseFrame(GuiGraphics guiGraphics, float centerX, float centerY, float radiusX, float radiusY, float exponent, int frameColor, float frameThickness, VertexDirection direction) {
         int steps = 36;
         float angleStep = Mth.PI / 2f / steps;
 
@@ -113,7 +113,7 @@ public class RenderUtil {
             float[] innerPoint = calculateVertexDirectionPoint(centerX, centerY, radiusX - frameThickness, radiusY - frameThickness, projX, projY, direction);
             float[] outerPoint = calculateVertexDirectionPoint(centerX, centerY, radiusX, radiusY, projX, projY, direction);
 
-            RenderUtil.fill(context, innerPoint[0], innerPoint[1], outerPoint[0], outerPoint[1], frameColor);
+            RenderUtil.fill(guiGraphics, innerPoint[0], innerPoint[1], outerPoint[0], outerPoint[1], frameColor);
         }
     }
 
