@@ -33,7 +33,7 @@ public class CreateWorldScreenMixin extends Screen {
     private final AnimationHandler koreanPatch$animationHandler = new AnimationHandler();
 
     @Inject(at = {@At(value = "RETURN")}, method = {"render"})
-    private void addCustomLabel(GuiGraphics context, int mouseX, int mouseY, float delta, CallbackInfo ci) {
+    private void addCustomLabel(GuiGraphics guiGraphics, int mouseX, int mouseY, float delta, CallbackInfo ci) {
         TabNavigationBarAccessor tabInvoker = (TabNavigationBarAccessor) tabNavigationBar;
         Tab currentTab = tabInvoker.getTabManager().getCurrentTab();
 
@@ -49,7 +49,7 @@ public class CreateWorldScreenMixin extends Screen {
             koreanPatch$animationHandler.init(x - 4, 0);
             koreanPatch$animationHandler.calculateAnimation(x, 0);
 
-            IndicatorHandler.showIndicator(context, koreanPatch$animationHandler.getResultX(), y);
+            IndicatorHandler.showIndicator(guiGraphics, koreanPatch$animationHandler.getResultX(), y);
         } else {
             GUIStatus.getInstance().setBypassInjection(true);
         }
