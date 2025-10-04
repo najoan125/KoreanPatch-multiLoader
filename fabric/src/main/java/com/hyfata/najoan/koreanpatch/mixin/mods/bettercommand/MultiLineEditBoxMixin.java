@@ -1,15 +1,11 @@
 package com.hyfata.najoan.koreanpatch.mixin.mods.bettercommand;
 
 import bettercommandblockui.main.ui.MultiLineTextFieldWidget;
-import com.hyfata.najoan.koreanpatch.client.GUIStatus;
 import com.hyfata.najoan.koreanpatch.mixin.accessor.EditBoxAccessor;
-import com.hyfata.najoan.koreanpatch.process.LangTypeManager;
 import com.hyfata.najoan.koreanpatch.wrapper.WrapperEditBox;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.network.chat.Component;
-import org.lwjgl.glfw.GLFW;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -27,22 +23,11 @@ public abstract class MultiLineEditBoxMixin extends EditBox {
 
     @Inject(method = "charTyped", at = @At("HEAD"), cancellable = true)
     private void charTyped(char chr, int modifiers, CallbackInfoReturnable<Boolean> cir) {
-        Minecraft client = Minecraft.getInstance();
-        if (client.screen != null && !GUIStatus.getInstance().isBypassInjection() &&
-                LangTypeManager.getInstance().isKorean() && this.isEditable() && Character.charCount(chr) == 1) {
-            handler.charTyped(chr, modifiers, cir);
-        }
+        handler.charTyped(chr, modifiers, cir, this.isEditable());
     }
 
     @Inject(at = @At(value = "HEAD"), method = "keyPressed", cancellable = true)
     public void keyPressed(int keyCode, int scanCode, int modifiers, CallbackInfoReturnable<Boolean> cir) {
-        Minecraft client = Minecraft.getInstance();
-        if (client.screen != null && !GUIStatus.getInstance().isBypassInjection()) {
-            if (keyCode == GLFW.GLFW_KEY_BACKSPACE) {
-                if (handler.onBackspaceKeyPressed()) {
-                    cir.setReturnValue(Boolean.TRUE);
-                }
-            }
-        }
+        handler.keyPressed(keyCode, cir);
     }
 }
