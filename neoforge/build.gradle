@@ -40,7 +40,6 @@ sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 dependencies {
     api "me.shedaniel.cloth:cloth-config-neoforge:${cloth_config}"
-    compileOnly "dev.isxander:yet-another-config-lib:${project.yacl_version}-neoforge"
     compileOnly "maven.modrinth:easy-anvils:${project.easy_anvils_version_neo}"
     compileOnly "maven.modrinth:xaeros-minimap:${project.xaeros_minimap_neo}"
     compileOnly "maven.modrinth:xaeros-world-map:${project.xaeros_world_map_neo}"

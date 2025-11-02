@@ -1,7 +1,6 @@
 package com.hyfata.najoan.koreanpatch.client;
 
-import com.hyfata.najoan.koreanpatch.config.yacl.YaclConfigScreenFactoryManager;
-import com.hyfata.najoan.koreanpatch.platform.Services;
+import com.hyfata.najoan.koreanpatch.config.screen.ModernSettingsScreen;
 import net.minecraft.client.KeyMapping;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
@@ -24,9 +23,8 @@ public class KoreanPatchNeoForge {
 
         registerEvents(bus);
 
-        if (Services.PLATFORM.isModLoaded("yet_another_config_lib_v3")) {
-            container.registerExtensionPoint(IConfigScreenFactory.class, (client, parent) -> YaclConfigScreenFactoryManager.createScreen(parent));
-        }
+        // 커스텀 설정 화면 등록
+        container.registerExtensionPoint(IConfigScreenFactory.class, (client, parent) -> new ModernSettingsScreen(parent));
     }
 
     public void registerEvents(IEventBus bus) {
