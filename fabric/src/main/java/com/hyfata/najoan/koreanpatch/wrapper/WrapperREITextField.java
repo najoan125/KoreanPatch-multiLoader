@@ -24,9 +24,18 @@ public class WrapperREITextField implements InterfaceIMEWrapper {
     }
 
     public void modifyText(char ch) {
-        String text = accessor.getText();
-        text = text.substring(0, text.length() - 1) + ch;
-        accessor.setText(text);
+        int cursorPosition = accessor.getCursor();
+        char[] arr = accessor.getText().toCharArray();
+        if (cursorPosition > 0 && cursorPosition <= arr.length) {
+            arr[cursorPosition - 1] = ch;
+            accessor.setText(String.valueOf(arr));
+        }
+    }
+
+    @Override
+    public void modifyText(String str) {
+        this.modifyText(str.charAt(0));
+        this.writeText(str.substring(1));
     }
 
     public boolean onBackspaceKeyPressed() {

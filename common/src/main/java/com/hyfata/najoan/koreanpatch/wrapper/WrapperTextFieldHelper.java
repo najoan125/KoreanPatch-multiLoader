@@ -34,6 +34,12 @@ public class WrapperTextFieldHelper implements InterfaceIMEWrapper {
     }
 
     @Override
+    public void modifyText(String str) {
+        this.modifyText(str.charAt(0));
+        this.writeText(str.substring(1));
+    }
+
+    @Override
     public int getCursor() {
         return accessor.getCursor();
     }

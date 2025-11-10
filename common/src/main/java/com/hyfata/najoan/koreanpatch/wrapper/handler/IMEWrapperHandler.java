@@ -115,12 +115,12 @@ public class IMEWrapperHandler {
                     }
 
                     char c = HangulProcessor.synthesizeHangulCharacter(cho, jung, jong);
-                    wrapper.modifyText(c);
+//                    wrapper.modifyText(c);
 
                     cho = newCho;
                     jung = KeyboardLayout.INSTANCE.jungsung_table.indexOf(curr);
                     code = HangulProcessor.synthesizeHangulCharacter(cho, jung, 0);
-                    wrapper.writeText(String.valueOf(Character.toChars(code)));
+                    wrapper.modifyText(c + String.valueOf(Character.toChars(code)));
                     KeyboardLayout.INSTANCE.assemblePosition = wrapper.getCursor();
                     return true;
                 }

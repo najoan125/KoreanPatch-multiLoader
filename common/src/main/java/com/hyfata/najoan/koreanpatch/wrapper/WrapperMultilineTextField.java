@@ -34,8 +34,13 @@ public class WrapperMultilineTextField implements InterfaceIMEWrapper {
 
     @Override
     public void modifyText(char ch) {
+        modifyText(String.valueOf(ch));
+    }
+
+    @Override
+    public void modifyText(String str) {
         accessor.invokeDeleteText(-1);
-        this.writeText(String.valueOf(Character.toChars(ch)));
+        this.writeText(str);
     }
 
     private boolean onBackspaceKeyPressed() {
