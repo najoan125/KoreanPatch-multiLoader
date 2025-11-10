@@ -16,9 +16,6 @@ public interface EditBoxAccessor {
     @Invoker("getValue")
     String invokeGetValue();
 
-    @Invoker("moveCursorTo")
-    void invokeMoveCursorTo(int pDelta, boolean pSelect);
-
     @Invoker("deleteChars")
     void invokeDeleteChars(int var1);
 

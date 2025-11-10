@@ -1,6 +1,7 @@
 package com.hyfata.najoan.koreanpatch.wrapper;
 
 import com.hyfata.najoan.koreanpatch.client.GUIStatus;
+import com.hyfata.najoan.koreanpatch.helper.WrapperHelper;
 import com.hyfata.najoan.koreanpatch.process.LangTypeManager;
 import com.hyfata.najoan.koreanpatch.wrapper.handler.IMEWrapperHandler;
 import com.hyfata.najoan.koreanpatch.mixin.accessor.EditBoxAccessor;
@@ -38,10 +39,11 @@ public class WrapperEditBox implements InterfaceIMEWrapper {
 
     @Override
     public void modifyText(char ch) {
-        int cursorPosition = accessor.invokeGetCursorPosition();
-        accessor.invokeMoveCursorTo(cursorPosition - 1, false);
-        accessor.invokeDeleteChars(1);
-        this.writeText(String.valueOf(Character.toChars(ch)));
+        WrapperHelper.setPacketEnabled(false);
+        accessor.invokeDeleteChars(-1);
+        WrapperHelper.setPacketEnabled(true);
+
+        this.writeText(String.valueOf(ch));
     }
 
     private void updateScreen() {
