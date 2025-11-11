@@ -9,6 +9,7 @@ import com.hyfata.najoan.koreanpatch.util.HangulUtil;
 import com.hyfata.najoan.koreanpatch.process.LangTypeManager;
 import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.client.Minecraft;
+import net.minecraft.util.Mth;
 import org.lwjgl.glfw.GLFW;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
@@ -24,24 +25,28 @@ public class WrapperTextFieldHelper implements InterfaceIMEWrapper {
     }
 
     @Override
-    public void modifyText(char ch) {
-        int cursorPosition = accessor.getCursor();
-        char[] arr = this.getText().toCharArray();
-        if (cursorPosition > 0 && cursorPosition <= arr.length) {
-            arr[cursorPosition - 1] = ch;
-            this.setText(String.valueOf(arr));
+    public void modifyText(String str) {
+        String text = this.getText();
+
+        // insertText()
+        if (accessor.getSelectionPos() != accessor.getCursorPos()) {
+            text = accessor.runDeleteSelection(text);
+        }
+
+        accessor.setCursorPos(Mth.clamp(accessor.getCursorPos(), 0, text.length()));
+        String s = (new StringBuilder(text)).replace(accessor.getCursorPos() - 1, accessor.getCursorPos(), str).toString();
+        if (accessor.getStringFilter().test(s)) {
+            accessor.getStringSetter().accept(s);
+
+            int cursorPos = Math.min(s.length(), accessor.getCursorPos() - 1 + str.length());
+            accessor.setCursorPos(cursorPos);
+            accessor.setSelectionPos(cursorPos);
         }
     }
 
     @Override
-    public void modifyText(String str) {
-        this.modifyText(str.charAt(0));
-        this.writeText(str.substring(1));
-    }
-
-    @Override
     public int getCursor() {
-        return accessor.getCursor();
+        return accessor.getSelectionPos();
     }
 
     @Override

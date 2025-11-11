@@ -38,11 +38,6 @@ public class WrapperEditBox implements InterfaceIMEWrapper {
     }
 
     @Override
-    public void modifyText(char ch) {
-        modifyText(String.valueOf(ch));
-    }
-
-    @Override
     public void modifyText(String str) {
         int cursorPosition = accessor.invokeGetCursorPosition();
 

@@ -10,6 +10,7 @@ import com.hyfata.najoan.koreanpatch.util.HangulUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.input.CharacterEvent;
 import net.minecraft.client.input.KeyEvent;
+import net.minecraft.util.Mth;
 import org.lwjgl.glfw.GLFW;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
@@ -33,14 +34,13 @@ public class WrapperMultilineTextField implements InterfaceIMEWrapper {
     }
 
     @Override
-    public void modifyText(char ch) {
-        modifyText(String.valueOf(ch));
-    }
-
-    @Override
     public void modifyText(String str) {
-        accessor.invokeDeleteText(-1);
-        this.writeText(str);
+        // deleteText()
+        if (!accessor.invokeHasSelection()) {
+            accessor.setSelectCursor(Mth.clamp(accessor.getCursor() - 1, 0, accessor.getValue().length()));
+        }
+
+        accessor.invokeInsertText(str);
     }
 
     private boolean onBackspaceKeyPressed() {

@@ -5,12 +5,14 @@ import com.hyfata.najoan.koreanpatch.process.keyboard.KeyboardLayout;
 import com.hyfata.najoan.koreanpatch.process.HangulProcessor;
 import com.hyfata.najoan.koreanpatch.util.HangulUtil;
 import me.shedaniel.rei.api.client.gui.widgets.TextField;
+import me.shedaniel.rei.impl.client.gui.widget.basewidgets.TextFieldWidget;
+import net.minecraft.util.StringUtil;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 public class WrapperREITextField implements InterfaceIMEWrapper {
-    private final TextField accessor;
+    private final TextFieldWidget accessor;
 
-    public WrapperREITextField(TextField accessor) {
+    public WrapperREITextField(TextFieldWidget accessor) {
         this.accessor = accessor;
     }
 
@@ -23,19 +25,26 @@ public class WrapperREITextField implements InterfaceIMEWrapper {
         accessor.addText(str);
     }
 
-    public void modifyText(char ch) {
-        int cursorPosition = accessor.getCursor();
-        char[] arr = accessor.getText().toCharArray();
-        if (cursorPosition > 0 && cursorPosition <= arr.length) {
-            arr[cursorPosition - 1] = ch;
-            accessor.setText(String.valueOf(arr));
-        }
-    }
-
     @Override
     public void modifyText(String str) {
-        this.modifyText(str.charAt(0));
-        this.writeText(str.substring(1));
+        int cursorPosition = accessor.getCursor();
+
+        // addText()
+        int highlightStart = cursorPosition - 1;
+        int highlightEnd = cursorPosition;
+        int k = accessor.getMaxLength() - accessor.getText().length() - (highlightStart - highlightEnd);
+        String textFiltered = StringUtil.filterText(str);
+        int l = textFiltered.length();
+        if (k < l) {
+            textFiltered = textFiltered.substring(0, k);
+            l = k;
+        }
+
+        String result = (new StringBuilder(accessor.getText())).replace(highlightStart, highlightEnd, textFiltered).toString();
+        accessor.setText(result);
+        accessor.setCursorPosition(highlightStart + l);
+        accessor.setHighlightPos(accessor.getCursor());
+        accessor.onChanged(result);
     }
 
     public boolean onBackspaceKeyPressed() {
