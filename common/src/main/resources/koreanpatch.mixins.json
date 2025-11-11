@@ -4,9 +4,7 @@
   "package": "com.hyfata.najoan.koreanpatch.mixin",
   "refmap": "${mod_id}.refmap.json",
   "compatibilityLevel": "JAVA_18",
-  "mixins": [
-    "NetworkMixin"
-  ],
+  "mixins": [],
   "client": [
     "EditBoxMixin",
     "KeyboardHandlerMixin",
