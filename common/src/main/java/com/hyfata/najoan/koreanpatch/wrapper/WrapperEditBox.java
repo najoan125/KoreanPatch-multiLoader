@@ -46,7 +46,7 @@ public class WrapperEditBox implements InterfaceIMEWrapper {
         int j = cursorPosition;
         int k = accessor.getMaxLength() - value.length() - (i - j);
         if (k > 0) {
-            String s = StringUtil.filterText(str);
+            String s = SharedConstants.filterText(str);
             int l = s.length();
             if (k < l) {
                 if (Character.isHighSurrogate(s.charAt(k - 1))) {
