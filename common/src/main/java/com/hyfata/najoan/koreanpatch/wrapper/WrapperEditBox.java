@@ -11,6 +11,7 @@ import com.hyfata.najoan.koreanpatch.util.HangulUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.inventory.CreativeModeInventoryScreen;
 import net.minecraft.util.StringUtil;
+import net.minecraft.util.StringUtil;
 import org.lwjgl.glfw.GLFW;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
@@ -36,18 +37,42 @@ public class WrapperEditBox implements InterfaceIMEWrapper {
     }
 
     @Override
-    public void modifyText(char ch) {
+    public void modifyText(String str) {
         int cursorPosition = accessor.invokeGetCursorPosition();
-        accessor.invokeMoveCursorTo(cursorPosition - 1, false);
-        accessor.invokeDeleteChars(1);
-        this.writeText(String.valueOf(Character.toChars(ch)));
+
+        // insertText()
+        // changed i, j only
+        String value = accessor.getValue();
+        int i = cursorPosition - 1;
+        int j = cursorPosition;
+        int k = accessor.getMaxLength() - value.length() - (i - j);
+        if (k > 0) {
+            String s = StringUtil.filterText(str);
+            int l = s.length();
+            if (k < l) {
+                if (Character.isHighSurrogate(s.charAt(k - 1))) {
+                    --k;
+                }
+
+                s = s.substring(0, k);
+                l = k;
+            }
+
+            String s1 = (new StringBuilder(value)).replace(i, j, s).toString();
+            if (accessor.getFilter().test(s1)) {
+                accessor.setValue(s1);
+                accessor.invokeSetCursorPosition(i + l);
+                accessor.invokeSetHighlightPos(accessor.invokeGetCursorPosition());
+                accessor.invokeOnValueChange(s1);
+            }
+        }
     }
 
     private void updateScreen() {
         if (this.client.screen == null) {
             return;
         }
-        if (this.client.screen instanceof CreativeModeInventoryScreen && !accessor.invokeGetValue().isEmpty()) {
+        if (this.client.screen instanceof CreativeModeInventoryScreen && !accessor.getValue().isEmpty()) {
             ((CreativeModeInventoryScreenInvoker) this.client.screen).updateCreativeSearch();
         }
     }
@@ -58,11 +83,11 @@ public class WrapperEditBox implements InterfaceIMEWrapper {
         }
 
         int cursorPosition = accessor.invokeGetCursorPosition();
-        return IMEWrapperHandler.onBackspaceKeyPressed(this, cursorPosition, accessor.invokeGetValue());
+        return IMEWrapperHandler.onBackspaceKeyPressed(this, cursorPosition, accessor.getValue());
     }
 
     private boolean onHangulCharTyped(int keyCode, int modifiers) {
-        return IMEWrapperHandler.onHangulCharTyped(this, keyCode, modifiers, accessor.invokeGetValue(), accessor.invokeGetHighlighted().isEmpty());
+        return IMEWrapperHandler.onHangulCharTyped(this, keyCode, modifiers, accessor.getValue(), accessor.invokeGetHighlighted().isEmpty());
     }
 
     private boolean validateKeyPressed(int keyCode) {
