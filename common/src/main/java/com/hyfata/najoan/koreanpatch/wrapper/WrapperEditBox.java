@@ -61,7 +61,7 @@ public class WrapperEditBox implements InterfaceIMEWrapper {
 
             String s1 = (new StringBuilder(value)).replace(i, j, s).toString();
             if (accessor.getFilter().test(s1)) {
-                accessor.setValue(s1);
+                accessor.overwriteValue(s1);
                 accessor.invokeSetCursorPosition(i + l);
                 accessor.invokeSetHighlightPos(accessor.invokeGetCursorPosition());
                 accessor.invokeOnValueChange(s1);

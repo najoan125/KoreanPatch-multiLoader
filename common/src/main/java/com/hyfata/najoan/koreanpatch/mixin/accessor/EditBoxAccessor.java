@@ -9,19 +9,19 @@ import java.util.function.Predicate;
 
 @Mixin(EditBox.class)
 public interface EditBoxAccessor {
-    @Accessor
+    @Accessor("displayPos")
     int getDisplayPos();
 
-    @Accessor
+    @Accessor("value")
     String getValue();
 
-    @Accessor
-    void setValue(String value);
+    @Accessor("value")
+    void overwriteValue(String val);
 
-    @Accessor
+    @Accessor("maxLength")
     int getMaxLength();
 
-    @Accessor
+    @Accessor("filter")
     Predicate<String> getFilter();
 
     @Invoker("getCursorPosition")
