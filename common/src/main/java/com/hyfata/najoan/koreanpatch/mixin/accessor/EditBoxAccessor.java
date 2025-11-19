@@ -5,22 +5,21 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
 import org.spongepowered.asm.mixin.gen.Invoker;
 
+import java.util.function.Predicate;
+
 @Mixin(EditBox.class)
 public interface EditBoxAccessor {
-    @Accessor
+    @Accessor("displayPos")
     int getDisplayPos();
+
+    @Accessor("value")
+    String readValue();
 
     @Invoker("getCursorPosition")
     int invokeGetCursorPosition();
 
-    @Invoker("getValue")
-    String invokeGetValue();
-
-    @Invoker("moveCursorTo")
-    void invokeMoveCursorTo(int pDelta, boolean pSelect);
-
-    @Invoker("deleteChars")
-    void invokeDeleteChars(int var1);
+    @Invoker("setHighlightPos")
+    void invokeSetHighlightPos(int var1);
 
     @Invoker("insertText")
     void invokeInsertText(String var1);

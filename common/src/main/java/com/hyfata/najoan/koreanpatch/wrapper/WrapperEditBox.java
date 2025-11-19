@@ -37,18 +37,17 @@ public class WrapperEditBox implements InterfaceIMEWrapper {
     }
 
     @Override
-    public void modifyText(char ch) {
+    public void modifyText(String str) {
         int cursorPosition = accessor.invokeGetCursorPosition();
-        accessor.invokeMoveCursorTo(cursorPosition - 1, false);
-        accessor.invokeDeleteChars(1);
-        this.writeText(String.valueOf(Character.toChars(ch)));
+        accessor.invokeSetHighlightPos(cursorPosition - 1);
+        accessor.invokeInsertText(str);
     }
 
     private void updateScreen() {
         if (this.client.screen == null) {
             return;
         }
-        if (this.client.screen instanceof CreativeModeInventoryScreen && !accessor.invokeGetValue().isEmpty()) {
+        if (this.client.screen instanceof CreativeModeInventoryScreen && !accessor.readValue().isEmpty()) {
             ((CreativeModeInventoryScreenInvoker) this.client.screen).updateCreativeSearch();
         }
     }
@@ -59,11 +58,11 @@ public class WrapperEditBox implements InterfaceIMEWrapper {
         }
 
         int cursorPosition = accessor.invokeGetCursorPosition();
-        return IMEWrapperHandler.onBackspaceKeyPressed(this, cursorPosition, accessor.invokeGetValue());
+        return IMEWrapperHandler.onBackspaceKeyPressed(this, cursorPosition, accessor.readValue());
     }
 
     private boolean onHangulCharTyped(int keyCode, int modifiers) {
-        return IMEWrapperHandler.onHangulCharTyped(this, keyCode, modifiers, accessor.invokeGetValue(), accessor.invokeGetHighlighted().isEmpty());
+        return IMEWrapperHandler.onHangulCharTyped(this, keyCode, modifiers, accessor.readValue(), accessor.invokeGetHighlighted().isEmpty());
     }
 
     private boolean validateKeyPressed(KeyEvent keyEvent) {

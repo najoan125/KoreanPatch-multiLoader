@@ -22,7 +22,7 @@ public abstract class EditBoxMixin {
 
     @Inject(at = {@At(value = "HEAD")}, method = {"charTyped"}, cancellable = true)
     public void charTyped(CharacterEvent chrEvent, CallbackInfoReturnable<Boolean> cir) {
-            koreanPatch$wrapper.charTyped(chrEvent, cir, isEditable());
+        koreanPatch$wrapper.charTyped(chrEvent, cir, isEditable());
     }
 
     @Inject(at = {@At(value = "HEAD")}, method = {"keyPressed"}, cancellable = true)
