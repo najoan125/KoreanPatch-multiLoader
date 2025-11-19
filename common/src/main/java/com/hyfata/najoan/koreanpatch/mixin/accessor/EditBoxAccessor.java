@@ -15,26 +15,11 @@ public interface EditBoxAccessor {
     @Accessor("value")
     String readValue();
 
-    @Accessor("value")
-    void overwriteValue(String val);
-
-    @Accessor("maxLength")
-    int readMaxLength();
-
-    @Accessor("filter")
-    Predicate<String> getFilter();
-
     @Invoker("getCursorPosition")
     int invokeGetCursorPosition();
 
-    @Invoker("setCursorPosition")
-    void invokeSetCursorPosition(int var1);
-
     @Invoker("setHighlightPos")
     void invokeSetHighlightPos(int var1);
-
-    @Invoker("onValueChange")
-    void invokeOnValueChange(String var1);
 
     @Invoker("insertText")
     void invokeInsertText(String var1);

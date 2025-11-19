@@ -12,7 +12,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.inventory.CreativeModeInventoryScreen;
 import net.minecraft.client.input.CharacterEvent;
 import net.minecraft.client.input.KeyEvent;
-import net.minecraft.util.StringUtil;
 import org.lwjgl.glfw.GLFW;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
@@ -40,33 +39,8 @@ public class WrapperEditBox implements InterfaceIMEWrapper {
     @Override
     public void modifyText(String str) {
         int cursorPosition = accessor.invokeGetCursorPosition();
-
-        // insertText()
-        // changed i, j only
-        String value = accessor.readValue();
-        int i = cursorPosition - 1;
-        int j = cursorPosition;
-        int k = accessor.readMaxLength() - value.length() - (i - j);
-        if (k > 0) {
-            String s = StringUtil.filterText(str);
-            int l = s.length();
-            if (k < l) {
-                if (Character.isHighSurrogate(s.charAt(k - 1))) {
-                    --k;
-                }
-
-                s = s.substring(0, k);
-                l = k;
-            }
-
-            String s1 = (new StringBuilder(value)).replace(i, j, s).toString();
-            if (accessor.getFilter().test(s1)) {
-                accessor.overwriteValue(s1);
-                accessor.invokeSetCursorPosition(i + l);
-                accessor.invokeSetHighlightPos(accessor.invokeGetCursorPosition());
-                accessor.invokeOnValueChange(s1);
-            }
-        }
+        accessor.invokeSetHighlightPos(cursorPosition - 1);
+        accessor.invokeInsertText(str);
     }
 
     private void updateScreen() {
