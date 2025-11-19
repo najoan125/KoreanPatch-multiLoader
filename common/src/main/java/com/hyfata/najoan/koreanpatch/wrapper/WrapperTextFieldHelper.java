@@ -29,24 +29,24 @@ public class WrapperTextFieldHelper implements InterfaceIMEWrapper {
         String text = this.getText();
 
         // insertText()
-        if (accessor.getSelectionPos() != accessor.getCursorPos()) {
+        if (accessor.readSelectionPos() != accessor.readCursorPos()) {
             text = accessor.runDeleteSelection(text);
         }
 
-        accessor.setCursorPos(Mth.clamp(accessor.getCursorPos(), 0, text.length()));
-        String s = (new StringBuilder(text)).replace(accessor.getCursorPos() - 1, accessor.getCursorPos(), str).toString();
+        accessor.overwriteCursorPos(Mth.clamp(accessor.readCursorPos(), 0, text.length()));
+        String s = (new StringBuilder(text)).replace(accessor.readCursorPos() - 1, accessor.readCursorPos(), str).toString();
         if (accessor.getStringFilter().test(s)) {
             accessor.getStringSetter().accept(s);
 
-            int cursorPos = Math.min(s.length(), accessor.getCursorPos() - 1 + str.length());
-            accessor.setCursorPos(cursorPos);
-            accessor.setSelectionPos(cursorPos);
+            int cursorPos = Math.min(s.length(), accessor.readCursorPos() - 1 + str.length());
+            accessor.overwriteCursorPos(cursorPos);
+            accessor.overwriteSelectionPos(cursorPos);
         }
     }
 
     @Override
     public int getCursor() {
-        return accessor.getSelectionPos();
+        return accessor.readSelectionPos();
     }
 
     @Override

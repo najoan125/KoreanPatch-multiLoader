@@ -13,13 +13,13 @@ public interface EditBoxAccessor {
     int getDisplayPos();
 
     @Accessor("value")
-    String getValue();
+    String readValue();
 
     @Accessor("value")
     void overwriteValue(String val);
 
     @Accessor("maxLength")
-    int getMaxLength();
+    int readMaxLength();
 
     @Accessor("filter")
     Predicate<String> getFilter();
