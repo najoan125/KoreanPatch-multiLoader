@@ -9,8 +9,8 @@ import org.joml.Matrix3x2f;
 public class FloatTextRenderState extends GuiTextRenderState {
     private Font.PreparedText preparedText;
     private ScreenRectangle bounds;
-    float x;
-    float y;
+    private final float x;
+    private final float y;
 
     public FloatTextRenderState(Font font, FormattedCharSequence text, Matrix3x2f pose, float x, float y, int color, int backgroundColor, boolean dropShadow, ScreenRectangle scissor) {
         super(font, text, pose, (int) x, (int) y, color, backgroundColor, dropShadow, scissor);
