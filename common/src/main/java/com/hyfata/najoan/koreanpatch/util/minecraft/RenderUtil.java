@@ -3,7 +3,6 @@ package com.hyfata.najoan.koreanpatch.util.minecraft;
 import com.hyfata.najoan.koreanpatch.mixin.accessor.GuiGraphicsAccessor;
 import com.hyfata.najoan.koreanpatch.util.minecraft.gui.FloatRenderState;
 import com.hyfata.najoan.koreanpatch.util.minecraft.gui.FloatTextRenderState;
-import com.mojang.blaze3d.pipeline.RenderPipeline;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
@@ -58,19 +57,19 @@ public class RenderUtil {
             y2 = i;
         }
 
-        submitColoredRectangle(guiGraphics, RenderPipelines.GUI, TextureSetup.noTexture(), x1, y1, x2, y2, color, null);
+        submitColoredRectangle(guiGraphics, TextureSetup.noTexture(), x1, y1, x2, y2, color);
     }
 
-    private static void submitColoredRectangle(GuiGraphics guiGraphics, RenderPipeline pipeline, TextureSetup textureSetup, float x0, float y0, float x1, float y1, int col1, Integer col2) {
+    private static void submitColoredRectangle(GuiGraphics guiGraphics, TextureSetup textureSetup, float x0, float y0, float x1, float y1, int col1) {
         GuiGraphicsAccessor accessor = (GuiGraphicsAccessor) guiGraphics;
         accessor.getGuiRenderState().submitGuiElement(
                 new FloatRenderState(
-                        pipeline,
+                        RenderPipelines.GUI,
                         textureSetup,
                         new Matrix3x2f(guiGraphics.pose()),
                         x0, y0, x1, y1,
                         col1,
-                        col2 != null ? col2 : col1,
+                        col1,
                         accessor.getScissorStack().peek()
                 )
         );
