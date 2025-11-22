@@ -5,15 +5,13 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
 import org.spongepowered.asm.mixin.gen.Invoker;
 
-import java.util.function.Predicate;
-
 @Mixin(EditBox.class)
 public interface EditBoxAccessor {
     @Accessor("displayPos")
     int getDisplayPos();
 
-    @Accessor("value")
-    String readValue();
+    @Invoker("getValue")
+    String invokeGetValue();
 
     @Invoker("getCursorPosition")
     int invokeGetCursorPosition();

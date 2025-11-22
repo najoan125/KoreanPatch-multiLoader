@@ -47,7 +47,7 @@ public class WrapperEditBox implements InterfaceIMEWrapper {
         if (this.client.screen == null) {
             return;
         }
-        if (this.client.screen instanceof CreativeModeInventoryScreen && !accessor.readValue().isEmpty()) {
+        if (this.client.screen instanceof CreativeModeInventoryScreen && !accessor.invokeGetValue().isEmpty()) {
             ((CreativeModeInventoryScreenInvoker) this.client.screen).updateCreativeSearch();
         }
     }
@@ -58,11 +58,11 @@ public class WrapperEditBox implements InterfaceIMEWrapper {
         }
 
         int cursorPosition = accessor.invokeGetCursorPosition();
-        return IMEWrapperHandler.onBackspaceKeyPressed(this, cursorPosition, accessor.readValue());
+        return IMEWrapperHandler.onBackspaceKeyPressed(this, cursorPosition, accessor.invokeGetValue());
     }
 
     private boolean onHangulCharTyped(int keyCode, int modifiers) {
-        return IMEWrapperHandler.onHangulCharTyped(this, keyCode, modifiers, accessor.readValue(), accessor.invokeGetHighlighted().isEmpty());
+        return IMEWrapperHandler.onHangulCharTyped(this, keyCode, modifiers, accessor.invokeGetValue(), accessor.invokeGetHighlighted().isEmpty());
     }
 
     private boolean validateKeyPressed(KeyEvent keyEvent) {
