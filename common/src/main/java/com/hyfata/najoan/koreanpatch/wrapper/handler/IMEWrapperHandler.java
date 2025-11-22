@@ -7,7 +7,7 @@ import com.hyfata.najoan.koreanpatch.util.HangulUtil;
 
 public class IMEWrapperHandler {
     public static boolean onBackspaceKeyPressed(InterfaceIMEWrapper wrapper, int cursorPosition, String text) {
-        if (cursorPosition == 0 || cursorPosition != KeyboardLayout.INSTANCE.assemblePosition) return false;
+        if (cursorPosition == 0 || cursorPosition != KeyboardLayout.INSTANCE.assemblePosition || text.isEmpty()) return false;
 
         char ch = text.toCharArray()[cursorPosition - 1];
 

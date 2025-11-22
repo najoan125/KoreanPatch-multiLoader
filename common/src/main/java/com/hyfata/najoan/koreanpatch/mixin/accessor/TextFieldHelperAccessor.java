@@ -12,16 +12,16 @@ import java.util.function.Supplier;
 @Mixin(TextFieldHelper.class)
 public interface TextFieldHelperAccessor {
     @Accessor("selectionPos")
-    int getSelectionPos();
+    int readSelectionPos();
 
-    @Accessor
-    void setSelectionPos(int pos);
+    @Accessor("selectionPos")
+    void overwriteSelectionPos(int pos);
 
     @Accessor("cursorPos")
-    int getCursorPos();
+    int readCursorPos();
 
-    @Accessor
-    void setCursorPos(int pos);
+    @Accessor("cursorPos")
+    void overwriteCursorPos(int pos);
 
     @Accessor("getMessageFn")
     Supplier<String> getStringGetter();
