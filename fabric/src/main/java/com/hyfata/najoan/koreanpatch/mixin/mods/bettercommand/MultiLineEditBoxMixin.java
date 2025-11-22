@@ -1,15 +1,13 @@
 package com.hyfata.najoan.koreanpatch.mixin.mods.bettercommand;
 
 import bettercommandblockui.main.ui.MultiLineTextFieldWidget;
-import com.hyfata.najoan.koreanpatch.client.GUIStatus;
 import com.hyfata.najoan.koreanpatch.mixin.accessor.EditBoxAccessor;
-import com.hyfata.najoan.koreanpatch.process.LangTypeManager;
 import com.hyfata.najoan.koreanpatch.wrapper.WrapperEditBox;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.components.EditBox;
+import net.minecraft.client.input.CharacterEvent;
+import net.minecraft.client.input.KeyEvent;
 import net.minecraft.network.chat.Component;
-import org.lwjgl.glfw.GLFW;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -23,26 +21,15 @@ public abstract class MultiLineEditBoxMixin extends EditBox {
     }
 
     @Unique
-    private final WrapperEditBox handler = new WrapperEditBox((EditBoxAccessor) this);
+    private final WrapperEditBox wrapper = new WrapperEditBox((EditBoxAccessor) this);
 
-//    @Inject(method = "charTyped", at = @At("HEAD"), cancellable = true)
-//    private void charTyped(char chr, int modifiers, CallbackInfoReturnable<Boolean> cir) {
-//        Minecraft client = Minecraft.getInstance();
-//        if (client.screen != null && !GUIStatus.getInstance().isBypassInjection() &&
-//                LangTypeManager.getInstance().isKorean() && this.isEditable() && Character.charCount(chr) == 1) {
-//            handler.charTyped(chr, modifiers, cir);
-//        }
-//    }
-//
-//    @Inject(at = @At(value = "HEAD"), method = "keyPressed", cancellable = true)
-//    public void keyPressed(int keyCode, int scanCode, int modifiers, CallbackInfoReturnable<Boolean> cir) {
-//        Minecraft client = Minecraft.getInstance();
-//        if (client.screen != null && !GUIStatus.getInstance().isBypassInjection()) {
-//            if (keyCode == GLFW.GLFW_KEY_BACKSPACE) {
-//                if (handler.onBackspaceKeyPressed()) {
-//                    cir.setReturnValue(Boolean.TRUE);
-//                }
-//            }
-//        }
-//    }
+    @Inject(method = "charTyped", at = @At("HEAD"), cancellable = true)
+    private void charTyped(CharacterEvent input, CallbackInfoReturnable<Boolean> cir) {
+        wrapper.charTyped(input, cir, this.isEditable());
+    }
+
+    @Inject(at = @At(value = "HEAD"), method = "keyPressed", cancellable = true)
+    public void keyPressed(KeyEvent input, CallbackInfoReturnable<Boolean> cir) {
+        wrapper.keyPressed(input, cir);
+    }
 }

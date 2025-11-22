@@ -1,14 +1,12 @@
 package com.hyfata.najoan.koreanpatch.mixin.mods.commandblockide;
 
 import arm32x.minecraft.commandblockide.client.gui.MultilineTextFieldWidget;
-import com.hyfata.najoan.koreanpatch.client.GUIStatus;
 import com.hyfata.najoan.koreanpatch.wrapper.WrapperEditBox;
 import com.hyfata.najoan.koreanpatch.mixin.accessor.EditBoxAccessor;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.components.EditBox;
+import net.minecraft.client.input.KeyEvent;
 import net.minecraft.network.chat.Component;
-import org.lwjgl.glfw.GLFW;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -22,17 +20,10 @@ public abstract class MultilineEditBoxMixin extends EditBox {
     }
 
     @Unique
-    private final WrapperEditBox handler = new WrapperEditBox((EditBoxAccessor) this);
+    private final WrapperEditBox wrapper = new WrapperEditBox((EditBoxAccessor) this);
 
-//    @Inject(at = @At(value = "HEAD"), method = "keyPressed", cancellable = true)
-//    public void keyPressed(int keyCode, int scanCode, int modifiers, CallbackInfoReturnable<Boolean> cir) {
-//        Minecraft client = Minecraft.getInstance();
-//        if (client.screen != null && !GUIStatus.getInstance().isBypassInjection()) {
-//            if (keyCode == GLFW.GLFW_KEY_BACKSPACE) {
-//                if (handler.onBackspaceKeyPressed()) {
-//                    cir.setReturnValue(Boolean.TRUE);
-//                }
-//            }
-//        }
-//    }
+    @Inject(at = @At(value = "HEAD"), method = "keyPressed", cancellable = true)
+    public void keyPressed(KeyEvent input, CallbackInfoReturnable<Boolean> cir) {
+        wrapper.keyPressed(input, cir);
+    }
 }
