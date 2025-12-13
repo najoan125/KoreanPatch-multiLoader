@@ -7,20 +7,17 @@ import org.spongepowered.asm.mixin.gen.Invoker;
 
 @Mixin(EditBox.class)
 public interface EditBoxAccessor {
-    @Accessor
+    @Accessor("displayPos")
     int getDisplayPos();
-
-    @Invoker("getCursorPosition")
-    int invokeGetCursorPosition();
 
     @Invoker("getValue")
     String invokeGetValue();
 
-    @Invoker("moveCursorTo")
-    void invokeMoveCursorTo(int pDelta, boolean pSelect);
+    @Invoker("getCursorPosition")
+    int invokeGetCursorPosition();
 
-    @Invoker("deleteChars")
-    void invokeDeleteChars(int var1);
+    @Invoker("setHighlightPos")
+    void invokeSetHighlightPos(int var1);
 
     @Invoker("insertText")
     void invokeInsertText(String var1);
