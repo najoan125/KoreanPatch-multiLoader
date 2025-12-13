@@ -36,11 +36,10 @@ public class WrapperEditBox implements InterfaceIMEWrapper {
     }
 
     @Override
-    public void modifyText(char ch) {
+    public void modifyText(String str) {
         int cursorPosition = accessor.invokeGetCursorPosition();
-        accessor.invokeMoveCursorTo(cursorPosition - 1);
-        accessor.invokeDeleteChars(1);
-        this.writeText(String.valueOf(Character.toChars(ch)));
+        accessor.invokeSetHighlightPos(cursorPosition - 1);
+        accessor.invokeInsertText(str);
     }
 
     private void updateScreen() {
