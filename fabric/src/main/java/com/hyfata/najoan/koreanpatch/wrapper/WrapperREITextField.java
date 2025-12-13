@@ -4,9 +4,8 @@ import com.hyfata.najoan.koreanpatch.wrapper.handler.IMEWrapperHandler;
 import com.hyfata.najoan.koreanpatch.process.keyboard.KeyboardLayout;
 import com.hyfata.najoan.koreanpatch.process.HangulProcessor;
 import com.hyfata.najoan.koreanpatch.util.HangulUtil;
-import me.shedaniel.rei.api.client.gui.widgets.TextField;
 import me.shedaniel.rei.impl.client.gui.widget.basewidgets.TextFieldWidget;
-import net.minecraft.util.StringUtil;
+import net.minecraft.SharedConstants;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 public class WrapperREITextField implements InterfaceIMEWrapper {
@@ -33,7 +32,7 @@ public class WrapperREITextField implements InterfaceIMEWrapper {
         int highlightStart = cursorPosition - 1;
         int highlightEnd = cursorPosition;
         int k = accessor.getMaxLength() - accessor.getText().length() - (highlightStart - highlightEnd);
-        String textFiltered = StringUtil.filterText(str);
+        String textFiltered = SharedConstants.filterText(str);
         int l = textFiltered.length();
         if (k < l) {
             textFiltered = textFiltered.substring(0, k);
