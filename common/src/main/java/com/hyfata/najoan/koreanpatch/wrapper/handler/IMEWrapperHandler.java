@@ -7,7 +7,7 @@ import com.hyfata.najoan.koreanpatch.util.HangulUtil;
 
 public class IMEWrapperHandler {
     public static boolean onBackspaceKeyPressed(InterfaceIMEWrapper wrapper, int cursorPosition, String text) {
-        if (cursorPosition == 0 || cursorPosition != KeyboardLayout.INSTANCE.assemblePosition) return false;
+        if (cursorPosition == 0 || cursorPosition != KeyboardLayout.INSTANCE.assemblePosition || text.isEmpty()) return false;
 
         char ch = text.toCharArray()[cursorPosition - 1];
 
@@ -26,16 +26,16 @@ public class IMEWrapperHandler {
                     jong = 0;
                 }
                 char c = HangulProcessor.synthesizeHangulCharacter(cho, jung, jong);
-                wrapper.modifyText(c);
+                wrapper.modifyText(String.valueOf(c));
             } else {
                 ch_arr = KeyboardLayout.INSTANCE.jungsung_ref_table.get(jung).toCharArray();
                 if (ch_arr.length == 2) {
                     jung = KeyboardLayout.INSTANCE.jungsung_table.indexOf(ch_arr[0]);
                     char c = HangulProcessor.synthesizeHangulCharacter(cho, jung, 0);
-                    wrapper.modifyText(c);
+                    wrapper.modifyText(String.valueOf(c));
                 } else {
                     char c = KeyboardLayout.INSTANCE.chosung_table.charAt(cho);
-                    wrapper.modifyText(c);
+                    wrapper.modifyText(String.valueOf(c));
                 }
             }
             return true;
@@ -65,7 +65,7 @@ public class IMEWrapperHandler {
                 int cho = KeyboardLayout.INSTANCE.chosung_table.indexOf(prev);
                 int jung = KeyboardLayout.INSTANCE.jungsung_table.indexOf(curr);
                 char c = HangulProcessor.synthesizeHangulCharacter(cho, jung, 0);
-                wrapper.modifyText(c);
+                wrapper.modifyText(String.valueOf(c));
                 KeyboardLayout.INSTANCE.assemblePosition = wrapper.getCursor();
                 return true;
             }
@@ -80,7 +80,7 @@ public class IMEWrapperHandler {
                 if (jong == 0 && HangulProcessor.isJungsung(prev, curr)) {
                     jung = HangulProcessor.getJungsung(prev, curr);
                     char c = HangulProcessor.synthesizeHangulCharacter(cho, jung, 0);
-                    wrapper.modifyText(c);
+                    wrapper.modifyText(String.valueOf(c));
                     KeyboardLayout.INSTANCE.assemblePosition = wrapper.getCursor();
                     return true;
                 }
@@ -88,7 +88,7 @@ public class IMEWrapperHandler {
                 // 종성 추가
                 if (jong == 0 && HangulProcessor.isJongsung(curr)) {
                     char c = HangulProcessor.synthesizeHangulCharacter(cho, jung, HangulProcessor.getJongsung(curr));
-                    wrapper.modifyText(c);
+                    wrapper.modifyText(String.valueOf(c));
                     KeyboardLayout.INSTANCE.assemblePosition = wrapper.getCursor();
                     return true;
                 }
@@ -97,7 +97,7 @@ public class IMEWrapperHandler {
                 if (jong != 0 && HangulProcessor.isJongsung(prev, curr)) {
                     jong = HangulProcessor.getJongsung(prev, curr);
                     char c = HangulProcessor.synthesizeHangulCharacter(cho, jung, jong);
-                    wrapper.modifyText(c);
+                    wrapper.modifyText(String.valueOf(c));
                     KeyboardLayout.INSTANCE.assemblePosition = wrapper.getCursor();
                     return true;
                 }
@@ -115,12 +115,12 @@ public class IMEWrapperHandler {
                     }
 
                     char c = HangulProcessor.synthesizeHangulCharacter(cho, jung, jong);
-                    wrapper.modifyText(c);
+//                    wrapper.modifyText(c);
 
                     cho = newCho;
                     jung = KeyboardLayout.INSTANCE.jungsung_table.indexOf(curr);
                     code = HangulProcessor.synthesizeHangulCharacter(cho, jung, 0);
-                    wrapper.writeText(String.valueOf(Character.toChars(code)));
+                    wrapper.modifyText(c + String.valueOf(Character.toChars(code)));
                     KeyboardLayout.INSTANCE.assemblePosition = wrapper.getCursor();
                     return true;
                 }
