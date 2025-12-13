@@ -47,7 +47,7 @@ public class KeyboardHandlerMixin {
 
             // lang key
             else if (KeyBinds.getLangBinding().matches(keyCode, scanCode) && action == 1 &&
-                    (!Platform.isMac() || modifiers != 1)) {
+                    (!Platform.isMac() || modifiers != 1 && modifiers != 2)) {
                 LangTypeManager.getInstance().toggleCurrentType();
                 if (categoryInput.isMemoryLangTypePerScreen())
                     InputStatusStorage.getInstance().add(minecraft.screen);
