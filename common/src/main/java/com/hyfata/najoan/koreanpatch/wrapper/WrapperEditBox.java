@@ -38,40 +38,15 @@ public class WrapperEditBox implements InterfaceIMEWrapper {
     @Override
     public void modifyText(String str) {
         int cursorPosition = accessor.invokeGetCursorPosition();
-
-        // insertText()
-        // changed i, j only
-        String value = accessor.getValue();
-        int i = cursorPosition - 1;
-        int j = cursorPosition;
-        int k = accessor.getMaxLength() - value.length() - (i - j);
-        if (k > 0) {
-            String s = SharedConstants.filterText(str);
-            int l = s.length();
-            if (k < l) {
-                if (Character.isHighSurrogate(s.charAt(k - 1))) {
-                    --k;
-                }
-
-                s = s.substring(0, k);
-                l = k;
-            }
-
-            String s1 = (new StringBuilder(value)).replace(i, j, s).toString();
-            if (accessor.getFilter().test(s1)) {
-                accessor.setValue(s1);
-                accessor.invokeSetCursorPosition(i + l);
-                accessor.invokeSetHighlightPos(accessor.invokeGetCursorPosition());
-                accessor.invokeOnValueChange(s1);
-            }
-        }
+        accessor.invokeSetHighlightPos(cursorPosition - 1);
+        accessor.invokeInsertText(str);
     }
 
     private void updateScreen() {
         if (this.client.screen == null) {
             return;
         }
-        if (this.client.screen instanceof CreativeModeInventoryScreen && !accessor.getValue().isEmpty()) {
+        if (this.client.screen instanceof CreativeModeInventoryScreen && !accessor.invokeGetValue().isEmpty()) {
             ((CreativeModeInventoryScreenInvoker) this.client.screen).updateCreativeSearch();
         }
     }
@@ -82,11 +57,11 @@ public class WrapperEditBox implements InterfaceIMEWrapper {
         }
 
         int cursorPosition = accessor.invokeGetCursorPosition();
-        return IMEWrapperHandler.onBackspaceKeyPressed(this, cursorPosition, accessor.getValue());
+        return IMEWrapperHandler.onBackspaceKeyPressed(this, cursorPosition, accessor.invokeGetValue());
     }
 
     private boolean onHangulCharTyped(int keyCode, int modifiers) {
-        return IMEWrapperHandler.onHangulCharTyped(this, keyCode, modifiers, accessor.getValue(), accessor.invokeGetHighlighted().isEmpty());
+        return IMEWrapperHandler.onHangulCharTyped(this, keyCode, modifiers, accessor.invokeGetValue(), accessor.invokeGetHighlighted().isEmpty());
     }
 
     private boolean validateKeyPressed(int keyCode) {
