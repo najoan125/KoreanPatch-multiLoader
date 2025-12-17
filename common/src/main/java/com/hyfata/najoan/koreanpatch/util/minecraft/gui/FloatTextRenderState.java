@@ -11,9 +11,11 @@ public class FloatTextRenderState extends GuiTextRenderState {
     private ScreenRectangle bounds;
     private final float x;
     private final float y;
+    private final boolean includeEmpty;
 
-    public FloatTextRenderState(Font font, FormattedCharSequence text, Matrix3x2f pose, float x, float y, int color, int backgroundColor, boolean dropShadow, ScreenRectangle scissor) {
-        super(font, text, pose, (int) x, (int) y, color, backgroundColor, dropShadow, scissor);
+    public FloatTextRenderState(Font font, FormattedCharSequence text, Matrix3x2f pose, float x, float y, int color, int backgroundColor, boolean dropShadow, boolean includeEmpty, ScreenRectangle scissor) {
+        super(font, text, pose, (int) x, (int) y, color, backgroundColor, dropShadow, includeEmpty, scissor);
+        this.includeEmpty = includeEmpty;
         this.x = x;
         this.y = y;
     }
@@ -21,7 +23,7 @@ public class FloatTextRenderState extends GuiTextRenderState {
     @Override
     public Font.PreparedText ensurePrepared() {
         if (this.preparedText == null) {
-            this.preparedText = this.font.prepareText(this.text, this.x, this.y, this.color, this.dropShadow, this.backgroundColor);
+            this.preparedText = this.font.prepareText(this.text, this.x, this.y, this.color, this.dropShadow, includeEmpty, this.backgroundColor);
             ScreenRectangle screenrectangle = this.preparedText.bounds();
             if (screenrectangle != null) {
                 screenrectangle = screenrectangle.transformMaxBounds(this.pose);
