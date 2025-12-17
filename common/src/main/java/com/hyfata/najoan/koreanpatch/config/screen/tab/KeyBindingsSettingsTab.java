@@ -5,15 +5,16 @@ import com.hyfata.najoan.koreanpatch.config.category.CategoryKeyBindings;
 import com.hyfata.najoan.koreanpatch.config.screen.widget.WidgetUtils;
 import com.hyfata.najoan.koreanpatch.keybinding.KeyBindingManager;
 import com.hyfata.najoan.koreanpatch.keybinding.KeyCombination;
+import com.hyfata.najoan.koreanpatch.keybinding.KeyIdentifier;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import org.lwjgl.glfw.GLFW;
 
 import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Set;
+import java.util.Map;
 
 /**
  * 키바인딩 설정 탭
@@ -21,7 +22,7 @@ import java.util.Set;
  */
 public class KeyBindingsSettingsTab extends SettingsTab {
     private CategoryKeyBindings config;
-    private int scrollY = 0;
+    private int scrollOffset = 0;
     private static final int SCROLL_STEP = 15;
     private static final int SECTION_SPACING = 30;
     private static final int ITEM_HEIGHT = 35;
@@ -30,7 +31,8 @@ public class KeyBindingsSettingsTab extends SettingsTab {
 
     private int recordingKeyIndex = -1; // 키 녹화 중인 인덱스 (-1 = 녹화 안함)
     private int recordingType = -1; // 0 = langTypeKey, 1 = imeKey
-    private final Set<Integer> recordedKeys = new HashSet<>();
+    private final Map<Integer, KeyIdentifier> pressedKeys = new HashMap<>(); // keyCode -> KeyIdentifier
+    private final List<KeyIdentifier> recordedKeyCombo = new ArrayList<>(); // 최종 저장될 키 조합
     private long recordingStartTime = 0;
     private static final long RECORDING_TIMEOUT = 5000; // 5초 타임아웃
 
@@ -49,7 +51,7 @@ public class KeyBindingsSettingsTab extends SettingsTab {
     @Override
     public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
         int padding = 15;
-        int y = contentStartY + padding - scrollY;
+        int y = contentStartY + padding - scrollOffset;
         int maxWidth = contentWidth - padding * 2;
 
         // 한/영 변환키 섹션
@@ -57,11 +59,11 @@ public class KeyBindingsSettingsTab extends SettingsTab {
         y += SECTION_SPACING;
 
         // 현재 등록된 한/영 변환키 목록
-        List<List<Integer>> langTypeKeys = config.getLangTypeKeys();
+        List<List<KeyIdentifier>> langTypeKeys = config.getLangTypeKeys();
         for (int i = 0; i < 2; i++) {
             String label = "키 " + (i + 1);
             if (i < langTypeKeys.size()) {
-                List<Integer> keyCombo = langTypeKeys.get(i);
+                List<KeyIdentifier> keyCombo = langTypeKeys.get(i);
                 String displayName = new KeyCombination(keyCombo).getDisplayName();
                 drawKeyBindingItem(guiGraphics, padding, y, label, displayName, 0, i, mouseX, mouseY);
             } else {
@@ -77,11 +79,11 @@ public class KeyBindingsSettingsTab extends SettingsTab {
         y += SECTION_SPACING;
 
         // 현재 등록된 IME 키 목록
-        List<List<Integer>> imeKeys = config.getImeKeys();
+        List<List<KeyIdentifier>> imeKeys = config.getImeKeys();
         for (int i = 0; i < 1; i++) {
             String label = "키 1";
             if (i < imeKeys.size()) {
-                List<Integer> keyCombo = imeKeys.get(i);
+                List<KeyIdentifier> keyCombo = imeKeys.get(i);
                 String displayName = new KeyCombination(keyCombo).getDisplayName();
                 drawKeyBindingItem(guiGraphics, padding, y, label, displayName, 1, i, mouseX, mouseY);
             } else {
@@ -100,8 +102,10 @@ public class KeyBindingsSettingsTab extends SettingsTab {
                 guiGraphics.drawString(client.font,
                         "원하는 키 조합을 누르세요 (" + ((RECORDING_TIMEOUT - elapsed) / 1000) + "초)",
                         padding, y + 50, WidgetUtils.COLOR_ACCENT, false);
+                String currentKeysDisplay = pressedKeys.isEmpty() ? "없음" :
+                        new KeyCombination(new ArrayList<>(pressedKeys.values())).getDisplayName();
                 guiGraphics.drawString(client.font,
-                        "현재 누른 키: " + (recordedKeys.isEmpty() ? "없음" : new KeyCombination(new ArrayList<>(recordedKeys)).getDisplayName()),
+                        "현재 누른 키: " + currentKeysDisplay,
                         padding, y + 65, WidgetUtils.COLOR_TEXT_SECONDARY, false);
             }
         }
@@ -160,7 +164,8 @@ public class KeyBindingsSettingsTab extends SettingsTab {
         }
 
         int padding = 15;
-        int y = contentStartY + padding - scrollY;
+        int y = contentStartY + padding - scrollOffset;
+        y += SECTION_SPACING; // 섹션 제목 높이 추가
         int recordButtonX = padding + 240;
         int resetButtonX = padding + 330;
 
@@ -184,6 +189,7 @@ public class KeyBindingsSettingsTab extends SettingsTab {
         }
 
         y += 2 * (ITEM_HEIGHT + 5) + 10;
+        y += SECTION_SPACING; // IME 섹션 제목 높이 추가
 
         // IME 토글 키 버튼
         for (int i = 0; i < 1; i++) {
@@ -210,7 +216,17 @@ public class KeyBindingsSettingsTab extends SettingsTab {
     @Override
     public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
         if (recordingKeyIndex >= 0) {
-            recordedKeys.add(keyCode);
+            // ESC를 누르면 취소
+            if (keyCode == GLFW.GLFW_KEY_ESCAPE) {
+                cancelKeyRecording();
+                return true;
+            }
+            // keyCode와 scanCode를 함께 저장
+            KeyIdentifier keyId = new KeyIdentifier(keyCode, scanCode);
+            pressedKeys.put(keyCode, keyId);
+            // 현재 누르고 있는 키 조합 저장
+            recordedKeyCombo.clear();
+            recordedKeyCombo.addAll(pressedKeys.values());
             return true;
         }
         return false;
@@ -219,20 +235,12 @@ public class KeyBindingsSettingsTab extends SettingsTab {
     @Override
     public boolean keyReleased(int keyCode, int scanCode, int modifiers) {
         if (recordingKeyIndex >= 0) {
-            recordedKeys.remove(keyCode);
+            pressedKeys.remove(keyCode);
 
-            // ESC를 누르면 취소
-            if (keyCode == GLFW.GLFW_KEY_ESCAPE) {
-                cancelKeyRecording();
-                return true;
-            }
-
-            // 모든 키를 떼었으면 설정 완료
-            if (recordedKeys.isEmpty() && !recordedKeys.isEmpty()) {
+            // 모든 키를 떼면 완료
+            if (pressedKeys.isEmpty() && !recordedKeyCombo.isEmpty()) {
                 completeKeyRecording();
-                return true;
             }
-
             return true;
         }
         return false;
@@ -244,7 +252,8 @@ public class KeyBindingsSettingsTab extends SettingsTab {
     private void startKeyRecording(int type, int index) {
         recordingType = type;
         recordingKeyIndex = index;
-        recordedKeys.clear();
+        pressedKeys.clear();
+        recordedKeyCombo.clear();
         recordingStartTime = System.currentTimeMillis();
     }
 
@@ -254,15 +263,16 @@ public class KeyBindingsSettingsTab extends SettingsTab {
     private void cancelKeyRecording() {
         recordingKeyIndex = -1;
         recordingType = -1;
-        recordedKeys.clear();
+        pressedKeys.clear();
+        recordedKeyCombo.clear();
     }
 
     /**
      * 키 녹화 완료
      */
     private void completeKeyRecording() {
-        if (!recordedKeys.isEmpty()) {
-            List<Integer> keyCombo = new ArrayList<>(recordedKeys);
+        if (!recordedKeyCombo.isEmpty()) {
+            List<KeyIdentifier> keyCombo = new ArrayList<>(recordedKeyCombo);
 
             if (recordingType == 0) {
                 // 한/영 변환키
@@ -285,11 +295,25 @@ public class KeyBindingsSettingsTab extends SettingsTab {
 
     @Override
     public boolean mouseScrolled(double mouseX, double mouseY, double scrollX, double scrollY) {
-        if (scrollY > 0) {
-            this.scrollY = Math.max(0, (int) (this.scrollY - scrollY * SCROLL_STEP));
-            return true;
-        }
-        return false;
+        int maxScroll = getContentHeight() - (contentHeight - contentStartY);
+        maxScroll = Math.max(0, maxScroll);
+        this.scrollOffset = (int) Math.max(0, Math.min(maxScroll, this.scrollOffset - scrollY * SCROLL_STEP));
+        return true;
+    }
+
+    /**
+     * 전체 콘텐츠 높이 계산
+     */
+    private int getContentHeight() {
+        int padding = 15;
+        int height = padding;
+        // 한/영 변환키: 섹션 + 키 2개
+        height += SECTION_SPACING + (ITEM_HEIGHT + 5) * 2 + 10;
+        // IME 토글 키: 섹션 + 키 1개
+        height += SECTION_SPACING + (ITEM_HEIGHT + 5);
+        // 키 녹화 중 표시 영역
+        height += 100;
+        return height;
     }
 
     @Override
