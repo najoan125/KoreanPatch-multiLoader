@@ -29,12 +29,6 @@ public class KeyboardHandlerMixin {
     @Final
     private Minecraft minecraft;
 
-    @Unique
-    private final KeyBindingManager koreanPatch$keyBindingManager = KeyBindingManager.getInstance();
-
-    @Unique
-    private final ConfigManager koreanPatch$configManager = ConfigManager.getInstance();
-
     /**
      * action
      *  - 0: key up
@@ -48,7 +42,7 @@ public class KeyboardHandlerMixin {
 
         // send key event to KeyBindingManager
         int glfwAction = action == 1 ? GLFW.GLFW_PRESS : (action == 0 ? GLFW.GLFW_RELEASE : GLFW.GLFW_REPEAT);
-        koreanPatch$keyBindingManager.onKeyInput(keyCode, scanCode, glfwAction, 0);
+        KeyBindingManager.getInstance().onKeyInput(keyCode, scanCode, glfwAction, 0);
 
         if (window == minecraft.getWindow().handle() && !GUIStatus.getInstance().isBypassInjection() && KoreanPatchClient.loaded) {
             // if the key is down
@@ -68,16 +62,16 @@ public class KeyboardHandlerMixin {
 
     @Unique
     private void koreanPatch$onKeyDown() {
-        CategoryInput categoryInput = koreanPatch$configManager.getConfig().getCategoryInput();
+        CategoryInput categoryInput = ConfigManager.getInstance().getConfig().getCategoryInput();
         // check IME toggle key
-        if (!categoryInput.isAlwaysImeEnabled() && koreanPatch$keyBindingManager.isImeKeyPressed()) {
+        if (!categoryInput.isAlwaysImeEnabled() && KeyBindingManager.getInstance().isImeKeyPressed()) {
             InputManager.getController().toggleFocus();
             if (categoryInput.isMemoryLangTypePerScreen())
                 InputStatusStorage.getInstance().add(minecraft.screen);
         }
 
         // check lang type toggle key
-        if (koreanPatch$keyBindingManager.isLangTypeKeyPressed()) {
+        if (KeyBindingManager.getInstance().isLangTypeKeyPressed()) {
             LangTypeManager.getInstance().toggleCurrentType();
             if (categoryInput.isMemoryLangTypePerScreen())
                 InputStatusStorage.getInstance().add(minecraft.screen);
