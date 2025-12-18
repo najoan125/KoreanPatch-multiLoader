@@ -18,6 +18,7 @@ import org.lwjgl.glfw.GLFW;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -27,6 +28,12 @@ public class KeyboardHandlerMixin {
     @Shadow
     @Final
     private Minecraft minecraft;
+
+    @Unique
+    private final KeyBindingManager koreanPatch$keyBindingManager = KeyBindingManager.getInstance();
+
+    @Unique
+    private final ConfigManager koreanPatch$configManager = ConfigManager.getInstance();
 
     /**
      * action
@@ -38,30 +45,15 @@ public class KeyboardHandlerMixin {
     private void onInput(long window, int action, KeyEvent keyEvent, CallbackInfo ci) {
         int keyCode = keyEvent.key();
         int scanCode = keyEvent.scancode();
-        CategoryInput categoryInput = ConfigManager.getInstance().getConfig().getCategoryInput();
 
-        // KeyBindingManager에 키 이벤트 전달
+        // send key event to KeyBindingManager
         int glfwAction = action == 1 ? GLFW.GLFW_PRESS : (action == 0 ? GLFW.GLFW_RELEASE : GLFW.GLFW_REPEAT);
-        KeyBindingManager.getInstance().onKeyInput(keyCode, scanCode, glfwAction, 0);
+        koreanPatch$keyBindingManager.onKeyInput(keyCode, scanCode, glfwAction, 0);
 
         if (window == minecraft.getWindow().handle() && !GUIStatus.getInstance().isBypassInjection() && KoreanPatchClient.loaded) {
             // if the key is down
             if (action == 1) {
-                // check IME toggle key
-                if (!categoryInput.isAlwaysImeEnabled()) {
-                    if (KeyBindingManager.getInstance().isImeKeyPressed()) {
-                        InputManager.getController().toggleFocus();
-                        if (categoryInput.isMemoryLangTypePerScreen())
-                            InputStatusStorage.getInstance().add(minecraft.screen);
-                    }
-                }
-
-                // 한/영 변환키 체크
-                if (KeyBindingManager.getInstance().isLangTypeKeyPressed()) {
-                    LangTypeManager.getInstance().toggleCurrentType();
-                    if (categoryInput.isMemoryLangTypePerScreen())
-                        InputStatusStorage.getInstance().add(minecraft.screen);
-                }
+                koreanPatch$onKeyDown();
             }
 
             // fix mac capslock
@@ -71,6 +63,24 @@ public class KeyboardHandlerMixin {
                     LangTypeManager.getInstance().setCurrentType(LanguageType.EN);
                 }
             }
+        }
+    }
+
+    @Unique
+    private void koreanPatch$onKeyDown() {
+        CategoryInput categoryInput = koreanPatch$configManager.getConfig().getCategoryInput();
+        // check IME toggle key
+        if (!categoryInput.isAlwaysImeEnabled() && koreanPatch$keyBindingManager.isImeKeyPressed()) {
+            InputManager.getController().toggleFocus();
+            if (categoryInput.isMemoryLangTypePerScreen())
+                InputStatusStorage.getInstance().add(minecraft.screen);
+        }
+
+        // check lang type toggle key
+        if (koreanPatch$keyBindingManager.isLangTypeKeyPressed()) {
+            LangTypeManager.getInstance().toggleCurrentType();
+            if (categoryInput.isMemoryLangTypePerScreen())
+                InputStatusStorage.getInstance().add(minecraft.screen);
         }
     }
 }
