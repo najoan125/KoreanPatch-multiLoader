@@ -73,5 +73,26 @@
     "koreanpatch.config.input.ime.auto_ime_switch": "입력기 자동 전환",
     "koreanpatch.config.input.ime.auto_ime_switch.description": "모드가 해당 화면에 성공적으로 주입하지 못했다고 감지했을 때 자동으로 운영체제의 입력기를 활성화하고, 성공적으로 주입했다고 감지하면 자동으로 운영체제 입력기를 비활성화합니다.",
     "koreanpatch.config.input.ime.always_ime_enabled": "운영체제 입력기 상시 활성화",
-    "koreanpatch.config.input.ime.always_ime_enabled.description": "일반적인 한글채팅 모드처럼 Korean Patch의 입력 방식은 그대로 유지하면서 마인크래프트 바닐라 입력 방식(IME)도 그대로 사용 가능하게 하는 기능입니다."
+    "koreanpatch.config.input.ime.always_ime_enabled.description": "일반적인 한글채팅 모드처럼 Korean Patch의 입력 방식은 그대로 유지하면서 마인크래프트 바닐라 입력 방식(IME)도 그대로 사용 가능하게 하는 기능입니다.",
+
+    "koreanpatch.config.title": "Korean Patch 설정",
+    "koreanpatch.config.done": "완료",
+    "koreanpatch.config.cancel": "취소",
+
+    "koreanpatch.config.tab.indicator": "표시기",
+    "koreanpatch.config.tab.input": "입력",
+    "koreanpatch.config.tab.keybindings": "키 바인딩",
+
+    "koreanpatch.config.keybindings.langtype": "한/영 변환키 (최대 2개)",
+    "koreanpatch.config.keybindings.ime": "IME 토글 키",
+    "koreanpatch.config.keybindings.key": "키 %d",
+    "koreanpatch.config.keybindings.notset": "(설정 안 됨)",
+    "koreanpatch.config.keybindings.set": "설정",
+    "koreanpatch.config.keybindings.remove": "제거",
+    "koreanpatch.config.keybindings.waiting": "키 입력 대기 중...",
+    "koreanpatch.config.keybindings.press_key": "원하는 키 조합을 누르세요 (%d초)",
+    "koreanpatch.config.keybindings.current_keys": "현재 누른 키: %s",
+    "koreanpatch.config.keybindings.none": "없음",
+
+    "koreanpatch.config.input.info": "자동 언어 모드는 키 바인딩 탭에서 설정할 수 있습니다."
 }

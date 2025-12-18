@@ -19,13 +19,18 @@ public class InputSettingsTab extends SettingsTab {
     private CategoryInput config;
     private int scrollOffset = 0;
     private static final int SCROLL_STEP = 15;
-    private static final int SECTION_SPACING = 30;
-    private static final int ITEM_HEIGHT = 25;
-    private static final int TOGGLE_WIDTH = 40;
-    private static final int TOGGLE_HEIGHT = 20;
+    private static final int SECTION_SPACING = 25;  // Space after section title (title height + gap to first item)
+    private static final int SECTION_GAP = 15;      // Gap between sections (after last item of previous section)
+    private static final int ITEM_HEIGHT = 22;
+    private static final int CONTENT_WIDTH = 350;
+    private static final int WIDGET_OFFSET_X = 200;
 
     // Track clickable widgets
     private final List<ClickableWidget> clickableWidgets = new ArrayList<>();
+
+    // Scrollbar drag state
+    private boolean isDraggingScrollbar = false;
+    private int scrollbarX, scrollbarY, scrollbarHeight;
 
     private static final Minecraft client = Minecraft.getInstance();
 
@@ -38,7 +43,7 @@ public class InputSettingsTab extends SettingsTab {
 
     @Override
     public Component getTabName() {
-        return Component.literal("Input");
+        return Component.translatable("koreanpatch.config.tab.input");
     }
 
     @Override
@@ -52,65 +57,74 @@ public class InputSettingsTab extends SettingsTab {
         clickableWidgets.clear();
 
         int padding = 15;
+        int contentX = (contentWidth - CONTENT_WIDTH) / 2; // Center content
         int y = contentStartY + padding - scrollOffset;
-        int maxWidth = contentWidth - padding * 2;
 
         // General settings section
-        drawSection(guiGraphics, padding, y, "General Settings", maxWidth);
+        drawSection(guiGraphics, contentX, y, Component.translatable("koreanpatch.config.input.general").getString(), CONTENT_WIDTH);
         y += SECTION_SPACING;
 
         // Auto language mode
-        drawEnumSetting(guiGraphics, padding, y, "Auto Language Mode",
-                config.getAutoLangTypeMode().name(),
+        drawEnumSetting(guiGraphics, contentX, y,
+                Component.translatable("koreanpatch.config.input.general.auto_lang_type_mode").getString(),
+                getAutoLangTypeModeName(config.getAutoLangTypeMode()),
                 () -> {
                     AutoLangTypeMode[] values = AutoLangTypeMode.values();
                     int next = (config.getAutoLangTypeMode().ordinal() + 1) % values.length;
                     config.setAutoLangTypeMode(values[next]);
                 });
-        y += ITEM_HEIGHT + 15;
+        y += ITEM_HEIGHT + 8;
 
         // Remember language state per screen
-        drawToggleSetting(guiGraphics, padding, y, "Remember Language State Per Screen",
+        drawToggleSetting(guiGraphics, contentX, y,
+                Component.translatable("koreanpatch.config.input.general.memory_lang_type").getString(),
                 config.isMemoryLangTypePerScreen(),
                 () -> config.setMemoryLangTypePerScreen(!config.isMemoryLangTypePerScreen()));
-        y += ITEM_HEIGHT + 10;
+        y += ITEM_HEIGHT + 8;
+
+        y += SECTION_GAP;
 
         // IME settings section
-        drawSection(guiGraphics, padding, y, "IME Settings", maxWidth);
+        drawSection(guiGraphics, contentX, y, Component.translatable("koreanpatch.config.input.ime").getString(), CONTENT_WIDTH);
         y += SECTION_SPACING;
 
         // Disable IME while playing
-        drawToggleSetting(guiGraphics, padding, y, "Disable IME While Playing",
+        drawToggleSetting(guiGraphics, contentX, y,
+                Component.translatable("koreanpatch.config.input.ime.disable_ime_playing").getString(),
                 config.isDisableImeWhenPlaying(),
                 () -> config.setDisableImeWhenPlaying(!config.isDisableImeWhenPlaying()));
-        y += ITEM_HEIGHT + 10;
+        y += ITEM_HEIGHT + 8;
 
         // Auto IME switch
-        drawToggleSetting(guiGraphics, padding, y, "Auto IME Switch",
+        drawToggleSetting(guiGraphics, contentX, y,
+                Component.translatable("koreanpatch.config.input.ime.auto_ime_switch").getString(),
                 config.isAutoImeSwitch(),
                 () -> config.setAutoImeSwitch(!config.isAutoImeSwitch()));
-        y += ITEM_HEIGHT + 10;
+        y += ITEM_HEIGHT + 8;
 
         // Always enable IME
-        drawToggleSetting(guiGraphics, padding, y, "Always Enable IME",
+        drawToggleSetting(guiGraphics, contentX, y,
+                Component.translatable("koreanpatch.config.input.ime.always_ime_enabled").getString(),
                 config.isAlwaysImeEnabled(),
                 () -> config.setAlwaysImeEnabled(!config.isAlwaysImeEnabled()));
-        y += ITEM_HEIGHT + 10;
+        y += ITEM_HEIGHT + 8;
+
+        y += SECTION_GAP;
 
         // Information section
-        drawSection(guiGraphics, padding, y, "Information", maxWidth);
+        drawSection(guiGraphics, contentX, y, "Information", CONTENT_WIDTH);
         y += SECTION_SPACING;
 
         guiGraphics.drawString(
                 client.font,
-                "Auto language mode can be changed in the Key Bindings settings tab.",
-                padding, y, WidgetUtils.COLOR_TEXT_SECONDARY, false
+                Component.translatable("koreanpatch.config.input.info").getString(),
+                contentX, y, WidgetUtils.COLOR_TEXT_SECONDARY, false
         );
 
         // Draw scrollbar
-        int scrollbarX = contentWidth - 10;
-        int scrollbarY = contentStartY;
-        int scrollbarHeight = contentHeight - contentStartY;
+        scrollbarX = contentWidth - 10;
+        scrollbarY = contentStartY;
+        scrollbarHeight = contentHeight - contentStartY;
         int totalContentHeight = getContentHeight();
         float visibleRatio = (float)(contentHeight - contentStartY) / totalContentHeight;
         int maxScroll = Math.max(0, totalContentHeight - (contentHeight - contentStartY));
@@ -123,16 +137,27 @@ public class InputSettingsTab extends SettingsTab {
     }
 
     /**
+     * Get translated name for AutoLangTypeMode
+     */
+    private String getAutoLangTypeModeName(AutoLangTypeMode mode) {
+        return switch (mode) {
+            case AUTO -> Component.translatable("koreanpatch.config.input.mode.auto").getString();
+            case KOREAN -> Component.translatable("koreanpatch.config.input.mode.korean").getString();
+            case ENGLISH -> Component.translatable("koreanpatch.config.input.mode.english").getString();
+            case IME -> Component.translatable("koreanpatch.config.input.mode.ime").getString();
+        };
+    }
+
+    /**
      * Calculate total content height
      */
     private int getContentHeight() {
-        int padding = 15;
-        int height = padding;
-        // General settings: section + 1 enum + 1 toggle
-        height += SECTION_SPACING + (ITEM_HEIGHT + 15) + (ITEM_HEIGHT + 10);
-        // IME settings: section + 3 toggles
-        height += SECTION_SPACING + (ITEM_HEIGHT + 10) * 3;
-        // Information: section + text
+        int height = 15;
+        // General settings: section + 2 items + section gap
+        height += SECTION_SPACING + (ITEM_HEIGHT + 8) * 2 + SECTION_GAP;
+        // IME settings: section + 3 toggles + section gap
+        height += SECTION_SPACING + (ITEM_HEIGHT + 8) * 3 + SECTION_GAP;
+        // Information: section + text (no gap after last section)
         height += SECTION_SPACING + ITEM_HEIGHT;
         return height;
     }
@@ -141,45 +166,90 @@ public class InputSettingsTab extends SettingsTab {
      * Render section title
      */
     private void drawSection(GuiGraphics guiGraphics, int x, int y, String title, int width) {
-        guiGraphics.drawString(client.font, title, x, y, WidgetUtils.COLOR_TEXT, false);
-        guiGraphics.fill(x, y + 15, x + width, y + 16, WidgetUtils.COLOR_BORDER);
+        WidgetUtils.drawSectionTitle(guiGraphics, x, y, title);
+        guiGraphics.fill(x, y + 14, x + width, y + 15, WidgetUtils.COLOR_BORDER);
     }
 
     /**
      * Render toggle setting item
      */
     private void drawToggleSetting(GuiGraphics guiGraphics, int x, int y, String label, boolean value, Runnable onClick) {
-        guiGraphics.drawString(client.font, label, x, y, WidgetUtils.COLOR_TEXT, false);
-        int toggleX = x + 250;
+        // Draw label with vertical centering
+        int labelY = y + (WidgetUtils.STANDARD_TOGGLE_HEIGHT - client.font.lineHeight) / 2;
+        guiGraphics.drawString(client.font, label, x, labelY, WidgetUtils.COLOR_TEXT, false);
+
+        int toggleX = x + WIDGET_OFFSET_X;
         WidgetUtils.drawToggle(guiGraphics, toggleX, y, value);
         // Register widget
-        clickableWidgets.add(new ClickableWidget(toggleX, y, TOGGLE_WIDTH, TOGGLE_HEIGHT, onClick));
+        clickableWidgets.add(new ClickableWidget(toggleX, y, WidgetUtils.STANDARD_TOGGLE_WIDTH, WidgetUtils.STANDARD_TOGGLE_HEIGHT, onClick));
     }
 
     /**
      * Render enum setting item
      */
     private void drawEnumSetting(GuiGraphics guiGraphics, int x, int y, String label, String value, Runnable onClick) {
-        guiGraphics.drawString(client.font, label, x, y, WidgetUtils.COLOR_TEXT, false);
-        int enumX = x + 250;
-        int enumWidth = 100;
-        WidgetUtils.drawBorderedRect(guiGraphics, enumX, y - 2, enumWidth, 20,
-                WidgetUtils.COLOR_WIDGET_BG, WidgetUtils.COLOR_BORDER);
-        guiGraphics.drawString(client.font, value, enumX + 5, y,
-                WidgetUtils.COLOR_TEXT_SECONDARY, false);
+        // Draw label with vertical centering
+        int labelY = y + (20 - client.font.lineHeight) / 2;
+        guiGraphics.drawString(client.font, label, x, labelY, WidgetUtils.COLOR_TEXT, false);
+
+        int enumX = x + WIDGET_OFFSET_X;
+        int enumWidth = 120;
+        WidgetUtils.drawBorderedRect(guiGraphics, enumX, y, enumWidth, 20, WidgetUtils.COLOR_WIDGET_BG, WidgetUtils.COLOR_BORDER);
+
+        int textY = y + (20 - client.font.lineHeight) / 2;
+        guiGraphics.drawString(client.font, value, enumX + 8, textY, WidgetUtils.COLOR_TEXT_SECONDARY, false);
         // Register widget
-        clickableWidgets.add(new ClickableWidget(enumX, y - 2, enumWidth, 20, onClick));
+        clickableWidgets.add(new ClickableWidget(enumX, y, enumWidth, 20, onClick));
     }
 
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
         if (button != 0) return false;
 
+        // Check scrollbar click
+        int totalContentHeight = getContentHeight();
+        float visibleRatio = (float)(contentHeight - contentStartY) / totalContentHeight;
+        if (visibleRatio < 1.0f) {
+            int maxScroll = Math.max(0, totalContentHeight - (contentHeight - contentStartY));
+            float scrollProgress = maxScroll > 0 ? (float)scrollOffset / maxScroll : 0;
+            int[] thumbBounds = WidgetUtils.getScrollbarThumbBounds(scrollbarX, scrollbarY, scrollbarHeight, scrollProgress, visibleRatio);
+
+            if (WidgetUtils.isMouseOver(mouseX, mouseY, thumbBounds[0], thumbBounds[1], thumbBounds[2], thumbBounds[3])) {
+                isDraggingScrollbar = true;
+                return true;
+            }
+        }
+
         for (ClickableWidget widget : clickableWidgets) {
             if (widget.contains(mouseX, mouseY) && widget.onClick != null) {
                 widget.onClick.run();
                 return true;
             }
+        }
+        return false;
+    }
+
+    @Override
+    public boolean mouseReleased(double mouseX, double mouseY, int button) {
+        if (isDraggingScrollbar) {
+            isDraggingScrollbar = false;
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean mouseDragged(double mouseX, double mouseY, int button, double dragX, double dragY) {
+        if (isDraggingScrollbar) {
+            int totalContentHeight = getContentHeight();
+            int maxScroll = Math.max(0, totalContentHeight - (contentHeight - contentStartY));
+            float visibleRatio = (float)(contentHeight - contentStartY) / totalContentHeight;
+            int thumbHeight = Math.max(20, (int)(scrollbarHeight * visibleRatio));
+
+            float progress = (float)(mouseY - scrollbarY - thumbHeight / 2) / (scrollbarHeight - thumbHeight);
+            progress = Math.max(0, Math.min(1, progress));
+            scrollOffset = (int)(progress * maxScroll);
+            return true;
         }
         return false;
     }

@@ -73,5 +73,26 @@
     "koreanpatch.config.input.ime.auto_ime_switch": "Auto Input Method Switch",
     "koreanpatch.config.input.ime.auto_ime_switch.description": "Automatically enables the operating system's Input Method when the mod detects it failed to inject into the current screen successfully, and automatically disables the OS Input Method when it detects successful injection.",
     "koreanpatch.config.input.ime.always_ime_enabled": "Always Enable OS Input Method",
-    "koreanpatch.config.input.ime.always_ime_enabled.description": "Allows using the Minecraft Vanilla input method (IME) alongside the Korean Patch input method, similar to typical Korean chat mods, without disabling the patch's input features."
+    "koreanpatch.config.input.ime.always_ime_enabled.description": "Allows using the Minecraft Vanilla input method (IME) alongside the Korean Patch input method, similar to typical Korean chat mods, without disabling the patch's input features.",
+
+    "koreanpatch.config.title": "Korean Patch Settings",
+    "koreanpatch.config.done": "Done",
+    "koreanpatch.config.cancel": "Cancel",
+
+    "koreanpatch.config.tab.indicator": "Indicator",
+    "koreanpatch.config.tab.input": "Input",
+    "koreanpatch.config.tab.keybindings": "Key Bindings",
+
+    "koreanpatch.config.keybindings.langtype": "Language Toggle Keys (Max 2)",
+    "koreanpatch.config.keybindings.ime": "IME Toggle Key",
+    "koreanpatch.config.keybindings.key": "Key %d",
+    "koreanpatch.config.keybindings.notset": "(Not Set)",
+    "koreanpatch.config.keybindings.set": "Set",
+    "koreanpatch.config.keybindings.remove": "Remove",
+    "koreanpatch.config.keybindings.waiting": "Waiting for Key Input...",
+    "koreanpatch.config.keybindings.press_key": "Press the desired key combination (%ds)",
+    "koreanpatch.config.keybindings.current_keys": "Currently pressed keys: %s",
+    "koreanpatch.config.keybindings.none": "None",
+
+    "koreanpatch.config.input.info": "Auto language mode can be configured in the Key Bindings tab."
 }

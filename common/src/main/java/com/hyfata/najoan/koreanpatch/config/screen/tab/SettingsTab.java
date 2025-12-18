@@ -89,6 +89,14 @@ public abstract class SettingsTab {
     }
 
     /**
+     * Check if this tab is currently recording key bindings
+     * Used to prevent ESC from closing the screen during key recording
+     */
+    public boolean isRecordingKey() {
+        return false;
+    }
+
+    /**
      * Save tab (called when screen closes)
      */
     public abstract void save();

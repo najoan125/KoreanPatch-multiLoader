@@ -61,6 +61,15 @@ public class ConfigManager {
         }
     }
 
+    /**
+     * Reload config from file, discarding any unsaved changes
+     */
+    public void reloadConfig() {
+        if (CONFIG_FILE != null && CONFIG_FILE.exists()) {
+            loadFromFile();
+        }
+    }
+
     public ModConfig getConfig() {
         return config;
     }
