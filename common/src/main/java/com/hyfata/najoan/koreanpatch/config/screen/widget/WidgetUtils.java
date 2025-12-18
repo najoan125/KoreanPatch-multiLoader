@@ -4,11 +4,11 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 
 /**
- * UI 위젯 렌더링 유틸리티
- * 모던하고 일관된 UI를 위한 헬퍼 메서드
+ * UI widget rendering utility
+ * Helper methods for modern and consistent UI
  */
 public class WidgetUtils {
-    // 색상 상수
+    // Color constants
     public static final int COLOR_BACKGROUND = 0xFF1A1A1A;
     public static final int COLOR_WIDGET_BG = 0xFF2D2D2D;
     public static final int COLOR_WIDGET_HOVER = 0xFF3D3D3D;
@@ -24,35 +24,35 @@ public class WidgetUtils {
     private static final Minecraft client = Minecraft.getInstance();
 
     /**
-     * 둥근 테두리가 있는 사각형 렌더링 (간단한 구현)
+     * Render rounded rectangle (simple implementation)
      */
     public static void drawRoundRect(GuiGraphics guiGraphics, int x, int y, int width, int height, int color) {
-        // 간단한 구현 - 직사각형으로 렌더링
+        // Simple implementation - render as rectangle
         guiGraphics.fill(x, y, x + width, y + height, color);
     }
 
     /**
-     * 테두리가 있는 사각형 렌더링
+     * Render bordered rectangle
      */
     public static void drawBorderedRect(GuiGraphics guiGraphics, int x, int y, int width, int height,
                                         int fillColor, int borderColor) {
-        // 배경
+        // Background
         guiGraphics.fill(x, y, x + width, y + height, fillColor);
-        // 테두리
-        guiGraphics.fill(x, y, x + width, y + 1, borderColor); // 위
-        guiGraphics.fill(x, y + height - 1, x + width, y + height, borderColor); // 아래
-        guiGraphics.fill(x, y, x + 1, y + height, borderColor); // 왼쪽
-        guiGraphics.fill(x + width - 1, y, x + width, y + height, borderColor); // 오른쪽
+        // Border
+        guiGraphics.fill(x, y, x + width, y + 1, borderColor); // Top
+        guiGraphics.fill(x, y + height - 1, x + width, y + height, borderColor); // Bottom
+        guiGraphics.fill(x, y, x + 1, y + height, borderColor); // Left
+        guiGraphics.fill(x + width - 1, y, x + width, y + height, borderColor); // Right
     }
 
     /**
-     * 슬라이더 렌더링
+     * Render slider
      */
     public static void drawSlider(GuiGraphics guiGraphics, int x, int y, int width, int height,
                                    float value, int backgroundColor, int fillColor) {
-        // 배경
+        // Background
         drawBorderedRect(guiGraphics, x, y, width, height, backgroundColor, COLOR_BORDER);
-        // 진행 상황
+        // Progress
         int fillWidth = (int) (width * value);
         if (fillWidth > 0) {
             guiGraphics.fill(x + 1, y + 1, x + fillWidth - 1, y + height - 1, fillColor);
@@ -60,7 +60,7 @@ public class WidgetUtils {
     }
 
     /**
-     * 토글 버튼 렌더링
+     * Render toggle button
      */
     public static void drawToggle(GuiGraphics guiGraphics, int x, int y, boolean enabled) {
         int width = 40;
@@ -68,13 +68,13 @@ public class WidgetUtils {
         int bgColor = enabled ? COLOR_ACCENT : COLOR_WIDGET_BG;
         drawRoundRect(guiGraphics, x, y, width, height, bgColor);
 
-        // 원형 인디케이터
+        // Circle indicator
         int circleX = enabled ? x + width - 12 : x + 4;
         guiGraphics.fill(circleX, y + 2, circleX + 16, y + 18, 0xFFFFFFFF);
     }
 
     /**
-     * 버튼 렌더링
+     * Render button
      */
     public static void drawButton(GuiGraphics guiGraphics, int x, int y, int width, int height,
                                    String text, boolean hovered, int textRenderer) {
@@ -83,11 +83,11 @@ public class WidgetUtils {
     }
 
     /**
-     * 색상 선택기 박스 렌더링
+     * Render color picker box
      */
     public static void drawColorBox(GuiGraphics guiGraphics, int x, int y, int size, int color) {
         guiGraphics.fill(x, y, x + size, y + size, color);
-        // 테두리
+        // Border
         guiGraphics.fill(x, y, x + size, y + 1, COLOR_BORDER);
         guiGraphics.fill(x, y + size - 1, x + size, y + size, COLOR_BORDER);
         guiGraphics.fill(x, y, x + 1, y + size, COLOR_BORDER);
@@ -95,17 +95,34 @@ public class WidgetUtils {
     }
 
     /**
-     * 섹션 제목 렌더링
+     * Render section title
      */
     public static void drawSectionTitle(GuiGraphics guiGraphics, int x, int y, String title) {
         guiGraphics.drawString(client.font, title, x, y, COLOR_TEXT, false);
     }
 
     /**
-     * 라벨과 값 렌더링
+     * Render label and value
      */
     public static void drawLabelValue(GuiGraphics guiGraphics, int x, int y, String label, String value) {
         guiGraphics.drawString(client.font, label, x, y, COLOR_TEXT, false);
         guiGraphics.drawString(client.font, value, x + 200, y, COLOR_TEXT_SECONDARY, false);
+    }
+
+    /**
+     * Render scrollbar
+     */
+    public static void drawScrollbar(GuiGraphics guiGraphics, int x, int y, int height,
+                                      float scrollProgress, float visibleRatio) {
+        int width = 6;
+        // Track background
+        guiGraphics.fill(x, y, x + width, y + height, COLOR_WIDGET_BG);
+
+        // Calculate thumb size and position
+        int thumbHeight = Math.max(20, (int)(height * visibleRatio));
+        int thumbY = y + (int)((height - thumbHeight) * scrollProgress);
+
+        // Thumb
+        guiGraphics.fill(x, thumbY, x + width, thumbY + thumbHeight, COLOR_ACCENT);
     }
 }

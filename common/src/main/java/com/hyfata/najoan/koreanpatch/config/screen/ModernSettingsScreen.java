@@ -84,8 +84,10 @@ public class ModernSettingsScreen extends Screen {
         // Tab separator line
         guiGraphics.fill(0, TAB_AREA_HEIGHT - 1, this.width, TAB_AREA_HEIGHT, COLOR_BORDER);
 
-        // Render current tab content
+        // Render current tab content with scissor clipping to prevent overlap with tab bar
+        guiGraphics.enableScissor(0, TAB_AREA_HEIGHT, this.width, this.height);
         getCurrentTab().render(guiGraphics, mouseX, mouseY, partialTick);
+        guiGraphics.disableScissor();
     }
 
     /**

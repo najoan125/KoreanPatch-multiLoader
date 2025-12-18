@@ -5,7 +5,7 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 
 /**
- * 설정 화면 탭의 기본 인터페이스
+ * Base interface for settings screen tabs
  */
 public abstract class SettingsTab {
     protected Screen screen;
@@ -14,12 +14,12 @@ public abstract class SettingsTab {
     protected int contentHeight;
 
     /**
-     * 탭 이름 (UI에 표시될 텍스트)
+     * Tab name (text displayed in UI)
      */
     public abstract Component getTabName();
 
     /**
-     * 탭 초기화
+     * Initialize tab
      */
     public void init(Screen screen, int contentStartY, int contentWidth, int contentHeight) {
         this.screen = screen;
@@ -30,66 +30,66 @@ public abstract class SettingsTab {
     }
 
     /**
-     * 탭 초기화 시 호출될 메서드 (서브클래스에서 구현)
+     * Method called on tab initialization (implemented by subclasses)
      */
     protected abstract void onInit();
 
     /**
-     * 렌더링
+     * Render
      */
     public abstract void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick);
 
     /**
-     * 마우스 스크롤
+     * Mouse scroll
      */
     public boolean mouseScrolled(double mouseX, double mouseY, double scrollX, double scrollY) {
         return false;
     }
 
     /**
-     * 마우스 클릭
+     * Mouse click
      */
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
         return false;
     }
 
     /**
-     * 마우스 릴리스
+     * Mouse release
      */
     public boolean mouseReleased(double mouseX, double mouseY, int button) {
         return false;
     }
 
     /**
-     * 마우스 드래그
+     * Mouse drag
      */
     public boolean mouseDragged(double mouseX, double mouseY, int button, double dragX, double dragY) {
         return false;
     }
 
     /**
-     * 키 입력
+     * Key pressed
      */
     public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
         return false;
     }
 
     /**
-     * 키 입력 끝
+     * Key released
      */
     public boolean keyReleased(int keyCode, int scanCode, int modifiers) {
         return false;
     }
 
     /**
-     * 문자 입력
+     * Character typed
      */
     public boolean charTyped(char codePoint, int modifiers) {
         return false;
     }
 
     /**
-     * 탭 저장 (화면 닫힐 때 호출)
+     * Save tab (called when screen closes)
      */
     public abstract void save();
 }
