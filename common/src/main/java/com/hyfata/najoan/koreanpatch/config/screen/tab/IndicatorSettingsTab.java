@@ -168,8 +168,7 @@ public class IndicatorSettingsTab extends SettingsTab {
      * 전체 콘텐츠 높이 계산
      */
     private int getContentHeight() {
-        int padding = 15;
-        int height = padding;
+        int height = 15;
         // 일반 설정: 섹션 + 토글 1개
         height += SECTION_SPACING + (ITEM_HEIGHT + 10);
         // 테두리 설정: 섹션 + 토글 1 + enum 1 + 색상 2 + 슬라이더 1

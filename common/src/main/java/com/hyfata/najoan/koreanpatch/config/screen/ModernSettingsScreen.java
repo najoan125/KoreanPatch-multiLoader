@@ -17,14 +17,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 커스텀 모던 설정 화면
- * 탭 기반 UI로 지표, 입력, 키바인딩 설정을 관리합니다.
+ * Custom modern settings screen
+ * Manages indicator, input, and keybinding settings with a tab-based UI.
  */
 public class ModernSettingsScreen extends Screen {
     private static final int TAB_WIDTH = 100;
     private static final int TAB_HEIGHT = 30;
     private static final int TAB_SPACING = 10;
-    private static final int TAB_AREA_HEIGHT = TAB_HEIGHT + 20; // 탭과 구분선
+    private static final int TAB_AREA_HEIGHT = TAB_HEIGHT + 20; // Tab and separator line
     private static final int PADDING = 15;
     private static final int CONTENT_TOP = TAB_AREA_HEIGHT + PADDING;
 
@@ -33,7 +33,7 @@ public class ModernSettingsScreen extends Screen {
     private int currentTabIndex = 0;
     private int tabStartX;
 
-    // 색상 설정
+    // Color settings
     private static final int COLOR_BACKGROUND = 0xFF1A1A1A;
     private static final int COLOR_TAB_INACTIVE = 0xFF2D2D2D;
     private static final int COLOR_TAB_ACTIVE = 0xFF3D3D3D;
@@ -54,11 +54,11 @@ public class ModernSettingsScreen extends Screen {
     protected void init() {
         super.init();
 
-        // 탭 시작 X 위치 (중앙 정렬)
+        // Tab start X position (center alignment)
         int totalTabWidth = (TAB_WIDTH + TAB_SPACING) * tabs.size() - TAB_SPACING;
         this.tabStartX = (this.width - totalTabWidth) / 2;
 
-        // 모든 탭 초기화
+        // Initialize all tabs
         for (SettingsTab tab : tabs) {
             tab.init(this, CONTENT_TOP, this.width, this.height);
         }
@@ -66,10 +66,10 @@ public class ModernSettingsScreen extends Screen {
 
     @Override
     public void render(@NotNull GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
-        // 배경 렌더링 (renderBackground는 blur 제약이 있어서 직접 구현)
+        // Render background (directly implemented due to blur constraints in renderBackground)
         guiGraphics.fill(0, 0, this.width, this.height, COLOR_BACKGROUND);
 
-        // 제목 렌더링
+        // Render title
         guiGraphics.drawCenteredString(
                 this.font,
                 this.title,
@@ -78,18 +78,18 @@ public class ModernSettingsScreen extends Screen {
                 COLOR_TEXT
         );
 
-        // 탭 렌더링
+        // Render tabs
         renderTabs(guiGraphics, mouseX, mouseY);
 
-        // 탭 구분선
+        // Tab separator line
         guiGraphics.fill(0, TAB_AREA_HEIGHT - 1, this.width, TAB_AREA_HEIGHT, COLOR_BORDER);
 
-        // 현재 탭 콘텐츠 렌더링
+        // Render current tab content
         getCurrentTab().render(guiGraphics, mouseX, mouseY, partialTick);
     }
 
     /**
-     * 탭 UI 렌더링
+     * Render tab UI
      */
     private void renderTabs(GuiGraphics guiGraphics, int mouseX, int mouseY) {
         for (int i = 0; i < tabs.size(); i++) {
@@ -99,18 +99,18 @@ public class ModernSettingsScreen extends Screen {
 
             boolean isActive = i == currentTabIndex;
             boolean isHovered = mouseX >= x && mouseX < x + TAB_WIDTH &&
-                                mouseY >= y && mouseY < y + TAB_HEIGHT;
+                    mouseY >= y && mouseY < y + TAB_HEIGHT;
 
-            // 탭 배경
+            // Tab background
             int bgColor = isActive ? COLOR_TAB_ACTIVE : COLOR_TAB_INACTIVE;
             guiGraphics.fill(x, y, x + TAB_WIDTH, y + TAB_HEIGHT, bgColor);
 
-            // 액티브 탭 상단 테두리
+            // Active tab top border
             if (isActive) {
                 guiGraphics.fill(x, y, x + TAB_WIDTH, y + 2, COLOR_TAB_ACTIVE_BORDER);
             }
 
-            // 탭 텍스트
+            // Tab text
             int textColor = isActive ? 0xFFFFFFFF : COLOR_TEXT_SECONDARY;
             guiGraphics.drawCenteredString(
                     this.font,
@@ -120,7 +120,7 @@ public class ModernSettingsScreen extends Screen {
                     textColor
             );
 
-            // 호버 효과
+            // Hover effect
             if (isHovered && !isActive) {
                 guiGraphics.fill(x, y, x + TAB_WIDTH, y + TAB_HEIGHT, 0x33FFFFFF);
             }
@@ -138,19 +138,19 @@ public class ModernSettingsScreen extends Screen {
         double mouseY = event.y();
         int button = event.button();
 
-        // 탭 클릭 처리
+        // Handle tab click
         for (int i = 0; i < tabs.size(); i++) {
             int x = tabStartX + i * (TAB_WIDTH + TAB_SPACING);
             int y = 5;
 
             if (mouseX >= x && mouseX < x + TAB_WIDTH &&
-                mouseY >= y && mouseY < y + TAB_HEIGHT) {
+                    mouseY >= y && mouseY < y + TAB_HEIGHT) {
                 currentTabIndex = i;
                 return true;
             }
         }
 
-        // 현재 탭에 마우스 클릭 처리
+        // Handle mouse click in the current tab
         return getCurrentTab().mouseClicked(mouseX, mouseY, button);
     }
 
@@ -203,7 +203,7 @@ public class ModernSettingsScreen extends Screen {
     }
 
     /**
-     * 현재 활성 탭 가져오기
+     * Get the current active tab
      */
     private SettingsTab getCurrentTab() {
         return tabs.get(currentTabIndex);
@@ -211,12 +211,11 @@ public class ModernSettingsScreen extends Screen {
 
     @Override
     public void onClose() {
-        // 모든 탭의 변경사항 저장
+        // Save changes from all tabs
         for (SettingsTab tab : tabs) {
             tab.save();
         }
         ConfigManager.getInstance().saveConfig(ConfigManager.getInstance().getConfig());
-        assert this.minecraft != null;
         this.minecraft.setScreen(previousScreen);
     }
 
