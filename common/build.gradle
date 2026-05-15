@@ -23,13 +23,6 @@ dependencies {
     annotationProcessor group: 'io.github.llamalad7', name: 'mixinextras-common', version: '0.3.5'
 
     compileOnly "dev.isxander:yet-another-config-lib:${project.yacl_version}-neoforge"
-
-    testImplementation 'org.junit.jupiter:junit-jupiter:6.0.3'
-    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
-}
-
-test {
-    useJUnitPlatform()
 }
 
 configurations {
