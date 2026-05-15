@@ -28,6 +28,10 @@ dependencies {
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
+test {
+    useJUnitPlatform()
+}
+
 configurations {
     commonJava {
         canBeResolved = false
