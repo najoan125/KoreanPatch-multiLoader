@@ -6,6 +6,7 @@ import com.hyfata.najoan.koreanpatch.driver.InputController;
 public class CocoainputLoadTest {
     @Test
     void newInputController() {
-        InputController.newController();
+        InputController inputController = InputController.newController();
+        assertNotNull(inputController);
     }
 }
