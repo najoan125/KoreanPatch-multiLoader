@@ -28,7 +28,7 @@ jobs:
           distribution: 'temurin'
           cache: gradle
 
-      - uses: gradle/actions/setup-gradle@v3
+      - uses: gradle/actions/setup-gradle@v6
 
       - name: Download PsExec
         run: |
@@ -57,7 +57,7 @@ jobs:
       - name: Create scheduled task for GUI session
         run: |
           $action = New-ScheduledTaskAction -Execute "powershell.exe" `
-            -Argument "-ExecutionPolicy Bypass -Command `"& { cd '$pwd'; ./gradlew runClient 2>&1 | Tee-Object '$env:TEMP\minecraft-x64.log' }`" "`
+            -Argument "-ExecutionPolicy Bypass -Command `"& { cd '$pwd'; ./gradlew :fabric:runClient 2>&1 | Tee-Object '$env:TEMP\minecraft-x64.log' }`" "`
             -WorkingDirectory "$pwd"
           $trigger = New-ScheduledTaskTrigger -Once -At (Get-Date).AddSeconds(5)
           $principal = New-ScheduledTaskPrincipal -UserId "mctest" -LogonType Interactive -RunLevel Highest
@@ -157,7 +157,7 @@ jobs:
           architecture: aarch64
           cache: gradle
 
-      - uses: gradle/actions/setup-gradle@v3
+      - uses: gradle/actions/setup-gradle@v6
 
       - name: Download PsExec
         run: |
@@ -180,7 +180,7 @@ jobs:
       - name: Create scheduled task for GUI session
         run: |
           $action = New-ScheduledTaskAction -Execute "powershell.exe" `
-            -Argument "-ExecutionPolicy Bypass -Command `"& { cd '$pwd'; ./gradlew runClient 2>&1 | Tee-Object '$env:TEMP\minecraft-arm64.log' }`" "`
+            -Argument "-ExecutionPolicy Bypass -Command `"& { cd '$pwd'; ./gradlew :fabric:runClient 2>&1 | Tee-Object '$env:TEMP\minecraft-arm64.log' }`" "`
             -WorkingDirectory "$pwd"
           $trigger = New-ScheduledTaskTrigger -Once -At (Get-Date).AddSeconds(5)
           $principal = New-ScheduledTaskPrincipal -UserId "mctest" -LogonType Interactive -RunLevel Highest
