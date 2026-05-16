@@ -150,15 +150,17 @@ jobs:
           $batchPath = "$env:TEMP\run_minecraft.bat"
           $projectDir = "$pwd"
           $logPath = "$env:TEMP\minecraft-x64.log"
-          $batchContent = "chcp 65001 >nul`ncd /d `"$projectDir`"`ngradlew :fabric:runClient > `"$logPath`" 2>&1"
-          Set-Content -Path $batchPath -Value $batchContent -Encoding ASCII
-          Write-Host "Created batch file: $batchPath"
+          # Use PowerShell with Tee-Object: shows on screen AND saves to file
+          $psScript = "$env:TEMP\run_minecraft.ps1"
+          $psContent = "cd `"$projectDir`"`n./gradlew :fabric:runClient 2>&1 | Tee-Object -FilePath `"$logPath`""
+          Set-Content -Path $psScript -Value $psContent -Encoding ASCII
+          Write-Host "Created PowerShell script: $psScript"
 
-          # Launch batch in RDP session via PsExec
+          # Launch PowerShell script in RDP session via PsExec
           Start-Process -FilePath "$env:TEMP\PsExec.exe" -ArgumentList @(
             "-accepteula", "-i", $sessionId,
             "-u", "runneradmin", "-p", $env:RDP_PASSWORD,
-            "cmd.exe", "/c", $batchPath
+            "powershell.exe", "-ExecutionPolicy", "Bypass", "-File", $psScript
           ) -WindowStyle Hidden
 
           Write-Host ":fabric:runClient launched in RDP session $sessionId"
@@ -318,19 +320,44 @@ jobs:
           Invoke-WebRequest -Uri "https://download.sysinternals.com/files/PSTools.zip" -OutFile "$env:TEMP\PSTools.zip"
           Expand-Archive -Path "$env:TEMP\PSTools.zip" -DestinationPath "$env:TEMP" -Force
 
-          # Create batch file
+          # Download Mesa3D software OpenGL renderer (ARM64)
+          $mesaDir = "$env:TEMP\mesa"
+          New-Item -ItemType Directory -Path $mesaDir -Force | Out-Null
+          Write-Host "Downloading Mesa3D software OpenGL for ARM64..."
+          Invoke-WebRequest -Uri "https://github.com/pal1000/mesa-dist-win/releases/download/24.3.4/mesa3d-24.3.4-release-msvc.7z" -OutFile "$env:TEMP\mesa.7z"
+          choco install 7zip -y --no-progress
+          & "C:\Program Files\7-Zip\7z.exe" x "$env:TEMP\mesa.7z" -o"$mesaDir" -y | Out-Null
+          # Extract ARM64 DLLs from x64 folder (works for ARM64 Windows via emulation)
+          $mesaDll = "$mesaDir\x64\opengl32.dll"
+          if (Test-Path $mesaDll) {
+            Write-Host "Mesa3D opengl32.dll ready: $mesaDll"
+          } else {
+            Write-Warning "Mesa3D DLL not found at expected path, will try system OpenGL"
+          }
+
+          # Create batch file — Mesa3D injected via java.library.path
           $batchPath = "$env:TEMP\run_minecraft_arm64.bat"
           $projectDir = "$pwd"
           $logPath = "$env:TEMP\minecraft-arm64.log"
-          $batchContent = "chcp 65001 >nul`ncd /d `"$projectDir`"`ngradlew :fabric:runClient > `"$logPath`" 2>&1"
-          Set-Content -Path $batchPath -Value $batchContent -Encoding ASCII
-          Write-Host "Created batch file: $batchPath"
+          $jvmArgs = ""
+          if (Test-Path "$mesaDir\x64\opengl32.dll") {
+            $jvmArgs = "-Djava.library.path=$mesaDir\x64 -Dorg.lwjgl.opengl.libname=opengl32.dll"
+          }
+          # Use PowerShell with Tee-Object: shows on screen AND saves to file
+          $psScript = "$env:TEMP\run_minecraft_arm64.ps1"
+          $mesaEnv = ""
+          if (Test-Path "$mesaDir\x64\opengl32.dll") {
+            $mesaEnv = "`$env:MESA_GL_VERSION_OVERRIDE='4.5'`n`$env:MESA_GLSL_VERSION_OVERRIDE='450'`n`$env:GALLIUM_DRIVER='llvmpipe'`n`$env:PATH=`"$mesaDir\x64;`$env:PATH`"`n"
+          }
+          $psContent = "cd `"$projectDir`"`n$mesaEnv./gradlew :fabric:runClient 2>&1 | Tee-Object -FilePath `"$logPath`""
+          Set-Content -Path $psScript -Value $psContent -Encoding ASCII
+          Write-Host "Created PowerShell script: $psScript"
 
-          # Launch batch in RDP session via PsExec
+          # Launch PowerShell script in RDP session via PsExec
           Start-Process -FilePath "$env:TEMP\PsExec.exe" -ArgumentList @(
             "-accepteula", "-i", $sessionId,
             "-u", "runneradmin", "-p", $env:RDP_PASSWORD,
-            "cmd.exe", "/c", $batchPath
+            "powershell.exe", "-ExecutionPolicy", "Bypass", "-File", $psScript
           ) -WindowStyle Hidden
 
           Write-Host ":fabric:runClient launched in RDP session $sessionId"
