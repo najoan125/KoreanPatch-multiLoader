@@ -342,21 +342,43 @@ jobs:
 
           if (Test-Path $mesaDll) {
             Write-Host "Mesa3D ARM64 DLL found: $mesaDll"
-            # Copy to project root — Windows loads opengl32.dll from app directory first
+            # Copy to project root — Windows loads DLL from app directory first
             Copy-Item -Path $mesaDll -Destination "$projectDir\opengl32.dll" -Force
-            Write-Host "Copied opengl32.dll to project root"
+            Write-Host "Copied opengl32.dll to project root: $projectDir\opengl32.dll"
+            # Verify file size
+            $dllSize = (Get-Item "$projectDir\opengl32.dll").Length
+            Write-Host "DLL size: $dllSize bytes"
           } else {
             Write-Warning "Mesa3D ARM64 DLL not found! OpenGL may fail."
           }
 
           # Create PowerShell script with Tee-Object (screen + file)
           $psScript = "$env:TEMP\run_minecraft_arm64.ps1"
+          # Debug: verify opengl32.dll architecture and existence
+          Write-Host "--- DLL Debug ---"
+          if (Test-Path "$projectDir\opengl32.dll") {
+            $dllInfo = [System.Reflection.AssemblyName]::GetAssemblyName("$projectDir\opengl32.dll") 2>$null
+            if ($dllInfo) { Write-Host "DLL Architecture: $($dllInfo.ProcessorArchitecture)" }
+            $dllBytes = [System.IO.File]::ReadAllBytes("$projectDir\opengl32.dll")[0..1]
+            Write-Host "DLL Magic bytes: $($dllBytes | ForEach-Object { '0x{0:X2}' -f $_ })"
+          }
+          Write-Host "Project dir contents:"
+          Get-ChildItem "$projectDir\*.dll" -ErrorAction SilentlyContinue | ForEach-Object { Write-Host "  $($_.Name) - $([System.IO.FileInfo]::new($_.FullName).Length) bytes" }
+          Write-Host "----------------"
+
           $psLines = @(
             "`$env:MESA_GL_VERSION_OVERRIDE='4.5'",
             "`$env:MESA_GLSL_VERSION_OVERRIDE='450'",
             "`$env:GALLIUM_DRIVER='llvmpipe'",
+            "`$env:LIBGL_ALWAYS_SOFTWARE='true'",
             "cd `"$projectDir`"",
-            ".\gradlew :fabric:runClient 2>&1 | Tee-Object -FilePath `"$logPath`""
+            "Write-Host 'PWD:' `$PWD",
+            "Write-Host 'opengl32.dll here:' (Test-Path '.\opengl32.dll')",
+            "Write-Host 'DLL size:' (Get-Item '.\opengl32.dll' -ErrorAction SilentlyContinue).Length",
+            "`$env:PATH=`"$projectDir;`$env:PATH`"",
+            # Use JVM args that Gradle passes through to the Minecraft process
+            "`$jvmArgs = '-Dorg.lwjgl.librarypath=`"$projectDir`" -Djava.library.path=`"$projectDir`" -Dorg.lwjgl.opengl.libname=opengl32.dll'",
+            ".\gradlew :fabric:runClient -Dorg.gradle.jvmargs=`"`$jvmArgs`" 2>&1 | Tee-Object -FilePath `"$logPath`""
           )
           Set-Content -Path $psScript -Value ($psLines -join "`n") -Encoding ASCII
           Write-Host "Created PowerShell script: $psScript"
