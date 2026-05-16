@@ -330,32 +330,24 @@ jobs:
             $found = $false
 
             foreach ($line in $allSessions) {
-              if ($line -match "console" -or $line -match "^\s*services\s") { continue }
+              Write-Host "  [SESSION] $line"
+              # Skip console and services lines
+              if ($line -match "\s+console\s+" -or $line -match "^\s*services\s") { continue }
 
-              if ($line -match "runneradmin\s+(\d+)\s+Active") {
-                $sid = $matches[1]
-                if ($line -match "rdp-tcp#") {
-                  $sessionId = $sid
-                  Write-Host "Active RDP session detected! ID: $sessionId"
-                  $found = $true
-                  break
-                }
-              }
-
-              if ($line -match "runneradmin\s+(\d+)\s+Disc") {
-                $sid = $matches[1]
-                if ($line -match "rdp-tcp#") {
-                  $sessionId = $sid
-                  Write-Host "Disconnected RDP session detected! ID: $sessionId"
-                  $found = $true
-                  break
-                }
+              # Match RDP sessions: rdp-tcp#N ... runneradmin ... ID ... Active/Disc
+              if ($line -match "rdp-tcp#\d+.*runneradmin\s+(\d+)\s+(Active|Disc)") {
+                $sessionId = $matches[1]
+                Write-Host "RDP session found! Name: $(($line -split '\s+')[0]) ID: $sessionId State: $($matches[2])"
+                $found = $true
+                break
               }
             }
 
             if ($found) {
               Write-Host "Proceeding to start Minecraft..."
-              Add-Content -Path $env:GITHUB_ENV -Value "MC_SESSION_ID=$sessionId"
+              # Use Out-File (UTF-8) for GITHUB_ENV — required by GitHub Actions
+              "MC_SESSION_ID=$sessionId" | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
+              Write-Host "Saved MC_SESSION_ID=$sessionId to GITHUB_ENV"
               break
             }
 
