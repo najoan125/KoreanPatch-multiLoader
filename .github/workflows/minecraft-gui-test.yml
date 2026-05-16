@@ -150,11 +150,8 @@ jobs:
           $batchPath = "$env:TEMP\run_minecraft.bat"
           $projectDir = "$pwd"
           $logPath = "$env:TEMP\minecraft-x64.log"
-          @"
-chcp 65001 >nul
-cd /d "$projectDir"
-gradlew :fabric:runClient > "$logPath" 2>&1
-"@ | Set-Content -Path $batchPath -Encoding ASCII
+          $batchContent = "chcp 65001 >nul`ncd /d `"$projectDir`"`ngradlew :fabric:runClient > `"$logPath`" 2>&1"
+          Set-Content -Path $batchPath -Value $batchContent -Encoding ASCII
           Write-Host "Created batch file: $batchPath"
 
           # Launch batch in RDP session via PsExec
@@ -325,11 +322,8 @@ gradlew :fabric:runClient > "$logPath" 2>&1
           $batchPath = "$env:TEMP\run_minecraft_arm64.bat"
           $projectDir = "$pwd"
           $logPath = "$env:TEMP\minecraft-arm64.log"
-          @"
-chcp 65001 >nul
-cd /d "$projectDir"
-gradlew :fabric:runClient > "$logPath" 2>&1
-"@ | Set-Content -Path $batchPath -Encoding ASCII
+          $batchContent = "chcp 65001 >nul`ncd /d `"$projectDir`"`ngradlew :fabric:runClient > `"$logPath`" 2>&1"
+          Set-Content -Path $batchPath -Value $batchContent -Encoding ASCII
           Write-Host "Created batch file: $batchPath"
 
           # Launch batch in RDP session via PsExec
