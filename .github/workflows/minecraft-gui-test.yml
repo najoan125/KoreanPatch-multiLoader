@@ -324,11 +324,15 @@ jobs:
           $projectDir = "$pwd"
           $logPath = "$env:TEMP\minecraft-arm64.log"
 
-          # Install Microsoft OpenGL/DirectX compatibility pack
+          # Install Microsoft OpenGL/DirectX compatibility pack (Windows Store app)
           # Translates OpenGL 3.3+ to DirectX12, works without GPU via WARP
-          Write-Host "Installing Microsoft OpenGL compatibility pack..."
-          dism /online /add-capability /capabilityname:OpenGL.GL0~~1.0 2>$null
-          Write-Host "OpenGL compatibility pack installed (or already present)"
+          Write-Host "Installing OpenCL/OpenGL/Vulkan Compatibility Pack..."
+          winget install --id Microsoft.OpenCLGLVulkanCompatibilityPack -e --accept-package-agreements --accept-source-agreements --silent
+          if ($LASTEXITCODE -ne 0) {
+            Write-Warning "winget install failed (exit: $LASTEXITCODE), OpenGL may fail without GPU"
+          } else {
+            Write-Host "Compatibility pack installed"
+          }
 
           # Create PowerShell script with Tee-Object (screen + file)
           $psScript = "$env:TEMP\run_minecraft_arm64.ps1"
