@@ -157,13 +157,13 @@ jobs:
           Write-Host "Created PowerShell script: $psScript"
 
           # Launch PowerShell script in RDP session via PsExec
-          Start-Process -FilePath "$env:TEMP\PsExec.exe" -ArgumentList @(
+          $proc = Start-Process -FilePath "$env:TEMP\PsExec.exe" -ArgumentList @(
             "-accepteula", "-i", $sessionId,
             "-u", "runneradmin", "-p", $env:RDP_PASSWORD,
             "powershell.exe", "-ExecutionPolicy", "Bypass", "-File", $psScript
-          ) -WindowStyle Hidden
+          ) -WindowStyle Hidden -PassThru
 
-          Write-Host ":fabric:runClient launched in RDP session $sessionId"
+          Write-Host ":fabric:runClient launched in RDP session $sessionId (PID: $($proc.Id))"
 
           # Stream log file in real-time
           $logFile = "$env:TEMP\minecraft-x64.log"
@@ -172,6 +172,7 @@ jobs:
           Write-Host "Minecraft log streaming (x64)"
           Write-Host "========================================"
 
+          # Wait for log file
           $timeout = 120
           $waited = 0
           while (-not (Test-Path $logFile) -and $waited -lt $timeout) {
@@ -185,25 +186,25 @@ jobs:
             exit 1
           }
 
-          # tail -f
-          Get-Content $logFile -Wait
-
-      # ── 4. Keep alive ──
-      - name: Keep alive until manually cancelled
-        run: |
-          Write-Host ""
-          Write-Host "Minecraft is running. Click 'Cancel workflow' to stop."
-          Write-Host ""
-          $min = 0
-          $logFile = "$env:TEMP\minecraft-x64.log"
-          while ($true) {
-            Start-Sleep 60
-            $min++
-            Write-Host "[KEEP-ALIVE x64] ${min} min..."
-            if (Test-Path $logFile) {
-              Get-Content $logFile -Tail 3 | ForEach-Object { Write-Host "  [LOG] $_" }
+          # Stream log while process is running (exits automatically when gradle finishes)
+          $linesRead = 0
+          while (-not $proc.HasExited) {
+            $allLines = @(Get-Content $logFile)
+            for ($i = $linesRead; $i -lt $allLines.Count; $i++) {
+              Write-Host $allLines[$i]
             }
+            $linesRead = $allLines.Count
+            Start-Sleep 1
           }
+
+          # Final flush after process exits
+          $allLines = @(Get-Content $logFile)
+          for ($i = $linesRead; $i -lt $allLines.Count; $i++) {
+            Write-Host $allLines[$i]
+          }
+
+          Write-Host ""
+          Write-Host "Minecraft process exited with code: $($proc.ExitCode)"
 
       - name: Upload log
         if: always()
@@ -320,47 +321,54 @@ jobs:
           Invoke-WebRequest -Uri "https://download.sysinternals.com/files/PSTools.zip" -OutFile "$env:TEMP\PSTools.zip"
           Expand-Archive -Path "$env:TEMP\PSTools.zip" -DestinationPath "$env:TEMP" -Force
 
-          # Download Mesa3D software OpenGL renderer (ARM64)
-          $mesaDir = "$env:TEMP\mesa"
+          # Download Mesa3D ARM64 software OpenGL renderer
+          # mmozeiko/build-mesa provides actual ARM64 binaries (pal1000 only has x86/x64)
+          $mesaDir = "$env:TEMP\mesa-arm64"
           New-Item -ItemType Directory -Path $mesaDir -Force | Out-Null
-          Write-Host "Downloading Mesa3D software OpenGL for ARM64..."
-          Invoke-WebRequest -Uri "https://github.com/pal1000/mesa-dist-win/releases/download/24.3.4/mesa3d-24.3.4-release-msvc.7z" -OutFile "$env:TEMP\mesa.7z"
+          Write-Host "Downloading Mesa3D ARM64 llvmpipe..."
+          Invoke-WebRequest -Uri "https://github.com/mmozeiko/build-mesa/releases/download/latest/mesa-llvmpipe-arm64.7z" -OutFile "$env:TEMP\mesa-arm64.7z"
           choco install 7zip -y --no-progress
-          & "C:\Program Files\7-Zip\7z.exe" x "$env:TEMP\mesa.7z" -o"$mesaDir" -y | Out-Null
-          # Extract ARM64 DLLs from x64 folder (works for ARM64 Windows via emulation)
-          $mesaDll = "$mesaDir\x64\opengl32.dll"
-          if (Test-Path $mesaDll) {
-            Write-Host "Mesa3D opengl32.dll ready: $mesaDll"
-          } else {
-            Write-Warning "Mesa3D DLL not found at expected path, will try system OpenGL"
+          & "C:\Program Files\7-Zip\7z.exe" x "$env:TEMP\mesa-arm64.7z" -o"$mesaDir" -y | Out-Null
+
+          # Find the ARM64 opengl32.dll
+          $mesaDll = "$mesaDir\opengl32.dll"
+          if (-not (Test-Path $mesaDll)) {
+            $found = Get-ChildItem -Path $mesaDir -Filter "opengl32.dll" -Recurse | Select-Object -First 1
+            if ($found) { $mesaDll = $found.FullName }
           }
 
-          # Create batch file — Mesa3D injected via java.library.path
-          $batchPath = "$env:TEMP\run_minecraft_arm64.bat"
           $projectDir = "$pwd"
           $logPath = "$env:TEMP\minecraft-arm64.log"
-          $jvmArgs = ""
-          if (Test-Path "$mesaDir\x64\opengl32.dll") {
-            $jvmArgs = "-Djava.library.path=$mesaDir\x64 -Dorg.lwjgl.opengl.libname=opengl32.dll"
+
+          if (Test-Path $mesaDll) {
+            Write-Host "Mesa3D ARM64 DLL found: $mesaDll"
+            # Copy to project root — Windows loads opengl32.dll from app directory first
+            Copy-Item -Path $mesaDll -Destination "$projectDir\opengl32.dll" -Force
+            Write-Host "Copied opengl32.dll to project root"
+          } else {
+            Write-Warning "Mesa3D ARM64 DLL not found! OpenGL may fail."
           }
-          # Use PowerShell with Tee-Object: shows on screen AND saves to file
+
+          # Create PowerShell script with Tee-Object (screen + file)
           $psScript = "$env:TEMP\run_minecraft_arm64.ps1"
-          $mesaEnv = ""
-          if (Test-Path "$mesaDir\x64\opengl32.dll") {
-            $mesaEnv = "`$env:MESA_GL_VERSION_OVERRIDE='4.5'`n`$env:MESA_GLSL_VERSION_OVERRIDE='450'`n`$env:GALLIUM_DRIVER='llvmpipe'`n`$env:PATH=`"$mesaDir\x64;`$env:PATH`"`n"
-          }
-          $psContent = "cd `"$projectDir`"`n$mesaEnv./gradlew :fabric:runClient 2>&1 | Tee-Object -FilePath `"$logPath`""
+          $psContent = @"
+`$env:MESA_GL_VERSION_OVERRIDE='4.5'
+`$env:MESA_GLSL_VERSION_OVERRIDE='450'
+`$env:GALLIUM_DRIVER='llvmpipe'
+cd "$projectDir"
+.\gradlew :fabric:runClient 2>&1 | Tee-Object -FilePath "$logPath"
+"@
           Set-Content -Path $psScript -Value $psContent -Encoding ASCII
           Write-Host "Created PowerShell script: $psScript"
 
           # Launch PowerShell script in RDP session via PsExec
-          Start-Process -FilePath "$env:TEMP\PsExec.exe" -ArgumentList @(
+          $proc = Start-Process -FilePath "$env:TEMP\PsExec.exe" -ArgumentList @(
             "-accepteula", "-i", $sessionId,
             "-u", "runneradmin", "-p", $env:RDP_PASSWORD,
             "powershell.exe", "-ExecutionPolicy", "Bypass", "-File", $psScript
-          ) -WindowStyle Hidden
+          ) -WindowStyle Hidden -PassThru
 
-          Write-Host ":fabric:runClient launched in RDP session $sessionId"
+          Write-Host ":fabric:runClient launched in RDP session $sessionId (PID: $($proc.Id))"
 
           # Stream log
           $logFile = "$env:TEMP\minecraft-arm64.log"
@@ -382,23 +390,25 @@ jobs:
             exit 1
           }
 
-          Get-Content $logFile -Wait
-
-      - name: Keep alive until manually cancelled
-        run: |
-          Write-Host ""
-          Write-Host "Minecraft is running. Click 'Cancel workflow' to stop."
-          Write-Host ""
-          $min = 0
-          $logFile = "$env:TEMP\minecraft-arm64.log"
-          while ($true) {
-            Start-Sleep 60
-            $min++
-            Write-Host "[KEEP-ALIVE ARM64] ${min} min..."
-            if (Test-Path $logFile) {
-              Get-Content $logFile -Tail 3 | ForEach-Object { Write-Host "  [LOG] $_" }
+          # Stream log while process is running (exits automatically when gradle finishes)
+          $linesRead = 0
+          while (-not $proc.HasExited) {
+            $allLines = @(Get-Content $logFile)
+            for ($i = $linesRead; $i -lt $allLines.Count; $i++) {
+              Write-Host $allLines[$i]
             }
+            $linesRead = $allLines.Count
+            Start-Sleep 1
           }
+
+          # Final flush after process exits
+          $allLines = @(Get-Content $logFile)
+          for ($i = $linesRead; $i -lt $allLines.Count; $i++) {
+            Write-Host $allLines[$i]
+          }
+
+          Write-Host ""
+          Write-Host "Minecraft process exited with code: $($proc.ExitCode)"
 
       - name: Upload log
         if: always()
