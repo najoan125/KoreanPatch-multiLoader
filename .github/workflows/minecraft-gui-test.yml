@@ -295,40 +295,32 @@ jobs:
 
           # Create PowerShell script that runs inside RDP session
           $psScript = "$env:TEMP\run_minecraft_arm64.ps1"
-          $lines = @(
-            "Write-Host '========================================'",
-            "Write-Host '[ARM64] OpenGL compatibility pack required'",
-            "Write-Host '========================================'",
-            "Write-Host 'Opening browser to store.rg-adguard.net...'",
-            "Write-Host '[1] Enter Product ID: 9NQPSL29BFFF'",
-            "Write-Host '[2] Download the .msixbundle file'",
-            "Write-Host '[3] Install it (double-click to install)'",
-            "Write-Host '[4] Return here and press ENTER to continue'",
-            "Write-Host '========================================'",
-            "",
-            "Start-Process 'https://store.rg-adguard.net'",
-            "",
-            "Read-Host 'Press ENTER after installing the compatibility pack'",
-            "",
-            "Set-Location '$projectDir'",
-            "",
-            "Write-Host ''",
-            "Write-Host 'Starting Minecraft client...'",
-            "Write-Host ''",
-            "",
-            "# Run gradlew synchronously, stream output to console + log file",
-            '`$exitCode = 0',
-            '.\gradlew :fabric:runClient --no-daemon 2>&1 | ForEach-Object {',
-            "    Write-Host `$_",
-            "    `$_ | Add-Content -Path '$logPath'",
-            '    if (`$LASTEXITCODE -ne 0) { `$exitCode = `$LASTEXITCODE }',
-            '}',
-            "",
-            "Write-Host ''",
-            'Write-Host "Minecraft exited with code: `$exitCode"',
-            'exit `$exitCode'
-          )
-          $lines -join [Environment]::NewLine | Set-Content -Path $psScript -Encoding UTF8
+          $psContent = "Write-Host '========================================'
+Write-Host '[ARM64] OpenGL compatibility pack required'
+Write-Host '========================================'
+Write-Host 'Opening browser to store.rg-adguard.net...'
+Write-Host '[1] Enter Product ID: 9NQPSL29BFFF'
+Write-Host '[2] Download the .msixbundle file'
+Write-Host '[3] Install it (double-click to install)'
+Write-Host '[4] Return here and press ENTER to continue'
+Write-Host '========================================'
+Write-Host ''
+
+Start-Process 'https://store.rg-adguard.net'
+
+Read-Host 'Press ENTER after installing the compatibility pack'
+
+Set-Location '$projectDir'
+
+Write-Host 'Starting Minecraft client...'
+Write-Host ''
+
+.\gradlew :fabric:runClient --no-daemon 2>&1 | Tee-Object -FilePath '$logPath'
+
+Write-Host ''
+Write-Host 'Minecraft finished. Exiting...'
+"
+          Set-Content -Path $psScript -Value $psContent -Encoding UTF8
 
           Write-Host "Created PowerShell script: $psScript"
 
@@ -342,45 +334,23 @@ jobs:
           Write-Host "PowerShell launched in RDP session $sessionId"
           Write-Host "A window is showing the compatibility pack instructions on the RDP desktop."
 
-          # Stream log in Actions console
-          $logFile = "$env:TEMP\minecraft-arm64.log"
+          # Wait for Minecraft to finish
           Write-Host ""
-          Write-Host "========================================"
-          Write-Host "Minecraft log streaming (ARM64)"
-          Write-Host "========================================"
-
-          $timeout = 600
-          $waited = 0
-          while (-not (Test-Path $logFile) -and $waited -lt $timeout) {
-            Start-Sleep 3
-            $waited += 3
-            if ($waited % 30 -eq 0) {
-              Write-Host "Waiting for you to install compatibility pack on RDP desktop... (${waited}s)"
-            }
-          }
-
-          if (-not (Test-Path $logFile)) {
-            Write-Error "Log file not created — compatibility pack may not be installed"
-            exit 1
-          }
-
-          $linesRead = 0
-          while (-not $proc.HasExited) {
-            $allLines = @(Get-Content $logFile)
-            for ($i = $linesRead; $i -lt $allLines.Count; $i++) {
-              Write-Host $allLines[$i]
-            }
-            $linesRead = $allLines.Count
-            Start-Sleep 1
-          }
-
-          $allLines = @(Get-Content $logFile)
-          for ($i = $linesRead; $i -lt $allLines.Count; $i++) {
-            Write-Host $allLines[$i]
-          }
+          Write-Host "Waiting for Minecraft to finish in RDP session..."
+          $proc.WaitForExit()
 
           Write-Host ""
           Write-Host "Minecraft exited with code: $($proc.ExitCode)"
+
+          # Stream log to Actions console after completion
+          $logFile = "$env:TEMP\minecraft-arm64.log"
+          if (Test-Path $logFile) {
+            Write-Host ""
+            Write-Host "========================================"
+            Write-Host "Minecraft log (ARM64)"
+            Write-Host "========================================"
+            Get-Content $logFile | Write-Host
+          }
 
           if ($proc.ExitCode -ne 0) {
             exit $proc.ExitCode
