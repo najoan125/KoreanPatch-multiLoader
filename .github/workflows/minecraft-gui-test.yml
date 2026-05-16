@@ -321,33 +321,19 @@ jobs:
           Invoke-WebRequest -Uri "https://download.sysinternals.com/files/PSTools.zip" -OutFile "$env:TEMP\PSTools.zip"
           Expand-Archive -Path "$env:TEMP\PSTools.zip" -DestinationPath "$env:TEMP" -Force
 
-          # Download and extract Mesa3D ARM64 llvmpipe
-          $mesaDir = "$env:TEMP\mesa-arm64"
-          New-Item -ItemType Directory -Path $mesaDir -Force | Out-Null
-          Write-Host "Downloading Mesa3D ARM64 llvmpipe..."
-          Invoke-WebRequest -Uri "https://github.com/mmozeiko/build-mesa/releases/download/26.1.0/mesa-llvmpipe-arm64-26.1.0.7z" -OutFile "$env:TEMP\mesa-arm64.7z"
-          choco install 7zip -y --no-progress
-          & "C:\Program Files\7-Zip\7z.exe" x "$env:TEMP\mesa-arm64.7z" -o"$mesaDir" -y | Out-Null
-
           $projectDir = "$pwd"
           $logPath = "$env:TEMP\minecraft-arm64.log"
 
-          # Copy ALL Mesa DLLs to project root
-          $mesaDlls = Get-ChildItem -Path $mesaDir -Filter "*.dll" -Recurse
-          foreach ($dll in $mesaDlls) {
-            Copy-Item -Path $dll.FullName -Destination "$projectDir\$($dll.Name)" -Force
-            Write-Host "Copied $($dll.Name) to project root"
-          }
+          # Install Microsoft OpenGL/DirectX compatibility pack
+          # Translates OpenGL 3.3+ to DirectX12, works without GPU via WARP
+          Write-Host "Installing Microsoft OpenGL compatibility pack..."
+          dism /online /add-capability /capabilityname:OpenGL.GL0~~1.0 2>$null
+          Write-Host "OpenGL compatibility pack installed (or already present)"
 
           # Create PowerShell script with Tee-Object (screen + file)
           $psScript = "$env:TEMP\run_minecraft_arm64.ps1"
           $psLines = @(
-            "`$env:MESA_GL_VERSION_OVERRIDE='4.5'",
-            "`$env:MESA_GLSL_VERSION_OVERRIDE='450'",
-            "`$env:GALLIUM_DRIVER='llvmpipe'",
             "cd `"$projectDir`"",
-            "`$env:PATH=`"$projectDir;`$env:PATH`"",
-            "`$env:JAVA_TOOL_OPTIONS='-Dorg.lwjgl.librarypath=`"$projectDir`" -Dorg.lwjgl.opengl.Display.allowSoftwareOpenGL=true'",
             ".\gradlew :fabric:runClient 2>&1 | Tee-Object -FilePath `"$logPath`""
           )
           Set-Content -Path $psScript -Value ($psLines -join "`n") -Encoding ASCII
