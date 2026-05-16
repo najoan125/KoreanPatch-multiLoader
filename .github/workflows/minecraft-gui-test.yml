@@ -249,7 +249,7 @@ jobs:
           Add-Content -Path $env:GITHUB_STEP_SUMMARY -Value "| User | ``runneradmin`` |"
           Add-Content -Path $env:GITHUB_STEP_SUMMARY -Value "| Pass | ``$env:RDP_PASSWORD`` |"
 
-      - name: Start Minecraft in RDP session with pause (ARM64)
+      - name: Start Minecraft in RDP session (ARM64)
         run: |
           Write-Host "Waiting for RDP session..."
           Write-Host "Connect from your phone now."
@@ -293,39 +293,54 @@ jobs:
           $projectDir = "$pwd"
           $logPath = "$env:TEMP\minecraft-arm64.log"
 
-          # Create batch file with PAUSE — user installs compatibility pack, then presses any key
-          $batchPath = "$env:TEMP\run_minecraft_arm64.bat"
-          $lines = @(
-            '@echo off',
-            'chcp 65001 >nul',
-            'echo ========================================',
-            'echo [ARM64] OpenGL compatibility pack required',
-            'echo ========================================',
-            'echo Browser will open to store.rg-adguard.net',
-            'echo [1] Enter Product ID: 9NQPSL29BFFF',
-            'echo [2] Download the .msixbundle file',
-            'echo [3] Install it (double-click to install)',
-            'echo [4] Return here and press ANY KEY to continue',
-            'echo ========================================',
-            'start "" "https://store.rg-adguard.net"',
-            'pause',
-            "cd /d `"$projectDir`"",
-            "powershell -Command `".\gradlew :fabric:runClient 2>&1 | Tee-Object -FilePath '$logPath'`""
-          )
-          $lines | Set-Content -Path $batchPath -Encoding ASCII
+          # Create PowerShell script that runs inside RDP session
+          $psScript = "$env:TEMP\run_minecraft_arm64.ps1"
+          $psContent = @'
+Write-Host ''========================================''
+Write-Host ''[ARM64] OpenGL compatibility pack required''
+Write-Host ''========================================''
+Write-Host ''Opening browser to store.rg-adguard.net...''
+Write-Host ''[1] Enter Product ID: 9NQPSL29BFFF''
+Write-Host ''[2] Download the .msixbundle file''
+Write-Host ''[3] Install it (double-click to install)''
+Write-Host ''[4] Return here and press ENTER to continue''
+Write-Host ''========================================''
 
-          Write-Host "Created batch file with PAUSE: $batchPath"
+Start-Process ''https://store.rg-adguard.net''
 
-          # Launch batch in RDP session — the window shows pause prompt
-          # NOTE: start /wait blocks until gradlew fully exits
+Read-Host ''Press ENTER after installing the compatibility pack''
+
+Set-Location ''{PROJECT_DIR}''
+
+Write-Host ''''
+Write-Host ''Starting Minecraft client...''
+Write-Host ''''
+
+# Run gradlew synchronously, stream output to console + log file
+$exitCode = 0
+.\gradlew :fabric:runClient --no-daemon 2>&1 | ForEach-Object {
+    Write-Host $_
+    $_ | Add-Content -Path ''{LOG_PATH}''
+    if ($LASTEXITCODE -ne 0) { $exitCode = $LASTEXITCODE }
+}
+
+Write-Host ''''
+Write-Host "Minecraft exited with code: $exitCode"
+exit $exitCode
+'@ -replace '\{PROJECT_DIR\}', $projectDir -replace '\{LOG_PATH\}', $logPath
+          Set-Content -Path $psScript -Value $psContent -Encoding UTF8
+
+          Write-Host "Created PowerShell script: $psScript"
+
+          # Launch PowerShell in RDP session
           $proc = Start-Process -FilePath "$env:TEMP\PsExec.exe" -ArgumentList @(
             "-accepteula", "-i", $sessionId,
             "-u", "runneradmin", "-p", $env:RDP_PASSWORD,
-            "cmd.exe", "/c", "start", "/wait", "", $batchPath
+            "powershell.exe", "-ExecutionPolicy", "Bypass", "-File", $psScript
           ) -WindowStyle Hidden -PassThru
 
-          Write-Host "Batch launched in RDP session $sessionId"
-          Write-Host "A visible CMD window is showing the pause prompt on the RDP desktop."
+          Write-Host "PowerShell launched in RDP session $sessionId"
+          Write-Host "A window is showing the compatibility pack instructions on the RDP desktop."
 
           # Stream log in Actions console
           $logFile = "$env:TEMP\minecraft-arm64.log"
@@ -340,7 +355,7 @@ jobs:
             Start-Sleep 3
             $waited += 3
             if ($waited % 30 -eq 0) {
-              Write-Host "Waiting for you to press any key on RDP desktop... (${waited}s)"
+              Write-Host "Waiting for you to install compatibility pack on RDP desktop... (${waited}s)"
             }
           }
 
@@ -366,3 +381,15 @@ jobs:
 
           Write-Host ""
           Write-Host "Minecraft exited with code: $($proc.ExitCode)"
+
+          if ($proc.ExitCode -ne 0) {
+            exit $proc.ExitCode
+          }
+
+      - name: Upload log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: minecraft-log-windows-arm64
+          path: ${{ env.TEMP }}\minecraft-arm64.log
+          if-no-files-found: ignore
