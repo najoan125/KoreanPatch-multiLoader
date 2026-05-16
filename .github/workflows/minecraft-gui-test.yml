@@ -351,14 +351,14 @@ jobs:
 
           # Create PowerShell script with Tee-Object (screen + file)
           $psScript = "$env:TEMP\run_minecraft_arm64.ps1"
-          $psContent = @"
-`$env:MESA_GL_VERSION_OVERRIDE='4.5'
-`$env:MESA_GLSL_VERSION_OVERRIDE='450'
-`$env:GALLIUM_DRIVER='llvmpipe'
-cd "$projectDir"
-.\gradlew :fabric:runClient 2>&1 | Tee-Object -FilePath "$logPath"
-"@
-          Set-Content -Path $psScript -Value $psContent -Encoding ASCII
+          $psLines = @(
+            "`$env:MESA_GL_VERSION_OVERRIDE='4.5'",
+            "`$env:MESA_GLSL_VERSION_OVERRIDE='450'",
+            "`$env:GALLIUM_DRIVER='llvmpipe'",
+            "cd `"$projectDir`"",
+            ".\gradlew :fabric:runClient 2>&1 | Tee-Object -FilePath `"$logPath`""
+          )
+          Set-Content -Path $psScript -Value ($psLines -join "`n") -Encoding ASCII
           Write-Host "Created PowerShell script: $psScript"
 
           # Launch PowerShell script in RDP session via PsExec
