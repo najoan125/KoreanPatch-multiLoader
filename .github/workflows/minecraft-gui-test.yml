@@ -31,7 +31,7 @@ jobs:
 
       - uses: actions/setup-java@v4
         with:
-          java-version: '21'
+          java-version: '17'
           distribution: 'temurin'
           cache: gradle
 
@@ -103,41 +103,51 @@ jobs:
           Add-Content -Path $env:GITHUB_STEP_SUMMARY -Value "| Pass | ``$env:RDP_PASSWORD`` |"
           Add-Content -Path $env:GITHUB_STEP_SUMMARY -Value "| App  | Microsoft Remote Desktop (Android/iOS) |"
 
-      # ── 3. RDP 세션 생성 대기 (휴드폰으로 접속 + disconnect 할 때까지) ──
-      - name: Wait for RDP session (connect from phone, then disconnect)
+      # ── 3. RDP 세션 생성 대기 (휴드폰으로 접속하면 바로 proceeding) ──
+      - name: Wait for RDP session (connect from phone)
         run: |
-          Write-Host "Waiting for RDP session to be created..."
-          Write-Host "(Connect from your phone now, then disconnect to keep session alive)"
+          Write-Host "Waiting for RDP session..."
+          Write-Host "Connect from your phone now. You can keep it connected or disconnect."
           Write-Host ""
 
-          $maxWait = 600  # 10 minutes to connect from phone
+          $maxWait = 600
           $elapsed = 0
+          $sessionId = $null
+
           while ($elapsed -lt $maxWait) {
-            # Check if any RDP session exists (active or disconnected)
-            $sessions = query session 2>$null
-            $hasSession = $sessions | Select-String "runneradmin"
+            # Look for an ACTIVE runneradmin session (RDP or console)
+            $allSessions = query session 2>$null
+            $activeSession = $allSessions | Select-String "runneradmin\s+(\d+)\s+Active"
 
-            if ($hasSession) {
-              Write-Host "RDP session detected! Waiting 15s for disconnect..."
-              Start-Sleep 15
+            if ($activeSession) {
+              $sessionId = $activeSession.Matches[0].Groups[1].Value
+              Write-Host "Active session detected! ID: $sessionId"
+              Write-Host "Proceeding to start Minecraft..."
 
-              # Check if session is still active (connected)
-              $activeSession = (query session) | Select-String "runneradmin.*Active"
-              if (-not $activeSession) {
-                Write-Host "RDP session is disconnected (session kept alive). Proceeding..."
-                break
-              }
-              Write-Host "Session still active. Disconnect from phone to proceed."
+              # Save session ID for next steps
+              Add-Content -Path $env:GITHUB_ENV -Value "MC_SESSION_ID=$sessionId"
+              break
+            }
+
+            # Also accept DISCONNECTED sessions (in case user already disconnected)
+            $discSession = $allSessions | Select-String "runneradmin\s+(\d+)\s+Disc"
+            if ($discSession) {
+              $sessionId = $discSession.Matches[0].Groups[1].Value
+              Write-Host "Disconnected session detected! ID: $sessionId"
+              Write-Host "Proceeding to start Minecraft..."
+
+              Add-Content -Path $env:GITHUB_ENV -Value "MC_SESSION_ID=$sessionId"
+              break
             }
 
             Start-Sleep 5
             $elapsed += 5
             if ($elapsed % 30 -eq 0) {
-              Write-Host "Still waiting... ($elapsed s elapsed, $(600-$elapsed)s remaining)"
+              Write-Host "Still waiting for RDP connection... ($elapsed s elapsed)"
             }
           }
 
-          if ($elapsed -ge $maxWait) {
+          if (-not $sessionId) {
             Write-Error "Timeout: No RDP session detected within 10 minutes."
             exit 1
           }
@@ -145,9 +155,12 @@ jobs:
       # ── 4. 대화형 세션에서 Minecraft 실행 ──
       - name: Run :fabric:runClient in RDP session
         run: |
-          # Find the active session ID for runneradmin
-          $sessionInfo = query session | Select-String "runneradmin"
-          $sessionId = ($sessionInfo -split "\s+")[2]
+          # Use session ID saved from previous step
+          $sessionId = $env:MC_SESSION_ID
+          if (-not $sessionId) {
+            Write-Error "No session ID found. RDP connection may have failed."
+            exit 1
+          }
           Write-Host "Target session ID: $sessionId"
 
           # Use PsExec to run in the RDP session
@@ -238,7 +251,7 @@ jobs:
 
       - uses: actions/setup-java@v4
         with:
-          java-version: '21'
+          java-version: '17'
           distribution: 'temurin'
           architecture: aarch64
           cache: gradle
@@ -289,35 +302,56 @@ jobs:
           Add-Content -Path $env:GITHUB_STEP_SUMMARY -Value "| User | ``runneradmin`` |"
           Add-Content -Path $env:GITHUB_STEP_SUMMARY -Value "| Pass | ``$env:RDP_PASSWORD`` |"
 
-      - name: Wait for RDP session
+      - name: Wait for RDP session (connect from phone)
         run: |
-          Write-Host "Waiting for RDP session... (connect from phone, then disconnect)"
+          Write-Host "Waiting for RDP session..."
+          Write-Host "Connect from your phone now. You can keep it connected or disconnect."
+          Write-Host ""
+
           $maxWait = 600
           $elapsed = 0
+          $sessionId = $null
+
           while ($elapsed -lt $maxWait) {
-            $sessions = query session 2>$null
-            $hasSession = $sessions | Select-String "runneradmin"
-            if ($hasSession) {
-              Write-Host "Session detected! Waiting 15s for disconnect..."
-              Start-Sleep 15
-              $activeSession = (query session) | Select-String "runneradmin.*Active"
-              if (-not $activeSession) {
-                Write-Host "Session disconnected. Proceeding..."
-                break
-              }
+            $allSessions = query session 2>$null
+            $activeSession = $allSessions | Select-String "runneradmin\s+(\d+)\s+Active"
+
+            if ($activeSession) {
+              $sessionId = $activeSession.Matches[0].Groups[1].Value
+              Write-Host "Active session detected! ID: $sessionId"
+              Write-Host "Proceeding to start Minecraft..."
+              Add-Content -Path $env:GITHUB_ENV -Value "MC_SESSION_ID=$sessionId"
+              break
             }
+
+            $discSession = $allSessions | Select-String "runneradmin\s+(\d+)\s+Disc"
+            if ($discSession) {
+              $sessionId = $discSession.Matches[0].Groups[1].Value
+              Write-Host "Disconnected session detected! ID: $sessionId"
+              Write-Host "Proceeding to start Minecraft..."
+              Add-Content -Path $env:GITHUB_ENV -Value "MC_SESSION_ID=$sessionId"
+              break
+            }
+
             Start-Sleep 5
             $elapsed += 5
+            if ($elapsed % 30 -eq 0) {
+              Write-Host "Still waiting for RDP connection... ($elapsed s elapsed)"
+            }
           }
-          if ($elapsed -ge $maxWait) {
-            Write-Error "Timeout waiting for RDP session"
+
+          if (-not $sessionId) {
+            Write-Error "Timeout: No RDP session detected within 10 minutes."
             exit 1
           }
 
       - name: Run :fabric:runClient in RDP session
         run: |
-          $sessionInfo = query session | Select-String "runneradmin"
-          $sessionId = ($sessionInfo -split "\s+")[2]
+          $sessionId = $env:MC_SESSION_ID
+          if (-not $sessionId) {
+            Write-Error "No session ID found. RDP connection may have failed."
+            exit 1
+          }
 
           Invoke-WebRequest -Uri "https://download.sysinternals.com/files/PSTools.zip" -OutFile "$env:TEMP\PSTools.zip"
           Expand-Archive -Path "$env:TEMP\PSTools.zip" -DestinationPath "$env:TEMP" -Force
