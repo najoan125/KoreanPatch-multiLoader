@@ -14,12 +14,11 @@ on:
           - windows-arm64
 
 env:
-  # Change this before running if you want
   RDP_PASSWORD: ${{ secrets.RDP_PASSWORD || 'MCTestPass123!' }}
 
 jobs:
   # ──────────────────────────────────────────
-  # Windows x64 — RDP 세션 생성 후 GUI 실행
+  # Windows x64 — Fully automated
   # ──────────────────────────────────────────
   test-windows-x64:
     if: ${{ inputs.architecture == 'both' || inputs.architecture == 'windows-x64' }}
@@ -37,15 +36,12 @@ jobs:
 
       - uses: gradle/actions/setup-gradle@v6
 
-      # ── 1. RDP 활성화 + 계정 설정 ──
       - name: Enable RDP and set password
         run: |
-          # Enable RDP
           Set-ItemProperty -Path "HKLM:\System\CurrentControlSet\Control\Terminal Server" -Name "fDenyTSConnections" -Value 0
           Enable-NetFirewallRule -DisplayGroup "Remote Desktop"
           Set-ItemProperty -Path "HKLM:\System\CurrentControlSet\Control\Terminal Server\WinStations\RDP-Tcp" -Name "UserAuthentication" -Value 0
 
-          # Set runneradmin password for RDP login
           $admin = Get-LocalUser -Name "runneradmin"
           $securePwd = ConvertTo-SecureString $env:RDP_PASSWORD -AsPlainText -Force
           Set-LocalUser -Name "runneradmin" -Password $securePwd
@@ -53,57 +49,40 @@ jobs:
 
           Write-Host "RDP enabled for user: runneradmin"
 
-      # ── 2. ngrok로 RDP 포트(3389) 터널링 ──
       - name: Start ngrok RDP tunnel
         run: |
           choco install ngrok -y --no-progress
           ngrok config add-authtoken ${{ secrets.NGROK_AUTH_TOKEN }}
-          # Tunnel RDP port 3389
           Start-Process ngrok -ArgumentList "tcp 3389" -WindowStyle Hidden
           Start-Sleep 8
 
-          # Get public endpoint
           $tunnels = Invoke-RestMethod -Uri http://127.0.0.1:4040/api/tunnels -TimeoutSec 10
           $tcpTunnel = $tunnels.tunnels | Where-Object { $_.proto -eq "tcp" } | Select-Object -First 1
-          $publicUrl = $tcpTunnel.public_url  # tcp://x.tcp.ngrok.io:xxxxx
+          $publicUrl = $tcpTunnel.public_url
 
-          # Parse host and port
           $hostPort = $publicUrl -replace "tcp://", ""
           $rdpHost = $hostPort.Split(":")[0]
           $rdpPort = $hostPort.Split(":")[1]
 
           Write-Host ""
           Write-Host "========================================"
-          Write-Host "RDP CONNECT WITH YOUR PHONE NOW"
+          Write-Host "RDP x64 — CONNECT WITH YOUR PHONE"
           Write-Host "========================================"
           Write-Host "Host: $rdpHost"
           Write-Host "Port: $rdpPort"
           Write-Host "User: runneradmin"
           Write-Host "Pass: $env:RDP_PASSWORD"
-          Write-Host ""
-          Write-Host "[Android] Microsoft Remote Desktop app"
-          Write-Host "[iOS]     Microsoft Remote Desktop app"
-          Write-Host ""
-          Write-Host "STEPS:"
-          Write-Host "  1. Open the app on your phone"
-          Write-Host "  2. Add PC -> Host: $rdpHost:$rdpPort"
-          Write-Host "  3. User: runneradmin / Pass: $env:RDP_PASSWORD"
-          Write-Host "  4. Connect -> see desktop -> DISCONNECT (keep session)"
-          Write-Host "  5. Minecraft will start automatically after disconnect"
           Write-Host "========================================"
           Write-Host ""
 
-          # Also write to job summary for web view
-          Add-Content -Path $env:GITHUB_STEP_SUMMARY -Value "## Windows x64 — RDP Connection Info"
+          Add-Content -Path $env:GITHUB_STEP_SUMMARY -Value "## Windows x64 — RDP Connection"
           Add-Content -Path $env:GITHUB_STEP_SUMMARY -Value "| Item | Value |"
           Add-Content -Path $env:GITHUB_STEP_SUMMARY -Value "|------|-------|"
           Add-Content -Path $env:GITHUB_STEP_SUMMARY -Value "| Host | ``$rdpHost`` |"
           Add-Content -Path $env:GITHUB_STEP_SUMMARY -Value "| Port | ``$rdpPort`` |"
           Add-Content -Path $env:GITHUB_STEP_SUMMARY -Value "| User | ``runneradmin`` |"
           Add-Content -Path $env:GITHUB_STEP_SUMMARY -Value "| Pass | ``$env:RDP_PASSWORD`` |"
-          Add-Content -Path $env:GITHUB_STEP_SUMMARY -Value "| App  | Microsoft Remote Desktop (Android/iOS) |"
 
-      # ── 3. RDP 세션 대기 + 배치파일 실행 + 로그 스트리밍 (한 step) ──
       - name: Start Minecraft in RDP session and stream logs
         run: |
           Write-Host "Waiting for RDP session..."
@@ -142,37 +121,30 @@ jobs:
             exit 1
           }
 
-          # Download PsExec
           Invoke-WebRequest -Uri "https://download.sysinternals.com/files/PSTools.zip" -OutFile "$env:TEMP\PSTools.zip"
           Expand-Archive -Path "$env:TEMP\PSTools.zip" -DestinationPath "$env:TEMP" -Force
 
-          # Create batch file — runs gradle with output redirected to log file
-          $batchPath = "$env:TEMP\run_minecraft.bat"
           $projectDir = "$pwd"
           $logPath = "$env:TEMP\minecraft-x64.log"
-          # Use PowerShell with Tee-Object: shows on screen AND saves to file
+
           $psScript = "$env:TEMP\run_minecraft.ps1"
           $psContent = "cd `"$projectDir`"`n./gradlew :fabric:runClient 2>&1 | Tee-Object -FilePath `"$logPath`""
           Set-Content -Path $psScript -Value $psContent -Encoding ASCII
-          Write-Host "Created PowerShell script: $psScript"
 
-          # Launch PowerShell script in RDP session via PsExec
           $proc = Start-Process -FilePath "$env:TEMP\PsExec.exe" -ArgumentList @(
             "-accepteula", "-i", $sessionId,
             "-u", "runneradmin", "-p", $env:RDP_PASSWORD,
             "powershell.exe", "-ExecutionPolicy", "Bypass", "-File", $psScript
           ) -WindowStyle Hidden -PassThru
 
-          Write-Host ":fabric:runClient launched in RDP session $sessionId (PID: $($proc.Id))"
+          Write-Host ":fabric:runClient launched (PID: $($proc.Id))"
 
-          # Stream log file in real-time
           $logFile = "$env:TEMP\minecraft-x64.log"
           Write-Host ""
           Write-Host "========================================"
           Write-Host "Minecraft log streaming (x64)"
           Write-Host "========================================"
 
-          # Wait for log file
           $timeout = 120
           $waited = 0
           while (-not (Test-Path $logFile) -and $waited -lt $timeout) {
@@ -186,7 +158,6 @@ jobs:
             exit 1
           }
 
-          # Stream log while process is running (exits automatically when gradle finishes)
           $linesRead = 0
           while (-not $proc.HasExited) {
             $allLines = @(Get-Content $logFile)
@@ -197,14 +168,13 @@ jobs:
             Start-Sleep 1
           }
 
-          # Final flush after process exits
           $allLines = @(Get-Content $logFile)
           for ($i = $linesRead; $i -lt $allLines.Count; $i++) {
             Write-Host $allLines[$i]
           }
 
           Write-Host ""
-          Write-Host "Minecraft process exited with code: $($proc.ExitCode)"
+          Write-Host "Minecraft exited with code: $($proc.ExitCode)"
 
       - name: Upload log
         if: always()
@@ -215,8 +185,9 @@ jobs:
           if-no-files-found: ignore
 
   # ──────────────────────────────────────────
-  # Windows arm64 — RDP 세션 생성 후 GUI 실행
-  # windows-11-arm runner 사용 (Preview)
+  # Windows arm64 — MANUAL MODE
+  # GitHub-hosted ARM64 runners lack GPU/OpenGL.
+  # You must manually install the compatibility pack via RDP.
   # ──────────────────────────────────────────
   test-windows-arm64:
     if: ${{ inputs.architecture == 'both' || inputs.architecture == 'windows-arm64' }}
@@ -256,6 +227,7 @@ jobs:
           $tunnels = Invoke-RestMethod -Uri http://127.0.0.1:4040/api/tunnels -TimeoutSec 10
           $tcpTunnel = $tunnels.tunnels | Where-Object { $_.proto -eq "tcp" } | Select-Object -First 1
           $publicUrl = $tcpTunnel.public_url
+
           $hostPort = $publicUrl -replace "tcp://", ""
           $rdpHost = $hostPort.Split(":")[0]
           $rdpPort = $hostPort.Split(":")[1]
@@ -267,11 +239,9 @@ jobs:
           Write-Host "Port: $rdpPort"
           Write-Host "User: runneradmin"
           Write-Host "Pass: $env:RDP_PASSWORD"
-          Write-Host ""
-          Write-Host "Steps: Connect -> see desktop -> DISCONNECT -> auto start"
           Write-Host "========================================"
 
-          Add-Content -Path $env:GITHUB_STEP_SUMMARY -Value "## Windows ARM64 — RDP Connection Info"
+          Add-Content -Path $env:GITHUB_STEP_SUMMARY -Value "## Windows ARM64 — RDP Connection"
           Add-Content -Path $env:GITHUB_STEP_SUMMARY -Value "| Item | Value |"
           Add-Content -Path $env:GITHUB_STEP_SUMMARY -Value "|------|-------|"
           Add-Content -Path $env:GITHUB_STEP_SUMMARY -Value "| Host | ``$rdpHost`` |"
@@ -279,7 +249,7 @@ jobs:
           Add-Content -Path $env:GITHUB_STEP_SUMMARY -Value "| User | ``runneradmin`` |"
           Add-Content -Path $env:GITHUB_STEP_SUMMARY -Value "| Pass | ``$env:RDP_PASSWORD`` |"
 
-      - name: Start Minecraft in RDP session and stream logs
+      - name: Start Minecraft in RDP session with pause (ARM64)
         run: |
           Write-Host "Waiting for RDP session..."
           Write-Host "Connect from your phone now."
@@ -317,62 +287,64 @@ jobs:
             exit 1
           }
 
-          # Download PsExec
           Invoke-WebRequest -Uri "https://download.sysinternals.com/files/PSTools.zip" -OutFile "$env:TEMP\PSTools.zip"
           Expand-Archive -Path "$env:TEMP\PSTools.zip" -DestinationPath "$env:TEMP" -Force
 
           $projectDir = "$pwd"
           $logPath = "$env:TEMP\minecraft-arm64.log"
 
-          # Install Microsoft OpenGL/DirectX compatibility pack (Windows Store app)
-          # Translates OpenGL 3.3+ to DirectX12, works without GPU via WARP
-          Write-Host "Installing OpenCL/OpenGL/Vulkan Compatibility Pack..."
-          winget install --id Microsoft.OpenCLGLVulkanCompatibilityPack -e --accept-package-agreements --accept-source-agreements --silent
-          if ($LASTEXITCODE -ne 0) {
-            Write-Warning "winget install failed (exit: $LASTEXITCODE), OpenGL may fail without GPU"
-          } else {
-            Write-Host "Compatibility pack installed"
-          }
+          # Create batch file with PAUSE — user installs compatibility pack, then presses any key
+          $batchPath = "$env:TEMP\run_minecraft_arm64.bat"
+          @'
+@echo off
+chcp 65001 >nul
+echo ========================================
+echo [ARM64] OpenGL compatibility pack required
+echo ========================================
+echo [1] Open Microsoft Store
+echo [2] Search: OpenCL and OpenGL Compatibility Pack
+echo [3] Click Install and wait for completion
+echo [4] Return here and press ANY KEY to continue
+echo ========================================
+pause
+cd /d "{PROJECT_DIR}"
+powershell -Command ".\gradlew :fabric:runClient 2>&1 | Tee-Object -FilePath '{LOG_PATH}'"
+'@ -replace '{PROJECT_DIR}', $projectDir -replace '{LOG_PATH}', $logPath | Set-Content -Path $batchPath -Encoding ASCII
 
-          # Create PowerShell script with Tee-Object (screen + file)
-          $psScript = "$env:TEMP\run_minecraft_arm64.ps1"
-          $psLines = @(
-            "cd `"$projectDir`"",
-            ".\gradlew :fabric:runClient 2>&1 | Tee-Object -FilePath `"$logPath`""
-          )
-          Set-Content -Path $psScript -Value ($psLines -join "`n") -Encoding ASCII
-          Write-Host "Created PowerShell script: $psScript"
+          Write-Host "Created batch file with PAUSE: $batchPath"
 
-          # Launch PowerShell script in RDP session via PsExec
+          # Launch batch in RDP session — the window shows pause prompt
           $proc = Start-Process -FilePath "$env:TEMP\PsExec.exe" -ArgumentList @(
             "-accepteula", "-i", $sessionId,
             "-u", "runneradmin", "-p", $env:RDP_PASSWORD,
-            "powershell.exe", "-ExecutionPolicy", "Bypass", "-File", $psScript
+            "cmd.exe", "/c", "start", "", $batchPath
           ) -WindowStyle Hidden -PassThru
 
-          Write-Host ":fabric:runClient launched in RDP session $sessionId (PID: $($proc.Id))"
+          Write-Host "Batch launched in RDP session $sessionId"
+          Write-Host "A visible CMD window is showing the pause prompt on the RDP desktop."
 
-          # Stream log
+          # Stream log in Actions console
           $logFile = "$env:TEMP\minecraft-arm64.log"
           Write-Host ""
           Write-Host "========================================"
           Write-Host "Minecraft log streaming (ARM64)"
           Write-Host "========================================"
 
-          $timeout = 120
+          $timeout = 600
           $waited = 0
           while (-not (Test-Path $logFile) -and $waited -lt $timeout) {
             Start-Sleep 3
             $waited += 3
-            Write-Host "Waiting for log file... (${waited}s)"
+            if ($waited % 30 -eq 0) {
+              Write-Host "Waiting for you to press any key on RDP desktop... (${waited}s)"
+            }
           }
 
           if (-not (Test-Path $logFile)) {
-            Write-Error "Log file not created after ${timeout}s"
+            Write-Error "Log file not created — compatibility pack may not be installed"
             exit 1
           }
 
-          # Stream log while process is running (exits automatically when gradle finishes)
           $linesRead = 0
           while (-not $proc.HasExited) {
             $allLines = @(Get-Content $logFile)
@@ -383,19 +355,10 @@ jobs:
             Start-Sleep 1
           }
 
-          # Final flush after process exits
           $allLines = @(Get-Content $logFile)
           for ($i = $linesRead; $i -lt $allLines.Count; $i++) {
             Write-Host $allLines[$i]
           }
 
           Write-Host ""
-          Write-Host "Minecraft process exited with code: $($proc.ExitCode)"
-
-      - name: Upload log
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: minecraft-log-windows-arm64
-          path: ${{ env.TEMP }}\minecraft-arm64.log
-          if-no-files-found: ignore
+          Write-Host "Minecraft exited with code: $($proc.ExitCode)"
