@@ -1,0 +1,259 @@
+name: Minecraft Mod GUI Test
+
+on:
+  workflow_dispatch:
+    inputs:
+      architecture:
+        description: 'Test target'
+        required: true
+        default: 'both'
+        type: choice
+        options:
+          - both
+          - windows-x64
+          - windows-arm64
+
+jobs:
+  test-windows-x64:
+    if: ${{ inputs.architecture == 'both' || inputs.architecture == 'windows-x64' }}
+    runs-on: windows-latest
+    timeout-minutes: 360
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: gradle
+
+      - uses: gradle/actions/setup-gradle@v3
+
+      - name: Download PsExec
+        run: |
+          Invoke-WebRequest -Uri "https://download.sysinternals.com/files/PSTools.zip" -OutFile "$env:TEMP\PSTools.zip"
+          Expand-Archive -Path "$env:TEMP\PSTools.zip" -DestinationPath "$env:TEMP\psexec" -Force
+          Write-Host "PsExec ready"
+
+      - name: Create interactive session user
+        run: |
+          $username = "mctest"
+          $password = ConvertTo-SecureString "MCTestPass123!" -AsPlainText -Force
+          try {
+            New-LocalUser -Name $username -Password $password -FullName "MCTest" -Description "Minecraft GUI test" -ErrorAction Stop
+            Write-Host "Created user: $username"
+          } catch {
+            # User may already exist, reset password
+            Set-LocalUser -Name $username -Password $password
+            Write-Host "Reset password for existing user: $username"
+          }
+          # Enable auto-logon so Session 1 exists
+          Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon" -Name "AutoAdminLogon" -Value "1"
+          Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon" -Name "DefaultUserName" -Value $username
+          Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon" -Name "DefaultPassword" -Value "MCTestPass123!"
+          Write-Host "Auto-logon configured for $username"
+
+      - name: Create scheduled task for GUI session
+        run: |
+          $action = New-ScheduledTaskAction -Execute "powershell.exe" `
+            -Argument "-ExecutionPolicy Bypass -Command `"& { cd '$pwd'; ./gradlew runClient 2>&1 | Tee-Object '$env:TEMP\minecraft-x64.log' }`" "`
+            -WorkingDirectory "$pwd"
+          $trigger = New-ScheduledTaskTrigger -Once -At (Get-Date).AddSeconds(5)
+          $principal = New-ScheduledTaskPrincipal -UserId "mctest" -LogonType Interactive -RunLevel Highest
+          $settings = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries -StartWhenAvailable
+
+          Unregister-ScheduledTask -TaskName "MinecraftGUI-x64" -Confirm:$false -ErrorAction SilentlyContinue
+          Register-ScheduledTask -TaskName "MinecraftGUI-x64" -Action $action -Trigger $trigger -Principal $principal -Settings $settings -Force
+
+          # Trigger the task to start in interactive session
+          Start-ScheduledTask -TaskName "MinecraftGUI-x64"
+          Write-Host "Scheduled task started in interactive GUI session"
+
+      - name: Wait and stream logs
+        run: |
+          Write-Host "Waiting for Minecraft to start in GUI session..."
+          $logFile = "$env:TEMP\minecraft-x64.log"
+          $timeout = 300  # 5 minutes to start
+          $elapsed = 0
+          # Wait for log file to appear
+          while (-not (Test-Path $logFile) -and $elapsed -lt $timeout) {
+            Start-Sleep 5
+            $elapsed += 5
+            Write-Host "Waiting for log file... ($elapsed s)"
+            Get-ScheduledTaskInfo -TaskName "MinecraftGUI-x64" | Select-Object LastTaskResult, TaskState | Write-Host
+          }
+          if (-not (Test-Path $logFile)) {
+            Write-Error "Log file not created after $timeout seconds"
+            exit 1
+          }
+          # Stream log in real-time
+          Write-Host "========================================"
+          Write-Host "Minecraft log streaming started (x64)"
+          Write-Host "========================================"
+          $reader = [System.IO.StreamReader]::new($logFile)
+          try {
+            while ($true) {
+              $line = $reader.ReadLine()
+              if ($line -ne $null) {
+                Write-Host $line
+              } else {
+                # Check if process is still running
+                $task = Get-ScheduledTaskInfo -TaskName "MinecraftGUI-x64" -ErrorAction SilentlyContinue
+                if ($task.TaskState -eq "Ready") {
+                  Write-Host "Minecraft process ended."
+                  break
+                }
+                Start-Sleep 1
+              }
+            }
+          } finally {
+            $reader.Close()
+          }
+
+      - name: Keep alive until manually cancelled
+        run: |
+          Write-Host ""
+          Write-Host "Minecraft is running in background GUI session."
+          Write-Host "Click 'Cancel workflow' above to stop."
+          Write-Host ""
+          $min = 0
+          $logFile = "$env:TEMP\minecraft-x64.log"
+          while ($true) {
+            Start-Sleep 60
+            $min++
+            Write-Host "[KEEP-ALIVE x64] Running for $min minute(s)..."
+            if (Test-Path $logFile) {
+              Get-Content $logFile -Tail 5 | ForEach-Object { Write-Host "  [LOG] $_" }
+            }
+          }
+
+      - name: Cleanup and upload log
+        if: always()
+        run: |
+          Unregister-ScheduledTask -TaskName "MinecraftGUI-x64" -Confirm:$false -ErrorAction SilentlyContinue
+        continue-on-error: true
+
+      - name: Upload x64 log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: minecraft-log-windows-x64
+          path: ${{ env.TEMP }}\minecraft-x64.log
+          if-no-files-found: ignore
+
+  test-windows-arm64:
+    if: ${{ inputs.architecture == 'both' || inputs.architecture == 'windows-arm64' }}
+    runs-on: windows-11-arm
+    timeout-minutes: 360
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          architecture: aarch64
+          cache: gradle
+
+      - uses: gradle/actions/setup-gradle@v3
+
+      - name: Download PsExec
+        run: |
+          Invoke-WebRequest -Uri "https://download.sysinternals.com/files/PSTools.zip" -OutFile "$env:TEMP\PSTools.zip"
+          Expand-Archive -Path "$env:TEMP\PSTools.zip" -DestinationPath "$env:TEMP\psexec" -Force
+
+      - name: Create interactive session user
+        run: |
+          $username = "mctest"
+          $password = ConvertTo-SecureString "MCTestPass123!" -AsPlainText -Force
+          try {
+            New-LocalUser -Name $username -Password $password -FullName "MCTest" -Description "Minecraft GUI test" -ErrorAction Stop
+          } catch {
+            Set-LocalUser -Name $username -Password $password
+          }
+          Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon" -Name "AutoAdminLogon" -Value "1"
+          Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon" -Name "DefaultUserName" -Value $username
+          Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon" -Name "DefaultPassword" -Value "MCTestPass123!"
+
+      - name: Create scheduled task for GUI session
+        run: |
+          $action = New-ScheduledTaskAction -Execute "powershell.exe" `
+            -Argument "-ExecutionPolicy Bypass -Command `"& { cd '$pwd'; ./gradlew runClient 2>&1 | Tee-Object '$env:TEMP\minecraft-arm64.log' }`" "`
+            -WorkingDirectory "$pwd"
+          $trigger = New-ScheduledTaskTrigger -Once -At (Get-Date).AddSeconds(5)
+          $principal = New-ScheduledTaskPrincipal -UserId "mctest" -LogonType Interactive -RunLevel Highest
+          $settings = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries -StartWhenAvailable
+
+          Unregister-ScheduledTask -TaskName "MinecraftGUI-arm64" -Confirm:$false -ErrorAction SilentlyContinue
+          Register-ScheduledTask -TaskName "MinecraftGUI-arm64" -Action $action -Trigger $trigger -Principal $principal -Settings $settings -Force
+          Start-ScheduledTask -TaskName "MinecraftGUI-arm64"
+
+      - name: Wait and stream logs
+        run: |
+          $logFile = "$env:TEMP\minecraft-arm64.log"
+          $timeout = 300
+          $elapsed = 0
+          while (-not (Test-Path $logFile) -and $elapsed -lt $timeout) {
+            Start-Sleep 5
+            $elapsed += 5
+            Write-Host "Waiting for log file... ($elapsed s)"
+            Get-ScheduledTaskInfo -TaskName "MinecraftGUI-arm64" | Select-Object LastTaskResult, TaskState | Write-Host
+          }
+          if (-not (Test-Path $logFile)) {
+            Write-Error "Log file not created after $timeout seconds"
+            exit 1
+          }
+          Write-Host "========================================"
+          Write-Host "Minecraft log streaming started (ARM64)"
+          Write-Host "========================================"
+          $reader = [System.IO.StreamReader]::new($logFile)
+          try {
+            while ($true) {
+              $line = $reader.ReadLine()
+              if ($line -ne $null) {
+                Write-Host $line
+              } else {
+                $task = Get-ScheduledTaskInfo -TaskName "MinecraftGUI-arm64" -ErrorAction SilentlyContinue
+                if ($task.TaskState -eq "Ready") {
+                  Write-Host "Minecraft process ended."
+                  break
+                }
+                Start-Sleep 1
+              }
+            }
+          } finally {
+            $reader.Close()
+          }
+
+      - name: Keep alive until manually cancelled
+        run: |
+          Write-Host ""
+          Write-Host "Minecraft is running in background GUI session (ARM64)."
+          Write-Host "Click 'Cancel workflow' above to stop."
+          Write-Host ""
+          $min = 0
+          $logFile = "$env:TEMP\minecraft-arm64.log"
+          while ($true) {
+            Start-Sleep 60
+            $min++
+            Write-Host "[KEEP-ALIVE ARM64] Running for $min minute(s)..."
+            if (Test-Path $logFile) {
+              Get-Content $logFile -Tail 5 | ForEach-Object { Write-Host "  [LOG] $_" }
+            }
+          }
+
+      - name: Cleanup and upload log
+        if: always()
+        run: |
+          Unregister-ScheduledTask -TaskName "MinecraftGUI-arm64" -Confirm:$false -ErrorAction SilentlyContinue
+        continue-on-error: true
+
+      - name: Upload ARM64 log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: minecraft-log-windows-arm64
+          path: ${{ env.TEMP }}\minecraft-arm64.log
+          if-no-files-found: ignore
