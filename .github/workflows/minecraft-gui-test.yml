@@ -115,27 +115,40 @@ jobs:
           $sessionId = $null
 
           while ($elapsed -lt $maxWait) {
-            # Look for an ACTIVE runneradmin session (RDP or console)
             $allSessions = query session 2>$null
-            $activeSession = $allSessions | Select-String "runneradmin\s+(\d+)\s+Active"
+            $found = $false
 
-            if ($activeSession) {
-              $sessionId = $activeSession.Matches[0].Groups[1].Value
-              Write-Host "Active session detected! ID: $sessionId"
-              Write-Host "Proceeding to start Minecraft..."
+            # Look for RDP sessions only (not console)
+            foreach ($line in $allSessions) {
+              # Skip console/services lines, only match rdp-tcp#N sessions
+              if ($line -match "console" -or $line -match "^\s*services\s") { continue }
 
-              # Save session ID for next steps
-              Add-Content -Path $env:GITHUB_ENV -Value "MC_SESSION_ID=$sessionId"
-              break
+              # Active RDP session
+              if ($line -match "runneradmin\s+(\d+)\s+Active") {
+                $sid = $matches[1]
+                # Verify it's actually an RDP session name (rdp-tcp#...)
+                if ($line -match "rdp-tcp#") {
+                  $sessionId = $sid
+                  Write-Host "Active RDP session detected! ID: $sessionId"
+                  $found = $true
+                  break
+                }
+              }
+
+              # Disconnected RDP session
+              if ($line -match "runneradmin\s+(\d+)\s+Disc") {
+                $sid = $matches[1]
+                if ($line -match "rdp-tcp#") {
+                  $sessionId = $sid
+                  Write-Host "Disconnected RDP session detected! ID: $sessionId"
+                  $found = $true
+                  break
+                }
+              }
             }
 
-            # Also accept DISCONNECTED sessions (in case user already disconnected)
-            $discSession = $allSessions | Select-String "runneradmin\s+(\d+)\s+Disc"
-            if ($discSession) {
-              $sessionId = $discSession.Matches[0].Groups[1].Value
-              Write-Host "Disconnected session detected! ID: $sessionId"
+            if ($found) {
               Write-Host "Proceeding to start Minecraft..."
-
               Add-Content -Path $env:GITHUB_ENV -Value "MC_SESSION_ID=$sessionId"
               break
             }
@@ -314,20 +327,33 @@ jobs:
 
           while ($elapsed -lt $maxWait) {
             $allSessions = query session 2>$null
-            $activeSession = $allSessions | Select-String "runneradmin\s+(\d+)\s+Active"
+            $found = $false
 
-            if ($activeSession) {
-              $sessionId = $activeSession.Matches[0].Groups[1].Value
-              Write-Host "Active session detected! ID: $sessionId"
-              Write-Host "Proceeding to start Minecraft..."
-              Add-Content -Path $env:GITHUB_ENV -Value "MC_SESSION_ID=$sessionId"
-              break
+            foreach ($line in $allSessions) {
+              if ($line -match "console" -or $line -match "^\s*services\s") { continue }
+
+              if ($line -match "runneradmin\s+(\d+)\s+Active") {
+                $sid = $matches[1]
+                if ($line -match "rdp-tcp#") {
+                  $sessionId = $sid
+                  Write-Host "Active RDP session detected! ID: $sessionId"
+                  $found = $true
+                  break
+                }
+              }
+
+              if ($line -match "runneradmin\s+(\d+)\s+Disc") {
+                $sid = $matches[1]
+                if ($line -match "rdp-tcp#") {
+                  $sessionId = $sid
+                  Write-Host "Disconnected RDP session detected! ID: $sessionId"
+                  $found = $true
+                  break
+                }
+              }
             }
 
-            $discSession = $allSessions | Select-String "runneradmin\s+(\d+)\s+Disc"
-            if ($discSession) {
-              $sessionId = $discSession.Matches[0].Groups[1].Value
-              Write-Host "Disconnected session detected! ID: $sessionId"
+            if ($found) {
               Write-Host "Proceeding to start Minecraft..."
               Add-Content -Path $env:GITHUB_ENV -Value "MC_SESSION_ID=$sessionId"
               break
