@@ -301,11 +301,13 @@ jobs:
             'echo ========================================',
             'echo [ARM64] OpenGL compatibility pack required',
             'echo ========================================',
-            'echo [1] Open Microsoft Store',
-            'echo [2] Search: OpenCL and OpenGL Compatibility Pack',
-            'echo [3] Click Install and wait for completion',
+            'echo Browser will open to store.rg-adguard.net',
+            'echo [1] Enter Product ID: 9NQPSL29BFFF',
+            'echo [2] Download the .msixbundle file',
+            'echo [3] Install it (double-click to install)',
             'echo [4] Return here and press ANY KEY to continue',
             'echo ========================================',
+            'start "" "https://store.rg-adguard.net"',
             'pause',
             "cd /d `"$projectDir`"",
             "powershell -Command `".\gradlew :fabric:runClient 2>&1 | Tee-Object -FilePath '$logPath'`""
@@ -315,10 +317,11 @@ jobs:
           Write-Host "Created batch file with PAUSE: $batchPath"
 
           # Launch batch in RDP session — the window shows pause prompt
+          # NOTE: start /wait blocks until gradlew fully exits
           $proc = Start-Process -FilePath "$env:TEMP\PsExec.exe" -ArgumentList @(
             "-accepteula", "-i", $sessionId,
             "-u", "runneradmin", "-p", $env:RDP_PASSWORD,
-            "cmd.exe", "/c", "start", "", $batchPath
+            "cmd.exe", "/c", "start", "/wait", "", $batchPath
           ) -WindowStyle Hidden -PassThru
 
           Write-Host "Batch launched in RDP session $sessionId"
