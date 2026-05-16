@@ -347,8 +347,8 @@ jobs:
             "`$env:GALLIUM_DRIVER='llvmpipe'",
             "cd `"$projectDir`"",
             "`$env:PATH=`"$projectDir;`$env:PATH`"",
-            "`$jvmArgs = '-Dorg.lwjgl.librarypath=`"$projectDir`" -Dorg.lwjgl.opengl.Display.allowSoftwareOpenGL=true'",
-            ".\gradlew :fabric:runClient -Dorg.gradle.jvmargs=`"`$jvmArgs`" 2>&1 | Tee-Object -FilePath `"$logPath`""
+            "`$env:JAVA_TOOL_OPTIONS='-Dorg.lwjgl.librarypath=`"$projectDir`" -Dorg.lwjgl.opengl.Display.allowSoftwareOpenGL=true'",
+            ".\gradlew :fabric:runClient 2>&1 | Tee-Object -FilePath `"$logPath`""
           )
           Set-Content -Path $psScript -Value ($psLines -join "`n") -Encoding ASCII
           Write-Host "Created PowerShell script: $psScript"
