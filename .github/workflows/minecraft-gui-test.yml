@@ -326,7 +326,7 @@ jobs:
           $mesaDir = "$env:TEMP\mesa-arm64"
           New-Item -ItemType Directory -Path $mesaDir -Force | Out-Null
           Write-Host "Downloading Mesa3D ARM64 llvmpipe..."
-          Invoke-WebRequest -Uri "https://github.com/mmozeiko/build-mesa/releases/download/latest/mesa-llvmpipe-arm64.7z" -OutFile "$env:TEMP\mesa-arm64.7z"
+          Invoke-WebRequest -Uri "https://github.com/mmozeiko/build-mesa/releases/download/26.1.0/mesa-llvmpipe-arm64-26.1.0.7z" -OutFile "$env:TEMP\mesa-arm64.7z"
           choco install 7zip -y --no-progress
           & "C:\Program Files\7-Zip\7z.exe" x "$env:TEMP\mesa-arm64.7z" -o"$mesaDir" -y | Out-Null
 
