@@ -312,7 +312,7 @@ jobs:
             "Write-Host ''; `n" + `
             "`$exitCode = (Start-Process -FilePath '.\gradlew' -ArgumentList ':fabric:runClient','--no-daemon' -NoNewWindow -Wait -PassThru).ExitCode; `n" + `
             "Write-Host ''; `n" + `
-            "Write-Host \"Minecraft exited with code: `$exitCode\"; `n" + `
+            "Write-Host `"Minecraft exited with code: `$exitCode`"; `n" + `
             "exit `$exitCode"
           Set-Content -Path $psScript -Value $psContent -Encoding UTF8
 
