@@ -295,31 +295,24 @@ jobs:
 
           # Create PowerShell script that runs inside RDP session
           $psScript = "$env:TEMP\run_minecraft_arm64.ps1"
-          $psContent = "Write-Host '========================================'
-Write-Host '[ARM64] OpenGL compatibility pack required'
-Write-Host '========================================'
-Write-Host 'Opening browser to store.rg-adguard.net...'
-Write-Host '[1] Enter Product ID: 9NQPSL29BFFF'
-Write-Host '[2] Download the .msixbundle file'
-Write-Host '[3] Install it (double-click to install)'
-Write-Host '[4] Return here and press ENTER to continue'
-Write-Host '========================================'
-Write-Host ''
-
-Start-Process 'https://store.rg-adguard.net'
-
-Read-Host 'Press ENTER after installing the compatibility pack'
-
-Set-Location '$projectDir'
-
-Write-Host 'Starting Minecraft client...'
-Write-Host ''
-
-.\gradlew :fabric:runClient --no-daemon 2>&1 | Tee-Object -FilePath '$logPath'
-
-Write-Host ''
-Write-Host 'Minecraft finished. Exiting...'
-"
+          $psContent = "Write-Host '========================================'; `n" + `
+            "Write-Host '[ARM64] OpenGL compatibility pack required'; `n" + `
+            "Write-Host '========================================'; `n" + `
+            "Write-Host 'Opening browser to store.rg-adguard.net...'; `n" + `
+            "Write-Host '[1] Enter Product ID: 9NQPSL29BFFF'; `n" + `
+            "Write-Host '[2] Download the .msixbundle file'; `n" + `
+            "Write-Host '[3] Install it (double-click to install)'; `n" + `
+            "Write-Host '[4] Return here and press ENTER to continue'; `n" + `
+            "Write-Host '========================================'; `n" + `
+            "Write-Host ''; `n" + `
+            "Start-Process 'https://store.rg-adguard.net'; `n" + `
+            "`$null = Read-Host 'Press ENTER after installing the compatibility pack'; `n" + `
+            "Set-Location '$projectDir'; `n" + `
+            "Write-Host 'Starting Minecraft client...'; `n" + `
+            "Write-Host ''; `n" + `
+            ".\gradlew :fabric:runClient --no-daemon 2>&1 | Tee-Object -FilePath '$logPath'; `n" + `
+            "Write-Host ''; `n" + `
+            "Write-Host 'Minecraft finished. Exiting...'"
           Set-Content -Path $psScript -Value $psContent -Encoding UTF8
 
           Write-Host "Created PowerShell script: $psScript"
