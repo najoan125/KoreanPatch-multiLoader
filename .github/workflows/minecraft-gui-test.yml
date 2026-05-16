@@ -310,10 +310,9 @@ jobs:
             "Set-Location '$projectDir'; `n" + `
             "Write-Host 'Starting Minecraft client...'; `n" + `
             "Write-Host ''; `n" + `
-            "`$exitCode = (Start-Process -FilePath '.\gradlew' -ArgumentList ':fabric:runClient','--no-daemon' -NoNewWindow -Wait -PassThru).ExitCode; `n" + `
+            "cmd /c `.\gradlew :fabric:runClient --no-daemon 2>&1 | Tee-Object -FilePath '$logPath'; `n" + `
             "Write-Host ''; `n" + `
-            "Write-Host `"Minecraft exited with code: `$exitCode`"; `n" + `
-            "exit `$exitCode"
+            "exit `$LASTEXITCODE"
           Set-Content -Path $psScript -Value $psContent -Encoding UTF8
 
           Write-Host "Created PowerShell script: $psScript"
@@ -349,6 +348,8 @@ jobs:
           if ($proc.ExitCode -ne 0) {
             exit $proc.ExitCode
           }
+          Write-Host "ARM64 test completed successfully."
+          exit 0
 
       - name: Upload log
         if: always()
