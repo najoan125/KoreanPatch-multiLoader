@@ -295,21 +295,22 @@ jobs:
 
           # Create batch file with PAUSE — user installs compatibility pack, then presses any key
           $batchPath = "$env:TEMP\run_minecraft_arm64.bat"
-          @'
-@echo off
-chcp 65001 >nul
-echo ========================================
-echo [ARM64] OpenGL compatibility pack required
-echo ========================================
-echo [1] Open Microsoft Store
-echo [2] Search: OpenCL and OpenGL Compatibility Pack
-echo [3] Click Install and wait for completion
-echo [4] Return here and press ANY KEY to continue
-echo ========================================
-pause
-cd /d "{PROJECT_DIR}"
-powershell -Command ".\gradlew :fabric:runClient 2>&1 | Tee-Object -FilePath '{LOG_PATH}'"
-'@ -replace '{PROJECT_DIR}', $projectDir -replace '{LOG_PATH}', $logPath | Set-Content -Path $batchPath -Encoding ASCII
+          $lines = @(
+            '@echo off',
+            'chcp 65001 >nul',
+            'echo ========================================',
+            'echo [ARM64] OpenGL compatibility pack required',
+            'echo ========================================',
+            'echo [1] Open Microsoft Store',
+            'echo [2] Search: OpenCL and OpenGL Compatibility Pack',
+            'echo [3] Click Install and wait for completion',
+            'echo [4] Return here and press ANY KEY to continue',
+            'echo ========================================',
+            'pause',
+            "cd /d `"$projectDir`"",
+            "powershell -Command `".\gradlew :fabric:runClient 2>&1 | Tee-Object -FilePath '$logPath'`""
+          )
+          $lines | Set-Content -Path $batchPath -Encoding ASCII
 
           Write-Host "Created batch file with PAUSE: $batchPath"
 
