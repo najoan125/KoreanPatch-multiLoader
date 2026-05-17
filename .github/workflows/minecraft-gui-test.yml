@@ -6,10 +6,9 @@ on:
       architecture:
         description: 'Test target'
         required: true
-        default: 'both'
+        default: 'windows-x64'
         type: choice
         options:
-          - both
           - windows-x64
           - windows-arm64
 
@@ -215,7 +214,6 @@ jobs:
           java-version: '21'
           distribution: 'temurin'
           architecture: aarch64
-          cache: gradle
 
       - uses: gradle/actions/setup-gradle@v6
         with:
