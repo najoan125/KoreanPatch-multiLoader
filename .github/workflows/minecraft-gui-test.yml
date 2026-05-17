@@ -127,8 +127,11 @@ jobs:
           $projectDir = "$pwd"
           $logPath = "$env:TEMP\minecraft-x64.log"
 
+          $javaHome = $env:JAVA_HOME
+          Write-Host "JAVA_HOME: $javaHome"
+
           $psScript = "$env:TEMP\run_minecraft.ps1"
-          $psContent = "cd `"$projectDir`"`n./gradlew :fabric:runClient 2>&1 | Tee-Object -FilePath `"$logPath`""
+          $psContent = "`$env:JAVA_HOME = '$javaHome'`ncd '$projectDir'`n`$env:JAVA_HOME = '$javaHome'`n.\gradlew :fabric:runClient --no-daemon 2>&1 | Tee-Object -FilePath '$logPath'"
           Set-Content -Path $psScript -Value $psContent -Encoding ASCII
 
           $proc = Start-Process -FilePath "$env:TEMP\PsExec.exe" -ArgumentList @(
