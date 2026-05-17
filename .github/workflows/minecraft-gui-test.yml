@@ -32,9 +32,10 @@ jobs:
         with:
           java-version: '21'
           distribution: 'temurin'
-          cache: gradle
 
       - uses: gradle/actions/setup-gradle@v6
+        with:
+          cache-read-only: false
 
       - name: Enable RDP and set password
         run: |
@@ -217,6 +218,8 @@ jobs:
           cache: gradle
 
       - uses: gradle/actions/setup-gradle@v6
+        with:
+          cache-read-only: false
 
       - name: Enable RDP and set password
         run: |
