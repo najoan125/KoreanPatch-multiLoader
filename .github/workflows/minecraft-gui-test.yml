@@ -83,7 +83,7 @@ jobs:
           Add-Content -Path $env:GITHUB_STEP_SUMMARY -Value "| User | ``runneradmin`` |"
           Add-Content -Path $env:GITHUB_STEP_SUMMARY -Value "| Pass | ``$env:RDP_PASSWORD`` |"
 
-      - name: Start Minecraft in RDP session and stream logs
+      - name: Start Minecraft in RDP session (x64)
         run: |
           Write-Host "Waiting for RDP session..."
           Write-Host "Connect from your phone now."
@@ -125,67 +125,68 @@ jobs:
           Expand-Archive -Path "$env:TEMP\PSTools.zip" -DestinationPath "$env:TEMP" -Force
 
           $projectDir = "$pwd"
-          $logPath = "$env:TEMP\minecraft-x64.log"
-
+          $logPath = "$pwd\minecraft-x64.log"
           $javaHome = $env:JAVA_HOME
-          Write-Host "JAVA_HOME: $javaHome"
 
+          # Create PowerShell script that runs inside RDP session
           $psScript = "$env:TEMP\run_minecraft.ps1"
-          $psContent = "`$env:JAVA_HOME = '$javaHome'`ncd '$projectDir'`n`$env:JAVA_HOME = '$javaHome'`n.\gradlew :fabric:runClient --no-daemon 2>&1 | Tee-Object -FilePath '$logPath'"
-          Set-Content -Path $psScript -Value $psContent -Encoding ASCII
+          $psContent = "Write-Host '========================================'; `n" + `
+            "Write-Host '[x64] Starting Minecraft'; `n" + `
+            "Write-Host '========================================'; `n" + `
+            "Write-Host ''; `n" + `
+            "`$env:JAVA_HOME = '" + $javaHome + "'; `n" + `
+            "Set-Location '" + $projectDir + "'; `n" + `
+            "Write-Host 'Starting Minecraft client...'; `n" + `
+            "Write-Host ''; `n" + `
+            "cmd /c `.\gradlew :fabric:runClient --no-daemon 2>&1 | Tee-Object -FilePath '" + $logPath + "'; `n" + `
+            "Write-Host ''; `n" + `
+            "Write-Host 'Minecraft finished.'; `n" + `
+            "exit `$LASTEXITCODE"
+          Set-Content -Path $psScript -Value $psContent -Encoding UTF8
 
+          Write-Host "Created PowerShell script: $psScript"
+
+          # Launch PowerShell in RDP session
           $proc = Start-Process -FilePath "$env:TEMP\PsExec.exe" -ArgumentList @(
             "-accepteula", "-i", $sessionId,
             "-u", "runneradmin", "-p", $env:RDP_PASSWORD,
             "powershell.exe", "-ExecutionPolicy", "Bypass", "-File", $psScript
           ) -WindowStyle Hidden -PassThru
 
-          Write-Host ":fabric:runClient launched (PID: $($proc.Id))"
+          Write-Host "PowerShell launched in RDP session $sessionId"
 
-          $logFile = "$env:TEMP\minecraft-x64.log"
+          # Wait for Minecraft to finish
           Write-Host ""
-          Write-Host "========================================"
-          Write-Host "Minecraft log streaming (x64)"
-          Write-Host "========================================"
-
-          $timeout = 120
-          $waited = 0
-          while (-not (Test-Path $logFile) -and $waited -lt $timeout) {
-            Start-Sleep 3
-            $waited += 3
-            Write-Host "Waiting for log file... (${waited}s)"
-          }
-
-          if (-not (Test-Path $logFile)) {
-            Write-Error "Log file not created after ${timeout}s"
-            exit 1
-          }
-
-          $linesRead = 0
-          while (-not $proc.HasExited) {
-            $allLines = @(Get-Content $logFile)
-            for ($i = $linesRead; $i -lt $allLines.Count; $i++) {
-              Write-Host $allLines[$i]
-            }
-            $linesRead = $allLines.Count
-            Start-Sleep 1
-          }
-
-          $allLines = @(Get-Content $logFile)
-          for ($i = $linesRead; $i -lt $allLines.Count; $i++) {
-            Write-Host $allLines[$i]
-          }
+          Write-Host "Waiting for Minecraft to finish in RDP session..."
+          $proc.WaitForExit()
 
           Write-Host ""
           Write-Host "Minecraft exited with code: $($proc.ExitCode)"
+
+          # Stream log to Actions console after completion
+          $logFile = "$pwd\minecraft-x64.log"
+          if (Test-Path $logFile) {
+            Write-Host ""
+            Write-Host "========================================"
+            Write-Host "Minecraft log (x64)"
+            Write-Host "========================================"
+            Get-Content $logFile | Write-Host
+          }
+
+          if ($proc.ExitCode -ne 0) {
+            exit $proc.ExitCode
+          }
+          Write-Host "x64 test completed successfully."
+          exit 0
 
       - name: Upload log
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: minecraft-log-windows-x64
-          path: ${{ env.TEMP }}\minecraft-x64.log
+          path: minecraft-x64.log
           if-no-files-found: ignore
+
 
   # ──────────────────────────────────────────
   # Windows arm64 — MANUAL MODE
