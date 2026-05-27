@@ -3,6 +3,7 @@ package com.hyfata.najoan.koreanpatch.driver.arch.win;
 import com.hyfata.najoan.koreanpatch.client.Constants;
 import com.hyfata.najoan.koreanpatch.config.ConfigManager;
 import com.hyfata.najoan.koreanpatch.driver.InputController;
+
 import net.minecraft.client.Minecraft;
 import org.lwjgl.glfw.GLFWNativeWin32;
 
