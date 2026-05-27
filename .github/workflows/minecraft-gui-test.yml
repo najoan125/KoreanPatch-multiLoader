@@ -1,0 +1,373 @@
+name: Minecraft Mod GUI Test (Windows RDP)
+
+on:
+  workflow_dispatch:
+    inputs:
+      architecture:
+        description: 'Test target'
+        required: true
+        default: 'windows-x64'
+        type: choice
+        options:
+          - windows-x64
+          - windows-arm64
+
+env:
+  RDP_PASSWORD: ${{ secrets.RDP_PASSWORD || 'MCTestPass123!' }}
+
+jobs:
+  # ──────────────────────────────────────────
+  # Windows x64 — Fully automated
+  # ──────────────────────────────────────────
+  test-windows-x64:
+    if: ${{ inputs.architecture == 'both' || inputs.architecture == 'windows-x64' }}
+    runs-on: windows-latest
+    timeout-minutes: 360
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+
+      - uses: gradle/actions/setup-gradle@v6
+        with:
+          cache-read-only: false
+
+      - name: Enable RDP and set password
+        run: |
+          Set-ItemProperty -Path "HKLM:\System\CurrentControlSet\Control\Terminal Server" -Name "fDenyTSConnections" -Value 0
+          Enable-NetFirewallRule -DisplayGroup "Remote Desktop"
+          Set-ItemProperty -Path "HKLM:\System\CurrentControlSet\Control\Terminal Server\WinStations\RDP-Tcp" -Name "UserAuthentication" -Value 0
+
+          $admin = Get-LocalUser -Name "runneradmin"
+          $securePwd = ConvertTo-SecureString $env:RDP_PASSWORD -AsPlainText -Force
+          Set-LocalUser -Name "runneradmin" -Password $securePwd
+          Enable-LocalUser -Name "runneradmin"
+
+          Write-Host "RDP enabled for user: runneradmin"
+
+      - name: Start ngrok RDP tunnel
+        run: |
+          choco install ngrok -y --no-progress
+          ngrok config add-authtoken ${{ secrets.NGROK_AUTH_TOKEN }}
+          Start-Process ngrok -ArgumentList "tcp 3389" -WindowStyle Hidden
+          Start-Sleep 8
+
+          $tunnels = Invoke-RestMethod -Uri http://127.0.0.1:4040/api/tunnels -TimeoutSec 10
+          $tcpTunnel = $tunnels.tunnels | Where-Object { $_.proto -eq "tcp" } | Select-Object -First 1
+          $publicUrl = $tcpTunnel.public_url
+
+          $hostPort = $publicUrl -replace "tcp://", ""
+          $rdpHost = $hostPort.Split(":")[0]
+          $rdpPort = $hostPort.Split(":")[1]
+
+          Write-Host ""
+          Write-Host "========================================"
+          Write-Host "RDP x64 — CONNECT WITH YOUR PHONE"
+          Write-Host "========================================"
+          Write-Host "Host: $rdpHost"
+          Write-Host "Port: $rdpPort"
+          Write-Host "User: runneradmin"
+          Write-Host "Pass: $env:RDP_PASSWORD"
+          Write-Host "========================================"
+          Write-Host ""
+
+          Add-Content -Path $env:GITHUB_STEP_SUMMARY -Value "## Windows x64 — RDP Connection"
+          Add-Content -Path $env:GITHUB_STEP_SUMMARY -Value "| Item | Value |"
+          Add-Content -Path $env:GITHUB_STEP_SUMMARY -Value "|------|-------|"
+          Add-Content -Path $env:GITHUB_STEP_SUMMARY -Value "| Host | ``$rdpHost`` |"
+          Add-Content -Path $env:GITHUB_STEP_SUMMARY -Value "| Port | ``$rdpPort`` |"
+          Add-Content -Path $env:GITHUB_STEP_SUMMARY -Value "| User | ``runneradmin`` |"
+          Add-Content -Path $env:GITHUB_STEP_SUMMARY -Value "| Pass | ``$env:RDP_PASSWORD`` |"
+
+      - name: Start Minecraft in RDP session (x64)
+        run: |
+          Write-Host "Waiting for RDP session..."
+          Write-Host "Connect from your phone now."
+          Write-Host ""
+
+          $maxWait = 600
+          $elapsed = 0
+          $sessionId = $null
+
+          while ($elapsed -lt $maxWait) {
+            $allSessions = query session 2>$null
+            $found = $false
+
+            foreach ($line in $allSessions) {
+              Write-Host "  [SESSION] $line"
+              if ($line -match "\s+console\s+" -or $line -match "^\s*services\s") { continue }
+              if ($line -match "rdp-tcp#\d+.*runneradmin\s+(\d+)\s+(Active|Disc)") {
+                $sessionId = $matches[1]
+                Write-Host "RDP session found! ID: $sessionId"
+                $found = $true
+                break
+              }
+            }
+
+            if ($found) { break }
+            Start-Sleep 5
+            $elapsed += 5
+            if ($elapsed % 30 -eq 0) {
+              Write-Host "Still waiting... ($elapsed s)"
+            }
+          }
+
+          if (-not $sessionId) {
+            Write-Error "Timeout: No RDP session within 10 minutes."
+            exit 1
+          }
+
+          Invoke-WebRequest -Uri "https://download.sysinternals.com/files/PSTools.zip" -OutFile "$env:TEMP\PSTools.zip"
+          Expand-Archive -Path "$env:TEMP\PSTools.zip" -DestinationPath "$env:TEMP" -Force
+
+          $projectDir = "$pwd"
+          $logPath = "$pwd\minecraft-x64.log"
+          $javaHome = $env:JAVA_HOME
+
+          # Create PowerShell script that runs inside RDP session
+          $psScript = "$env:TEMP\run_minecraft.ps1"
+          $psContent = "Write-Host '========================================'; `n" + `
+            "Write-Host '[x64] OpenGL compatibility pack required'; `n" + `
+            "Write-Host '========================================'; `n" + `
+            "Write-Host 'Opening browser to store.rg-adguard.net...'; `n" + `
+            "Write-Host '[1] Enter Product ID: 9NQPSL29BFFF'; `n" + `
+            "Write-Host '[2] Download the .msixbundle file'; `n" + `
+            "Write-Host '[3] Install it (double-click to install)'; `n" + `
+            "Write-Host '[4] Return here and press ENTER to continue'; `n" + `
+            "Write-Host '========================================'; `n" + `
+            "Write-Host ''; `n" + `
+            "Start-Process 'https://store.rg-adguard.net'; `n" + `
+            "`$null = Read-Host 'Press ENTER after installing the compatibility pack'; `n" + `
+            "`$env:JAVA_HOME = '" + $javaHome + "'; `n" + `
+            "Set-Location '" + $projectDir + "'; `n" + `
+            "Write-Host 'Starting Minecraft client...'; `n" + `
+            "Write-Host ''; `n" + `
+            "cmd /c `.\gradlew :fabric:runClient --no-daemon 2>&1 | Tee-Object -FilePath '" + $logPath + "'; `n" + `
+            "Write-Host ''; `n" + `
+            "Write-Host 'Minecraft finished.'; `n" + `
+            "exit `$LASTEXITCODE"
+          Set-Content -Path $psScript -Value $psContent -Encoding UTF8
+
+          Write-Host "Created PowerShell script: $psScript"
+
+          # Launch PowerShell in RDP session
+          $proc = Start-Process -FilePath "$env:TEMP\PsExec.exe" -ArgumentList @(
+            "-accepteula", "-i", $sessionId,
+            "-u", "runneradmin", "-p", $env:RDP_PASSWORD,
+            "powershell.exe", "-ExecutionPolicy", "Bypass", "-File", $psScript
+          ) -WindowStyle Hidden -PassThru
+
+          Write-Host "PowerShell launched in RDP session $sessionId"
+
+          # Wait for Minecraft to finish
+          Write-Host ""
+          Write-Host "Waiting for Minecraft to finish in RDP session..."
+          $proc.WaitForExit()
+
+          Write-Host ""
+          Write-Host "Minecraft exited with code: $($proc.ExitCode)"
+
+          # Stream log to Actions console after completion
+          $logFile = "$pwd\minecraft-x64.log"
+          if (Test-Path $logFile) {
+            Write-Host ""
+            Write-Host "========================================"
+            Write-Host "Minecraft log (x64)"
+            Write-Host "========================================"
+            Get-Content $logFile | Write-Host
+          }
+
+          if ($proc.ExitCode -ne 0) {
+            exit $proc.ExitCode
+          }
+          Write-Host "x64 test completed successfully."
+          exit 0
+
+      - name: Upload log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: minecraft-log-windows-x64
+          path: minecraft-x64.log
+          if-no-files-found: ignore
+
+
+  # ──────────────────────────────────────────
+  # Windows arm64 — MANUAL MODE
+  # GitHub-hosted ARM64 runners lack GPU/OpenGL.
+  # You must manually install the compatibility pack via RDP.
+  # ──────────────────────────────────────────
+  test-windows-arm64:
+    if: ${{ inputs.architecture == 'both' || inputs.architecture == 'windows-arm64' }}
+    runs-on: windows-11-arm
+    timeout-minutes: 360
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+          architecture: aarch64
+
+      - uses: gradle/actions/setup-gradle@v6
+        with:
+          cache-read-only: false
+
+      - name: Enable RDP and set password
+        run: |
+          Set-ItemProperty -Path "HKLM:\System\CurrentControlSet\Control\Terminal Server" -Name "fDenyTSConnections" -Value 0
+          Enable-NetFirewallRule -DisplayGroup "Remote Desktop"
+          Set-ItemProperty -Path "HKLM:\System\CurrentControlSet\Control\Terminal Server\WinStations\RDP-Tcp" -Name "UserAuthentication" -Value 0
+
+          $admin = Get-LocalUser -Name "runneradmin"
+          $securePwd = ConvertTo-SecureString $env:RDP_PASSWORD -AsPlainText -Force
+          Set-LocalUser -Name "runneradmin" -Password $securePwd
+          Enable-LocalUser -Name "runneradmin"
+
+      - name: Start ngrok RDP tunnel
+        run: |
+          choco install ngrok -y --no-progress
+          ngrok config add-authtoken ${{ secrets.NGROK_AUTH_TOKEN }}
+          Start-Process ngrok -ArgumentList "tcp 3389" -WindowStyle Hidden
+          Start-Sleep 8
+
+          $tunnels = Invoke-RestMethod -Uri http://127.0.0.1:4040/api/tunnels -TimeoutSec 10
+          $tcpTunnel = $tunnels.tunnels | Where-Object { $_.proto -eq "tcp" } | Select-Object -First 1
+          $publicUrl = $tcpTunnel.public_url
+
+          $hostPort = $publicUrl -replace "tcp://", ""
+          $rdpHost = $hostPort.Split(":")[0]
+          $rdpPort = $hostPort.Split(":")[1]
+
+          Write-Host "========================================"
+          Write-Host "RDP ARM64 — CONNECT WITH YOUR PHONE"
+          Write-Host "========================================"
+          Write-Host "Host: $rdpHost"
+          Write-Host "Port: $rdpPort"
+          Write-Host "User: runneradmin"
+          Write-Host "Pass: $env:RDP_PASSWORD"
+          Write-Host "========================================"
+
+          Add-Content -Path $env:GITHUB_STEP_SUMMARY -Value "## Windows ARM64 — RDP Connection"
+          Add-Content -Path $env:GITHUB_STEP_SUMMARY -Value "| Item | Value |"
+          Add-Content -Path $env:GITHUB_STEP_SUMMARY -Value "|------|-------|"
+          Add-Content -Path $env:GITHUB_STEP_SUMMARY -Value "| Host | ``$rdpHost`` |"
+          Add-Content -Path $env:GITHUB_STEP_SUMMARY -Value "| Port | ``$rdpPort`` |"
+          Add-Content -Path $env:GITHUB_STEP_SUMMARY -Value "| User | ``runneradmin`` |"
+          Add-Content -Path $env:GITHUB_STEP_SUMMARY -Value "| Pass | ``$env:RDP_PASSWORD`` |"
+
+      - name: Start Minecraft in RDP session (ARM64)
+        run: |
+          Write-Host "Waiting for RDP session..."
+          Write-Host "Connect from your phone now."
+          Write-Host ""
+
+          $maxWait = 600
+          $elapsed = 0
+          $sessionId = $null
+
+          while ($elapsed -lt $maxWait) {
+            $allSessions = query session 2>$null
+            $found = $false
+
+            foreach ($line in $allSessions) {
+              Write-Host "  [SESSION] $line"
+              if ($line -match "\s+console\s+" -or $line -match "^\s*services\s") { continue }
+              if ($line -match "rdp-tcp#\d+.*runneradmin\s+(\d+)\s+(Active|Disc)") {
+                $sessionId = $matches[1]
+                Write-Host "RDP session found! ID: $sessionId"
+                $found = $true
+                break
+              }
+            }
+
+            if ($found) { break }
+            Start-Sleep 5
+            $elapsed += 5
+            if ($elapsed % 30 -eq 0) {
+              Write-Host "Still waiting... ($elapsed s)"
+            }
+          }
+
+          if (-not $sessionId) {
+            Write-Error "Timeout: No RDP session within 10 minutes."
+            exit 1
+          }
+
+          Invoke-WebRequest -Uri "https://download.sysinternals.com/files/PSTools.zip" -OutFile "$env:TEMP\PSTools.zip"
+          Expand-Archive -Path "$env:TEMP\PSTools.zip" -DestinationPath "$env:TEMP" -Force
+
+          $projectDir = "$pwd"
+          $logPath = "$pwd\minecraft-arm64.log"
+
+          # Create PowerShell script that runs inside RDP session
+          $psScript = "$env:TEMP\run_minecraft_arm64.ps1"
+          $psContent = "Write-Host '========================================'; `n" + `
+            "Write-Host '[ARM64] OpenGL compatibility pack required'; `n" + `
+            "Write-Host '========================================'; `n" + `
+            "Write-Host 'Opening browser to store.rg-adguard.net...'; `n" + `
+            "Write-Host '[1] Enter Product ID: 9NQPSL29BFFF'; `n" + `
+            "Write-Host '[2] Download the .msixbundle file'; `n" + `
+            "Write-Host '[3] Install it (double-click to install)'; `n" + `
+            "Write-Host '[4] Return here and press ENTER to continue'; `n" + `
+            "Write-Host '========================================'; `n" + `
+            "Write-Host ''; `n" + `
+            "Start-Process 'https://store.rg-adguard.net'; `n" + `
+            "`$null = Read-Host 'Press ENTER after installing the compatibility pack'; `n" + `
+            "Set-Location '$projectDir'; `n" + `
+            "Write-Host 'Starting Minecraft client...'; `n" + `
+            "Write-Host ''; `n" + `
+            "cmd /c `.\gradlew :fabric:runClient --no-daemon 2>&1 | Tee-Object -FilePath '$logPath'; `n" + `
+            "Write-Host ''; `n" + `
+            "exit `$LASTEXITCODE"
+          Set-Content -Path $psScript -Value $psContent -Encoding UTF8
+
+          Write-Host "Created PowerShell script: $psScript"
+
+          # Launch PowerShell in RDP session
+          $proc = Start-Process -FilePath "$env:TEMP\PsExec.exe" -ArgumentList @(
+            "-accepteula", "-i", $sessionId,
+            "-u", "runneradmin", "-p", $env:RDP_PASSWORD,
+            "powershell.exe", "-ExecutionPolicy", "Bypass", "-File", $psScript
+          ) -WindowStyle Hidden -PassThru
+
+          Write-Host "PowerShell launched in RDP session $sessionId"
+          Write-Host "A window is showing the compatibility pack instructions on the RDP desktop."
+
+          # Wait for Minecraft to finish
+          Write-Host ""
+          Write-Host "Waiting for Minecraft to finish in RDP session..."
+          $proc.WaitForExit()
+
+          Write-Host ""
+          Write-Host "Minecraft exited with code: $($proc.ExitCode)"
+
+          # Stream log to Actions console after completion
+          $logFile = "$pwd\minecraft-arm64.log"
+          if (Test-Path $logFile) {
+            Write-Host ""
+            Write-Host "========================================"
+            Write-Host "Minecraft log (ARM64)"
+            Write-Host "========================================"
+            Get-Content $logFile | Write-Host
+          }
+
+          if ($proc.ExitCode -ne 0) {
+            exit $proc.ExitCode
+          }
+          Write-Host "ARM64 test completed successfully."
+          exit 0
+
+      - name: Upload log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: minecraft-log-windows-arm64
+          path: minecraft-arm64.log
+          if-no-files-found: ignore
