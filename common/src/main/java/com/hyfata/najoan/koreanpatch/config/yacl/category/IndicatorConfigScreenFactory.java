@@ -51,9 +51,6 @@ public class IndicatorConfigScreenFactory extends ConfigScreenFactory {
 
         Option<Boolean> showOption = Option.<Boolean>createBuilder()
                 .name(createTranslatableComponent("general.show"))
-                .description(YACLUtil.descWithImage(
-                        createTranslationKey("general.show.description"), "indicator")
-                )
                 .binding(
                         config.getCategoryIndicator().isShowIndicator(),
                         config.getCategoryIndicator()::isShowIndicator,

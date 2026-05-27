@@ -37,7 +37,7 @@ public class RenderUtil {
             GuiGraphicsAccessor accessor = (GuiGraphicsAccessor) guiGraphics;
             accessor.getGuiRenderState().submitText(
                     new FloatTextRenderState(
-                            client.font, text, new Matrix3x2f(guiGraphics.pose()), x, y, color, 0, true, accessor.getScissorStack().peek()
+                            client.font, text, new Matrix3x2f(guiGraphics.pose()), x, y, color, 0, true, false, accessor.getScissorStack().peek()
                     )
             );
         }
