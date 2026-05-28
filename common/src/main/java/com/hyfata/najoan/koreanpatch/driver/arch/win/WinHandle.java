@@ -1,10 +1,21 @@
 package com.hyfata.najoan.koreanpatch.driver.arch.win;
 
 import com.hyfata.najoan.koreanpatch.util.LibraryUtil;
-import com.sun.jna.*;
+import com.sun.jna.Callback;
+import com.sun.jna.Library;
+import com.sun.jna.Native;
+import com.sun.jna.Platform;
 
 public interface WinHandle extends Library {
-    WinHandle INSTANCE = Native.load(LibraryUtil.copyLibrary("libwincocoainput.dll"), WinHandle.class);
+    WinHandle INSTANCE = Native.load(LibraryUtil.copyLibrary(selectLibrary()), WinHandle.class);
+
+    static String selectLibrary() {
+        if (Platform.isARM()) {
+            return "libwincocoainput-arm64.dll";
+        } else {
+            return "libwincocoainput-x64.dll";
+        }
+    }
 
     void set_focus(int flag);
     void initialize(

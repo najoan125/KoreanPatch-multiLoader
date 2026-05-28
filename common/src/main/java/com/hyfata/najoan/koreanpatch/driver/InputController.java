@@ -11,9 +11,9 @@ public interface InputController {
     boolean isFocused();
 
     static InputController newController() {
-        if (Platform.isWindows()) {
+        if (Platform.isWindows() && Platform.is64Bit()) {
             return new WinController(); // Windows
-        } else if (Platform.isMac()) {
+        } else if (Platform.isMac() && Platform.is64Bit()) {
             return new DarwinController(); // MacOS
         }
 
