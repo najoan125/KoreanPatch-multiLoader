@@ -30,7 +30,7 @@ jobs:
       - uses: actions/setup-java@v4
         with:
           java-version: '16'
-          distribution: 'temurin'
+          distribution: 'zulu'
 
       - uses: gradle/actions/setup-gradle@v6
         with:
@@ -213,8 +213,8 @@ jobs:
 
       - uses: actions/setup-java@v4
         with:
-          java-version: '16'
-          distribution: 'temurin'
+          java-version: '17'
+          distribution: 'zulu'
           architecture: aarch64
 
       - uses: gradle/actions/setup-gradle@v6
