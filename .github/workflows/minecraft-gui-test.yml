@@ -68,6 +68,7 @@ jobs:
           Write-Host "========================================"
           Write-Host "RDP x64 — CONNECT WITH YOUR PHONE"
           Write-Host "========================================"
+          Write-Host "$hostPort"
           Write-Host "Host: $rdpHost"
           Write-Host "Port: $rdpPort"
           Write-Host "User: runneradmin"
@@ -140,6 +141,7 @@ jobs:
             "Write-Host '[4] Return here and press ENTER to continue'; `n" + `
             "Write-Host '========================================'; `n" + `
             "Write-Host ''; `n" + `
+            "Set-Clipboard -Value '9NQPSL29BFFF'; `n" + `
             "Start-Process 'https://store.rg-adguard.net'; `n" + `
             "`$null = Read-Host 'Press ENTER after installing the compatibility pack'; `n" + `
             "`$env:JAVA_HOME = '" + $javaHome + "'; `n" + `
@@ -248,6 +250,7 @@ jobs:
           Write-Host "========================================"
           Write-Host "RDP ARM64 — CONNECT WITH YOUR PHONE"
           Write-Host "========================================"
+          Write-Host "$hostPort"
           Write-Host "Host: $rdpHost"
           Write-Host "Port: $rdpPort"
           Write-Host "User: runneradmin"
@@ -318,6 +321,7 @@ jobs:
             "Write-Host '[4] Return here and press ENTER to continue'; `n" + `
             "Write-Host '========================================'; `n" + `
             "Write-Host ''; `n" + `
+            "Set-Clipboard -Value '9NQPSL29BFFF'; `n" + `
             "Start-Process 'https://store.rg-adguard.net'; `n" + `
             "`$null = Read-Host 'Press ENTER after installing the compatibility pack'; `n" + `
             "Set-Location '$projectDir'; `n" + `
