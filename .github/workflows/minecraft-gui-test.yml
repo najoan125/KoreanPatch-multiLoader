@@ -308,6 +308,7 @@ jobs:
 
           $projectDir = "$pwd"
           $logPath = "$pwd\minecraft-arm64.log"
+          $javaHome = $env:JAVA_HOME
 
           # Create PowerShell script that runs inside RDP session
           $psScript = "$env:TEMP\run_minecraft_arm64.ps1"
