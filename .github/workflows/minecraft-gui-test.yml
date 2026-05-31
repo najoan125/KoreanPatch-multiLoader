@@ -10,7 +10,6 @@ on:
         type: choice
         options:
           - windows-x64
-          - windows-arm64
 
 env:
   RDP_PASSWORD: ${{ secrets.RDP_PASSWORD || 'MCTestPass123!' }}
