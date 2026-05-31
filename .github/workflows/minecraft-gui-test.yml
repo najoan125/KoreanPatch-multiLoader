@@ -325,6 +325,7 @@ jobs:
             "Set-Clipboard -Value '9NQPSL29BFFF'; `n" + `
             "Start-Process 'https://store.rg-adguard.net'; `n" + `
             "`$null = Read-Host 'Press ENTER after installing the compatibility pack'; `n" + `
+            "`$env:JAVA_HOME = '" + $javaHome + "'; `n" + `
             "Set-Location '$projectDir'; `n" + `
             "Write-Host 'Starting Minecraft client...'; `n" + `
             "Write-Host ''; `n" + `
