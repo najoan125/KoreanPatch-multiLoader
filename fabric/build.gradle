@@ -39,9 +39,9 @@ dependencies {
         exclude group: 'net.fabricmc', module: 'fabric-loader'
         exclude group: 'net.fabricmc.fabric-api', module: 'fabric-api'
     }
-    modCompileOnly "dev.isxander:yet-another-config-lib:${project.yacl_version}-fabric" // To test modImplementation
+    modCompileOnly "maven.modrinth:yacl:${project.yacl_version}-fabric" // To test modImplementation
 
-    modImplementation "com.terraformersmc:modmenu:${project.modmenu_version}"
+    modCompileOnly "com.terraformersmc:modmenu:${project.modmenu_version}"
 	modCompileOnly "maven.modrinth:command-block-ide:${project.command_block_ide_version}"
 	modCompileOnly "maven.modrinth:bettercommandblockui:${project.better_command_block_ui_version}"
     modCompileOnly "maven.modrinth:easy-anvils:${project.easy_anvils_version_fabric}"
