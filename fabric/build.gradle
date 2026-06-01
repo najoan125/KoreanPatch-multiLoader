@@ -35,8 +35,11 @@ dependencies {
     addEmbeddedFabricModule "fabric-resource-loader-v0"
     addEmbeddedFabricModule "fabric-screen-api-v1"
 
-    modApi "me.shedaniel.cloth:cloth-config-fabric:${cloth_config}"
-    modImplementation "dev.isxander:yet-another-config-lib:${project.yacl_version}-fabric" // To test modImplementation
+    modApi("me.shedaniel.cloth:cloth-config-fabric:${cloth_config}") {
+        exclude group: 'net.fabricmc', module: 'fabric-loader'
+        exclude group: 'net.fabricmc.fabric-api', module: 'fabric-api'
+    }
+    modCompileOnly "dev.isxander:yet-another-config-lib:${project.yacl_version}-fabric" // To test modImplementation
 
     modImplementation "com.terraformersmc:modmenu:${project.modmenu_version}"
 	modCompileOnly "maven.modrinth:command-block-ide:${project.command_block_ide_version}"
