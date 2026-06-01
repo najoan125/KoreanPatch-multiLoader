@@ -35,9 +35,12 @@ dependencies {
     addEmbeddedFabricModule "fabric-resource-loader-v0"
     addEmbeddedFabricModule "fabric-screen-api-v1"
 
-    modApi "me.shedaniel.cloth:cloth-config-fabric:${cloth_config}"
+    modApi("me.shedaniel.cloth:cloth-config-fabric:${cloth_config}") {
+        exclude group: 'net.fabricmc', module: 'fabric-loader'
+        exclude group: 'net.fabricmc.fabric-api', module: 'fabric-api'
+    }
 
-    modImplementation "com.terraformersmc:modmenu:${project.modmenu_version}"
+    modCompileOnly "com.terraformersmc:modmenu:${project.modmenu_version}"
 	modCompileOnly "maven.modrinth:command-block-ide:${project.command_block_ide_version}"
     modCompileOnly "maven.modrinth:xaeros-minimap:${project.xaeros_minimap_fabric}"
     modCompileOnly "maven.modrinth:xaeros-world-map:${project.xaeros_world_map_fabric}"
