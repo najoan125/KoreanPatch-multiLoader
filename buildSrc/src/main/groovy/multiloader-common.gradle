@@ -23,7 +23,7 @@ repositories {
                 url = 'https://repo.spongepowered.org/repository/maven-public'
             }
         }
-        filter { includeGroupAndSubgroups('org.spongepowered') }
+        filter { includeGroupByRegex('org\\.spongepowered(\\..*)?') }
     }
     exclusiveContent {
         forRepository {
