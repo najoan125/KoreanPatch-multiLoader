@@ -22,7 +22,7 @@ pluginManagement {
                 }
             }
             filter {
-                includeGroupAndSubgroups("org.spongepowered")
+                includeGroupByRegex('org\\.spongepowered(\\..*)?')
             }
         }
         exclusiveContent {
@@ -33,7 +33,7 @@ pluginManagement {
                 }
             }
             filter {
-                includeGroupAndSubgroups('net.minecraftforge')
+                includeGroupByRegex('net\\.minecraftforge(\\..*)?')
             }
         }
         exclusiveContent {
@@ -44,7 +44,7 @@ pluginManagement {
                 }
             }
             filter {
-                includeGroupAndSubgroups('org.parchmentmc')
+                includeGroupByRegex('org\\.parchmentmc(\\..*)?')
             }
         }
     }
