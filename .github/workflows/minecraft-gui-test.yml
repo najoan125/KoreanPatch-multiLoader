@@ -28,7 +28,7 @@ jobs:
 
       - uses: actions/setup-java@v4
         with:
-          java-version: '16'
+          java-version: '21'
           distribution: 'zulu'
 
       - uses: gradle/actions/setup-gradle@v6
