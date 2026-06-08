@@ -4,6 +4,7 @@ import com.hyfata.najoan.koreanpatch.wrapper.WrapperEditBox;
 import com.hyfata.najoan.koreanpatch.mixin.accessor.EditBoxAccessor;
 import fuzs.easyanvils.client.gui.components.AdvancedEditBox;
 import fuzs.easyanvils.client.gui.components.FormattableEditBox;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.network.chat.Component;
 import org.spongepowered.asm.mixin.Mixin;
