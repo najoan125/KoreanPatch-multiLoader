@@ -23,7 +23,7 @@ public abstract class MultilineEditBoxMixin extends EditBox {
     private final WrapperEditBox wrapper = new WrapperEditBox((EditBoxAccessor) this);
 
     @Inject(at = @At(value = "HEAD"), method = "keyPressed", cancellable = true)
-    public void keyPressed(KeyEvent input, CallbackInfoReturnable<Boolean> cir) {
-        wrapper.keyPressed(input, cir);
+    public void keyPressed(KeyEvent event, CallbackInfoReturnable<Boolean> cir) {
+        wrapper.keyPressed(event, cir);
     }
 }
