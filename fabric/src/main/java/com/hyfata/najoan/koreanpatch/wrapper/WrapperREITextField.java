@@ -4,8 +4,8 @@ import com.hyfata.najoan.koreanpatch.wrapper.handler.IMEWrapperHandler;
 import com.hyfata.najoan.koreanpatch.process.keyboard.KeyboardLayout;
 import com.hyfata.najoan.koreanpatch.process.HangulProcessor;
 import com.hyfata.najoan.koreanpatch.util.HangulUtil;
+import me.shedaniel.rei.api.client.gui.widgets.TextField;
 import me.shedaniel.rei.impl.client.gui.widget.basewidgets.TextFieldWidget;
-import net.minecraft.client.input.CharacterEvent;
 import net.minecraft.util.StringUtil;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
@@ -60,10 +60,7 @@ public class WrapperREITextField implements InterfaceIMEWrapper {
         return IMEWrapperHandler.onHangulCharTyped(this, keyCode, modifiers, accessor.getText(), accessor.getSelectedText().isEmpty());
     }
 
-    public void typedTextField(CharacterEvent charEvent, CallbackInfoReturnable<Boolean> cir) {
-        char chr = (char) charEvent.codepoint();
-        int modifiers = charEvent.modifiers();
-
+    public void typedTextField(char chr, int modifiers, CallbackInfoReturnable<Boolean> cir) {
         int qwertyIndex = KeyboardLayout.INSTANCE.getQwertyIndexCodePoint(chr);
         if (qwertyIndex == -1) {
             KeyboardLayout.INSTANCE.assemblePosition = -1;
