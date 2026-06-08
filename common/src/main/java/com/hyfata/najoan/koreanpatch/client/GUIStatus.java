@@ -17,8 +17,8 @@ public class GUIStatus {
         this.shouldUseIME = shouldUseIME;
     }
 
-    public boolean isBypassInjection() {
-        return bypassInjection;
+    public boolean shouldApplyInjection() {
+        return !bypassInjection;
     }
 
     public void setBypassInjection(boolean bypassInjection) {
