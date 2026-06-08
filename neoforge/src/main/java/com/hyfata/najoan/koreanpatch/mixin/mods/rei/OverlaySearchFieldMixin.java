@@ -27,10 +27,10 @@ public abstract class OverlaySearchFieldMixin extends TextFieldWidget {
     private final WrapperREITextField koreanPatch$handler = new WrapperREITextField(this);
 
     @Inject(at = @At("HEAD"), method = "charTyped", cancellable = true)
-    public void charTyped(char chr, int modifiers, CallbackInfoReturnable<Boolean> cir) {
+    public void charTyped(char character, int modifiers, CallbackInfoReturnable<Boolean> cir) {
         if (this.koreanPatch$client.screen != null && GUIStatus.getInstance().shouldApplyInjection() &&
-                LangTypeManager.getInstance().isKorean() && Character.charCount(chr) == 1) {
-            koreanPatch$handler.typedTextField(chr, modifiers, cir);
+                LangTypeManager.getInstance().isKorean() && Character.charCount(character) == 1) {
+            koreanPatch$handler.typedTextField(character, modifiers, cir);
         }
     }
 
