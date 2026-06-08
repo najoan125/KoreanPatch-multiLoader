@@ -1,6 +1,8 @@
 plugins {
-    // see https://fabricmc.net/develop/ for new versions
-    id 'fabric-loom' version '1.17-SNAPSHOT' apply false
+    // DO NOT CHANGE LOOM VERSION
+    // mixin gradle in used "Forge module" is not support Gradle 9.0 and upper.
+    // loom 1.13 is the last version that support Gradle 8.14.
+    id 'fabric-loom' version '1.13-SNAPSHOT' apply false
     // see https://projects.neoforged.net/neoforged/moddevgradle for new versions
     id 'net.neoforged.moddev' version '2.0.141' apply false
 }
