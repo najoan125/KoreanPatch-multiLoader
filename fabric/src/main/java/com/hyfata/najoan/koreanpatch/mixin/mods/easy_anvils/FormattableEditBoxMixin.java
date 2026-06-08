@@ -4,7 +4,6 @@ import com.hyfata.najoan.koreanpatch.wrapper.WrapperEditBox;
 import com.hyfata.najoan.koreanpatch.mixin.accessor.EditBoxAccessor;
 import fuzs.easyanvils.client.gui.components.AdvancedEditBox;
 import fuzs.easyanvils.client.gui.components.FormattableEditBox;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.network.chat.Component;
 import org.spongepowered.asm.mixin.Mixin;
@@ -23,8 +22,8 @@ public abstract class FormattableEditBoxMixin extends AdvancedEditBox {
     private final WrapperEditBox koreanPatch$handler = new WrapperEditBox((EditBoxAccessor) this);
 
     @Inject(at = {@At(value = "HEAD")}, method = {"charTyped(CI)Z"}, cancellable = true)
-    public void charTyped(char chr, int modifiers, CallbackInfoReturnable<Boolean> cir) {
-        koreanPatch$handler.charTyped(chr, modifiers, cir, this.isEditable());
+    public void charTyped(char codePoint, int modifiers, CallbackInfoReturnable<Boolean> cir) {
+        koreanPatch$handler.charTyped(codePoint, modifiers, cir, this.isEditable());
     }
 
     @Unique
