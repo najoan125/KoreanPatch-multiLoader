@@ -8,7 +8,7 @@ import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.input.CharacterEvent;
 import net.minecraft.client.input.KeyEvent;
 import net.minecraft.network.chat.Component;
-import org.jspecify.annotations.NonNull;
+import org.jetbrains.annotations.NotNull;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -25,13 +25,13 @@ public abstract class FormattableEditBoxMixin extends EditBox {
     private final WrapperEditBox koreanPatch$wrapper = new WrapperEditBox((EditBoxAccessor) this);
 
     @Inject(at = {@At(value = "HEAD")}, method = {"charTyped"}, cancellable = true)
-    public void charTyped(CharacterEvent event, CallbackInfoReturnable<Boolean> cir) {
-        koreanPatch$wrapper.charTyped(event, cir, isEditable());
+    public void charTyped(CharacterEvent characterEvent, CallbackInfoReturnable<Boolean> cir) {
+        koreanPatch$wrapper.charTyped(characterEvent, cir, isEditable());
     }
 
     @Unique
     @Override
-    public boolean keyPressed(@NonNull KeyEvent keyEvent) {
+    public boolean keyPressed(@NotNull KeyEvent keyEvent) {
         return koreanPatch$wrapper.keyPressed(keyEvent, () -> super.keyPressed(keyEvent));
     }
 }
