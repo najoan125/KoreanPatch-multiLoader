@@ -87,7 +87,7 @@ public class WrapperTextFieldHelper implements InterfaceIMEWrapper {
 
     public void deleteCharsFromCursor(CallbackInfo ci) {
         Minecraft client = Minecraft.getInstance();
-        if (client.screen != null && !GUIStatus.getInstance().isBypassInjection()) {
+        if (client.screen != null && GUIStatus.getInstance().shouldApplyInjection()) {
             if (onBackspaceKeyPressed()) {
                 ci.cancel();
             }

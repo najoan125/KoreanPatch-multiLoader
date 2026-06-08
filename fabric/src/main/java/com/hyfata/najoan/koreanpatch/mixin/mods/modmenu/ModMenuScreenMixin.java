@@ -22,14 +22,14 @@ public class ModMenuScreenMixin {
     private final AnimationHandler animationHandler = new AnimationHandler();
 
     @Inject(at = @At("TAIL"), method = "render")
-    private void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float delta, CallbackInfo ci) {
+    private void render(GuiGraphics drawContext, int mouseX, int mouseY, float delta, CallbackInfo ci) {
         float cursorX = EditBoxUtil.getCursorX(searchBox) + 4;
         float y = EditBoxUtil.calculateIndicatorY(searchBox);
 
         animationHandler.init(cursorX - 4, 0);
         animationHandler.calculateAnimation(cursorX, 0);
 
-        guiGraphics.pose().translate(0.0F, 0.0F, 200.0F);
-        IndicatorHandler.showIndicator(guiGraphics, animationHandler.getResultX(), y);
+        drawContext.pose().translate(0.0F, 0.0F, 200.0F);
+        IndicatorHandler.showIndicator(drawContext, animationHandler.getResultX(), y);
     }
 }
