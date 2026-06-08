@@ -40,7 +40,7 @@ public class KeyboardHandlerMixin {
         int modifiers = keyEvent.modifiers();
         CategoryInput categoryInput = ConfigManager.getInstance().getConfig().getCategoryInput();
 
-        if (window == minecraft.getWindow().handle() && !GUIStatus.getInstance().isBypassInjection() && KoreanPatchClient.loaded) {
+        if (window == minecraft.getWindow().handle() && GUIStatus.getInstance().shouldApplyInjection() && KoreanPatchClient.loaded) {
             // ime key
             if (KeyBinds.getImeBinding().matches(keyEvent) && action == 1 && modifiers == 2 &&
                     !categoryInput.isAlwaysImeEnabled()) {

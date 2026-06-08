@@ -8,7 +8,6 @@ import com.hyfata.najoan.koreanpatch.config.category.indicator.outline.OutlineCo
 import com.hyfata.najoan.koreanpatch.config.EasingFunctions;
 import com.hyfata.najoan.koreanpatch.config.OutlineType;
 import com.hyfata.najoan.koreanpatch.config.yacl.ConfigScreenFactory;
-import com.hyfata.najoan.koreanpatch.util.YACLUtil;
 import dev.isxander.yacl3.api.ConfigCategory;
 import dev.isxander.yacl3.api.Option;
 import dev.isxander.yacl3.api.OptionDescription;

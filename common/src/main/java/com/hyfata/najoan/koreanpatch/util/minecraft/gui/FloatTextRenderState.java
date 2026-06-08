@@ -5,6 +5,7 @@ import net.minecraft.client.gui.navigation.ScreenRectangle;
 import net.minecraft.client.gui.render.state.GuiTextRenderState;
 import net.minecraft.util.FormattedCharSequence;
 import org.joml.Matrix3x2f;
+import org.jspecify.annotations.NonNull;
 
 public class FloatTextRenderState extends GuiTextRenderState {
     private Font.PreparedText preparedText;
@@ -21,7 +22,7 @@ public class FloatTextRenderState extends GuiTextRenderState {
     }
 
     @Override
-    public Font.PreparedText ensurePrepared() {
+    public Font.@NonNull PreparedText ensurePrepared() {
         if (this.preparedText == null) {
             this.preparedText = this.font.prepareText(this.text, this.x, this.y, this.color, this.dropShadow, includeEmpty, this.backgroundColor);
             ScreenRectangle screenrectangle = this.preparedText.bounds();

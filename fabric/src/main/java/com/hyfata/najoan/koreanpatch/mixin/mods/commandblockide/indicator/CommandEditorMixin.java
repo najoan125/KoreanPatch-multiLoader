@@ -41,7 +41,7 @@ public abstract class CommandEditorMixin {
     }
 
     @Inject(at = @At(value = "HEAD"), method = "render")
-    public void renderHead(GuiGraphics guiGraphics, int mouseX, int mouseY, float delta, CallbackInfo ci) {
+    public void renderHead(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick, CallbackInfo ci) {
         if (this.orgX != 0)
             commandField.setX((int) (this.orgX + IndicatorHandler.getIndicatorWidth() + margin));
         if (this.width != 0 && Minecraft.getInstance().screen != null) {
@@ -52,7 +52,7 @@ public abstract class CommandEditorMixin {
     }
 
     @Inject(at = @At(value = "INVOKE", target = "Larm32x/minecraft/commandblockide/client/gui/Container;render(Lnet/minecraft/client/gui/GuiGraphics;IIF)V", shift = At.Shift.BEFORE), method = "render")
-    public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float delta, CallbackInfo ci) {
+    public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick, CallbackInfo ci) {
         if (commandField.isFocused() && this.orgX != 0) {
             IndicatorHandler.showIndicator(guiGraphics, (float) this.orgX, (float) (y - IndicatorHandler.getIndicatorHeight() / 2 + 7.5));
         }
