@@ -27,18 +27,18 @@ public abstract class OverlaySearchFieldMixin extends TextFieldWidget {
     private final WrapperREITextField koreanPatch$handler = new WrapperREITextField(this);
 
     @Inject(at = @At("HEAD"), method = "m_5534_", cancellable = true, remap = false)
-    public void charTyped(char character, int modifiers, CallbackInfoReturnable<Boolean> cir) {
+    public void charTyped(char char_1, int int_1, CallbackInfoReturnable<Boolean> cir) {
         if (this.koreanPatch$client.screen != null && GUIStatus.getInstance().shouldApplyInjection() &&
-                LangTypeManager.getInstance().isKorean() && Character.charCount(character) == 1) {
-            koreanPatch$handler.typedTextField(character, modifiers, cir);
+                LangTypeManager.getInstance().isKorean() && Character.charCount(char_1) == 1) {
+            koreanPatch$handler.typedTextField(char_1, int_1, cir);
         }
     }
 
     @Inject(at = @At("HEAD"), method = "m_7933_", cancellable = true, remap = false)
-    public void keyPressed(int keyCode, int scanCode, int modifiers, CallbackInfoReturnable<Boolean> cir) {
+    public void keyPressed(int int_1, int int_2, int int_3, CallbackInfoReturnable<Boolean> cir) {
         Minecraft client = Minecraft.getInstance();
         if (client.screen != null && GUIStatus.getInstance().shouldApplyInjection()) {
-            if (keyCode == GLFW.GLFW_KEY_BACKSPACE) {
+            if (int_1 == GLFW.GLFW_KEY_BACKSPACE) {
                 if (koreanPatch$handler.onBackspaceKeyPressed()) {
                     cir.setReturnValue(Boolean.TRUE);
                 }

@@ -41,7 +41,7 @@ public abstract class CommandEditorMixin {
     }
 
     @Inject(at = @At(value = "HEAD"), method = "render")
-    public void renderHead(PoseStack poseStack, int mouseX, int mouseY, float delta, CallbackInfo ci) {
+    public void renderHead(PoseStack matrices, int mouseX, int mouseY, float delta, CallbackInfo ci) {
         if (this.orgX != 0)
             commandField.setX((int) (this.orgX + IndicatorHandler.getIndicatorWidth() + margin));
         if (this.width != 0 && Minecraft.getInstance().screen != null) {
@@ -52,9 +52,9 @@ public abstract class CommandEditorMixin {
     }
 
     @Inject(at = @At(value = "INVOKE", target = "Larm32x/minecraft/commandblockide/client/gui/Container;render(Lcom/mojang/blaze3d/vertex/PoseStack;IIF)V", shift = At.Shift.BEFORE), method = "render")
-    public void render(PoseStack poseStack, int mouseX, int mouseY, float delta, CallbackInfo ci) {
+    public void render(PoseStack matrices, int mouseX, int mouseY, float delta, CallbackInfo ci) {
         if (commandField.isFocused() && this.orgX != 0) {
-            IndicatorHandler.showIndicator(poseStack, (float) this.orgX, (float) (y - IndicatorHandler.getIndicatorHeight() / 2 + 7.5));
+            IndicatorHandler.showIndicator(matrices, (float) this.orgX, (float) (y - IndicatorHandler.getIndicatorHeight() / 2 + 7.5));
         }
     }
 }
