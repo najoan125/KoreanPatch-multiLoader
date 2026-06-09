@@ -22,8 +22,8 @@ public abstract class MultiLineEditBoxMixin extends EditBox {
     private final WrapperEditBox handler = new WrapperEditBox((EditBoxAccessor) this);
 
     @Inject(method = "charTyped", at = @At("HEAD"), cancellable = true)
-    private void charTyped(char codePoint, int modifiers, CallbackInfoReturnable<Boolean> cir) {
-        handler.charTyped(codePoint, modifiers, cir, this.isEditable());
+    private void charTyped(char chr, int modifiers, CallbackInfoReturnable<Boolean> cir) {
+        handler.charTyped(chr, modifiers, cir, this.isEditable());
     }
 
     @Inject(at = @At(value = "HEAD"), method = "keyPressed", cancellable = true)
