@@ -4,7 +4,6 @@ import com.hyfata.najoan.koreanpatch.wrapper.handler.IMEWrapperHandler;
 import com.hyfata.najoan.koreanpatch.process.keyboard.KeyboardLayout;
 import com.hyfata.najoan.koreanpatch.process.HangulProcessor;
 import com.hyfata.najoan.koreanpatch.util.HangulUtil;
-import me.shedaniel.rei.api.client.gui.widgets.TextField;
 import me.shedaniel.rei.impl.client.gui.widget.basewidgets.TextFieldWidget;
 import net.minecraft.SharedConstants;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
