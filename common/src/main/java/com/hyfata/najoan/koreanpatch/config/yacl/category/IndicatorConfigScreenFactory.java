@@ -8,7 +8,6 @@ import com.hyfata.najoan.koreanpatch.config.category.indicator.outline.OutlineCo
 import com.hyfata.najoan.koreanpatch.config.EasingFunctions;
 import com.hyfata.najoan.koreanpatch.config.OutlineType;
 import com.hyfata.najoan.koreanpatch.config.yacl.ConfigScreenFactory;
-import com.hyfata.najoan.koreanpatch.util.YACLUtil;
 import dev.isxander.yacl3.api.ConfigCategory;
 import dev.isxander.yacl3.api.Option;
 import dev.isxander.yacl3.api.OptionDescription;
@@ -51,9 +50,6 @@ public class IndicatorConfigScreenFactory extends ConfigScreenFactory {
 
         Option<Boolean> showOption = Option.<Boolean>createBuilder()
                 .name(createTranslatableComponent("general.show"))
-                .description(YACLUtil.descWithImage(
-                        createTranslationKey("general.show.description"), "indicator")
-                )
                 .binding(
                         config.getCategoryIndicator().isShowIndicator(),
                         config.getCategoryIndicator()::isShowIndicator,
