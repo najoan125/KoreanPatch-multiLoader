@@ -22,8 +22,8 @@ public abstract class FormattableEditBoxMixin extends EditBox {
     private final WrapperEditBox koreanPatch$handler = new WrapperEditBox((EditBoxAccessor) this);
 
     @Inject(at = {@At(value = "HEAD")}, method = {"charTyped(CI)Z"}, cancellable = true)
-    public void charTyped(char chr, int modifiers, CallbackInfoReturnable<Boolean> cir) {
-        koreanPatch$handler.charTyped(chr, modifiers, cir, this.isEditable());
+    public void charTyped(char codePoint, int modifiers, CallbackInfoReturnable<Boolean> cir) {
+        koreanPatch$handler.charTyped(codePoint, modifiers, cir, this.isEditable());
     }
 
     @Unique

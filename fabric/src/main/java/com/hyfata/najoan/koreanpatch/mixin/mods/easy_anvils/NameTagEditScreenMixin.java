@@ -15,10 +15,10 @@ public class NameTagEditScreenMixin {
     @Shadow private EditBox name;
 
     @Inject(at = @At("TAIL"), method = "render")
-    private void render(PoseStack guiGraphics, int mouseX, int mouseY, float partialTick, CallbackInfo ci) {
+    private void render(PoseStack poseStack, int mouseX, int mouseY, float partialTick, CallbackInfo ci) {
         float x = name.x - IndicatorHandler.getIndicatorWidth() / 2f - 5f;
         float y = name.y + name.getHeight() / 2f - 2f;
 
-        IndicatorHandler.showCenteredIndicator(guiGraphics, x, y);
+        IndicatorHandler.showCenteredIndicator(poseStack, x, y);
     }
 }
