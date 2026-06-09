@@ -16,7 +16,7 @@ public class AbstractBetterCommandBlockScreenMixin {
     protected EditBox consoleCommandTextField;
 
     @Inject(method = "render", at = @At("TAIL"))
-    public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float delta, CallbackInfo ci) {
+    public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick, CallbackInfo ci) {
         int x = (int) (consoleCommandTextField.getX() - IndicatorHandler.getIndicatorWidth() - 10);
         int y = consoleCommandTextField.getY();
 
