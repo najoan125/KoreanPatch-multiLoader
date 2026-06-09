@@ -28,7 +28,7 @@ public abstract class OverlaySearchFieldMixin extends TextFieldWidget {
 
     @Inject(at = @At("HEAD"), method = "m_5534_", cancellable = true, remap = false)
     public void charTyped(char chr, int modifiers, CallbackInfoReturnable<Boolean> cir) {
-        if (this.koreanPatch$client.screen != null && !GUIStatus.getInstance().isBypassInjection() &&
+        if (this.koreanPatch$client.screen != null && GUIStatus.getInstance().shouldApplyInjection() &&
                 LangTypeManager.getInstance().isKorean() && Character.charCount(chr) == 1) {
             koreanPatch$handler.typedTextField(chr, modifiers, cir);
         }
@@ -37,7 +37,7 @@ public abstract class OverlaySearchFieldMixin extends TextFieldWidget {
     @Inject(at = @At("HEAD"), method = "m_7933_", cancellable = true, remap = false)
     public void keyPressed(int keyCode, int scanCode, int modifiers, CallbackInfoReturnable<Boolean> cir) {
         Minecraft client = Minecraft.getInstance();
-        if (client.screen != null && !GUIStatus.getInstance().isBypassInjection()) {
+        if (client.screen != null && GUIStatus.getInstance().shouldApplyInjection()) {
             if (keyCode == GLFW.GLFW_KEY_BACKSPACE) {
                 if (koreanPatch$handler.onBackspaceKeyPressed()) {
                     cir.setReturnValue(Boolean.TRUE);
