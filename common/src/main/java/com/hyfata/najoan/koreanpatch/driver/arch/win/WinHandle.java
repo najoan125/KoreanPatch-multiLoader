@@ -13,14 +13,11 @@ public interface WinHandle extends Library {
 
     static String selectLibrary() {
         Architecture arch = Platform.getArchitecture();
-        switch (arch) {
-            case X64:
-                return "libwincocoainput-x64.dll";
-            case ARM64:
-                return "libwincocoainput-arm64.dll";
-            default:
-                return null;
-        }
+        return switch (arch) {
+            case X64 -> "libwincocoainput-x64.dll";
+            case ARM64 -> "libwincocoainput-arm64.dll";
+            default -> null;
+        };
     }
 
     void set_focus(int flag);
