@@ -16,10 +16,10 @@ public class AbstractBetterCommandBlockScreenMixin {
     protected EditBox consoleCommandTextField;
 
     @Inject(method = "render", at = @At("TAIL"))
-    public void render(PoseStack poseStack, int mouseX, int mouseY, float delta, CallbackInfo ci) {
+    public void render(PoseStack matrices, int mouseX, int mouseY, float delta, CallbackInfo ci) {
         int x = (int) (consoleCommandTextField.getX() - IndicatorHandler.getIndicatorWidth() - 10);
         int y = consoleCommandTextField.getY();
 
-        IndicatorHandler.showIndicator(poseStack, x, y);
+        IndicatorHandler.showIndicator(matrices, x, y);
     }
 }
