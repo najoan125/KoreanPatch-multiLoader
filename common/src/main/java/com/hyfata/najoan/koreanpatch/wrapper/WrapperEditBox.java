@@ -68,7 +68,7 @@ public class WrapperEditBox implements InterfaceIMEWrapper {
     private boolean validateKeyPressed(KeyEvent keyEvent) {
         Minecraft client = Minecraft.getInstance();
         if (client.screen != null &&
-                !GUIStatus.getInstance().isBypassInjection() &&
+                GUIStatus.getInstance().shouldApplyInjection() &&
                 keyEvent.key() == GLFW.GLFW_KEY_BACKSPACE) {
             return onBackspaceKeyPressed();
         }
@@ -92,7 +92,7 @@ public class WrapperEditBox implements InterfaceIMEWrapper {
     private boolean validateCharTyped(CharacterEvent event, boolean isEditable) {
         char chr = (char) event.codepoint();
         return Minecraft.getInstance().screen != null &&
-                !GUIStatus.getInstance().isBypassInjection() &&
+                GUIStatus.getInstance().shouldApplyInjection() &&
                 LangTypeManager.getInstance().isKorean() &&
                 isEditable &&
                 event.isAllowedChatCharacter() &&

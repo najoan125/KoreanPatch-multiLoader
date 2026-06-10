@@ -44,7 +44,7 @@ public class KeyboardHandlerMixin {
         int glfwAction = action == 1 ? GLFW.GLFW_PRESS : (action == 0 ? GLFW.GLFW_RELEASE : GLFW.GLFW_REPEAT);
         KeyBindingManager.getInstance().onKeyInput(keyCode, scanCode, glfwAction, 0);
 
-        if (window == minecraft.getWindow().handle() && !GUIStatus.getInstance().isBypassInjection() && KoreanPatchClient.loaded) {
+        if (window == minecraft.getWindow().handle() && GUIStatus.getInstance().shouldApplyInjection() && KoreanPatchClient.loaded) {
             // if the key is down
             if (action == 1) {
                 koreanPatch$onKeyDown();
