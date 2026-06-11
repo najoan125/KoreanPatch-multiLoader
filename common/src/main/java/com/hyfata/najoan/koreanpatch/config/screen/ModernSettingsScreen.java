@@ -18,8 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Custom modern settings screen
- * Manages indicator, input, and keybinding settings with a tab-based UI.
+ * Custom modern settings screen with tab-based UI.
  */
 public class ModernSettingsScreen extends Screen {
     private static final int TAB_WIDTH = 90;
@@ -37,14 +36,11 @@ public class ModernSettingsScreen extends Screen {
     private int currentTabIndex = 0;
     private int tabStartX;
 
-    // Bottom bar button bounds
     private int cancelButtonX, cancelButtonY;
     private int doneButtonX, doneButtonY;
 
-    // Hover state tracking
     private boolean isOverClickable = false;
 
-    // Color settings
     private static final int COLOR_BACKGROUND = 0xFF1A1A1A;
     private static final int COLOR_TAB_INACTIVE = 0xFF2D2D2D;
     private static final int COLOR_TAB_ACTIVE = 0xFF3D3D3D;
@@ -66,20 +62,16 @@ public class ModernSettingsScreen extends Screen {
     protected void init() {
         super.init();
 
-        // Tab start X position (center alignment)
         int totalTabWidth = (TAB_WIDTH + TAB_SPACING) * tabs.size() - TAB_SPACING;
         this.tabStartX = (this.width - totalTabWidth) / 2;
 
-        // Calculate content area (between tab bar and bottom bar)
         int contentTop = TAB_AREA_HEIGHT + PADDING;
         int contentBottom = this.height - BOTTOM_BAR_HEIGHT;
 
-        // Initialize all tabs with adjusted content area
         for (SettingsTab tab : tabs) {
             tab.init(this, contentTop, this.width, contentBottom);
         }
 
-        // Calculate bottom bar button positions
         int buttonTotalWidth = BUTTON_WIDTH * 2 + BUTTON_SPACING;
         cancelButtonX = (this.width - buttonTotalWidth) / 2;
         doneButtonX = cancelButtonX + BUTTON_WIDTH + BUTTON_SPACING;
@@ -89,13 +81,10 @@ public class ModernSettingsScreen extends Screen {
 
     @Override
     public void render(@NotNull GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
-        // Reset cursor state
         isOverClickable = false;
 
-        // Render background
         guiGraphics.fill(0, 0, this.width, this.height, COLOR_BACKGROUND);
 
-        // Render title
         guiGraphics.drawCenteredString(
                 this.font,
                 this.title,
@@ -104,21 +93,16 @@ public class ModernSettingsScreen extends Screen {
                 COLOR_TEXT
         );
 
-        // Render tabs
         renderTabs(guiGraphics, mouseX, mouseY);
 
-        // Tab separator line
         guiGraphics.fill(0, TAB_AREA_HEIGHT - 1, this.width, TAB_AREA_HEIGHT, COLOR_BORDER);
 
-        // Render current tab content with scissor clipping
         guiGraphics.enableScissor(0, TAB_AREA_HEIGHT, this.width, this.height - BOTTOM_BAR_HEIGHT);
         getCurrentTab().render(guiGraphics, mouseX, mouseY, partialTick);
         guiGraphics.disableScissor();
 
-        // Render bottom bar
         renderBottomBar(guiGraphics, mouseX, mouseY);
 
-        // Update cursor based on hover state
         if (isOverClickable) {
             WidgetUtils.setHandCursor();
         } else {
@@ -126,9 +110,6 @@ public class ModernSettingsScreen extends Screen {
         }
     }
 
-    /**
-     * Render tab UI
-     */
     private void renderTabs(GuiGraphics guiGraphics, int mouseX, int mouseY) {
         for (int i = 0; i < tabs.size(); i++) {
             SettingsTab tab = tabs.get(i);
@@ -143,16 +124,13 @@ public class ModernSettingsScreen extends Screen {
                 isOverClickable = true;
             }
 
-            // Tab background
             int bgColor = isActive ? COLOR_TAB_ACTIVE : COLOR_TAB_INACTIVE;
             guiGraphics.fill(x, y, x + TAB_WIDTH, y + TAB_HEIGHT, bgColor);
 
-            // Active tab top border
             if (isActive) {
                 guiGraphics.fill(x, y, x + TAB_WIDTH, y + 2, COLOR_TAB_ACTIVE_BORDER);
             }
 
-            // Tab text
             int textColor = isActive ? 0xFFFFFFFF : COLOR_TEXT_SECONDARY;
             guiGraphics.drawCenteredString(
                     this.font,
@@ -162,42 +140,31 @@ public class ModernSettingsScreen extends Screen {
                     textColor
             );
 
-            // Hover effect
             if (isHovered && !isActive) {
                 guiGraphics.fill(x, y, x + TAB_WIDTH, y + TAB_HEIGHT, 0x33FFFFFF);
             }
         }
     }
 
-    /**
-     * Render bottom bar with Cancel and Done buttons
-     */
     private void renderBottomBar(GuiGraphics guiGraphics, int mouseX, int mouseY) {
-        // Bottom bar background
         guiGraphics.fill(0, this.height - BOTTOM_BAR_HEIGHT, this.width, this.height, COLOR_BOTTOM_BAR);
-        // Top border
         guiGraphics.fill(0, this.height - BOTTOM_BAR_HEIGHT, this.width, this.height - BOTTOM_BAR_HEIGHT + 1, COLOR_BORDER);
 
-        // Cancel button
         boolean cancelHovered = WidgetUtils.isMouseOver(mouseX, mouseY, cancelButtonX, cancelButtonY, BUTTON_WIDTH, BUTTON_HEIGHT);
         if (cancelHovered) isOverClickable = true;
-        drawButton(guiGraphics, cancelButtonX, cancelButtonY, BUTTON_WIDTH, BUTTON_HEIGHT,
+        drawButton(guiGraphics, cancelButtonX, cancelButtonY,
                 Component.translatable("koreanpatch.config.cancel").getString(), cancelHovered);
 
-        // Done button
         boolean doneHovered = WidgetUtils.isMouseOver(mouseX, mouseY, doneButtonX, doneButtonY, BUTTON_WIDTH, BUTTON_HEIGHT);
         if (doneHovered) isOverClickable = true;
-        drawButton(guiGraphics, doneButtonX, doneButtonY, BUTTON_WIDTH, BUTTON_HEIGHT,
+        drawButton(guiGraphics, doneButtonX, doneButtonY,
                 Component.translatable("koreanpatch.config.done").getString(), doneHovered);
     }
 
-    /**
-     * Draw a button with sharp corners
-     */
-    private void drawButton(GuiGraphics guiGraphics, int x, int y, int width, int height, String text, boolean hovered) {
+    private void drawButton(GuiGraphics guiGraphics, int x, int y, String text, boolean hovered) {
         int bgColor = hovered ? WidgetUtils.COLOR_BUTTON_HOVER : WidgetUtils.COLOR_WIDGET_BG;
-        WidgetUtils.drawBorderedRect(guiGraphics, x, y, width, height, bgColor, COLOR_BORDER);
-        guiGraphics.drawCenteredString(this.font, text, x + width / 2, y + (height - this.font.lineHeight) / 2, COLOR_TEXT);
+        WidgetUtils.drawBorderedRect(guiGraphics, x, y, ModernSettingsScreen.BUTTON_WIDTH, ModernSettingsScreen.BUTTON_HEIGHT, bgColor, COLOR_BORDER);
+        guiGraphics.drawCenteredString(this.font, text, x + ModernSettingsScreen.BUTTON_WIDTH / 2, y + (ModernSettingsScreen.BUTTON_HEIGHT - this.font.lineHeight) / 2, COLOR_TEXT);
     }
 
     @Override
@@ -211,22 +178,18 @@ public class ModernSettingsScreen extends Screen {
         double mouseY = event.y();
         int button = event.button();
 
-        // Handle bottom bar button clicks
         if (button == 0) {
-            // Cancel button
             if (WidgetUtils.isMouseOver(mouseX, mouseY, cancelButtonX, cancelButtonY, BUTTON_WIDTH, BUTTON_HEIGHT)) {
                 cancelAndClose();
                 return true;
             }
 
-            // Done button
             if (WidgetUtils.isMouseOver(mouseX, mouseY, doneButtonX, doneButtonY, BUTTON_WIDTH, BUTTON_HEIGHT)) {
                 saveAndClose();
                 return true;
             }
         }
 
-        // Handle tab click
         for (int i = 0; i < tabs.size(); i++) {
             int x = tabStartX + i * (TAB_WIDTH + TAB_SPACING);
             int y = 28;
@@ -238,7 +201,6 @@ public class ModernSettingsScreen extends Screen {
             }
         }
 
-        // Handle mouse click in the current tab
         return getCurrentTab().mouseClicked(mouseX, mouseY, button);
     }
 
@@ -266,13 +228,7 @@ public class ModernSettingsScreen extends Screen {
         int scanCode = event.scancode();
         int modifiers = event.modifiers();
 
-        // Check if current tab is recording keys
-        if (getCurrentTab().isRecordingKey()) {
-            // Let the tab handle the key press (including ESC for cancel)
-            return getCurrentTab().keyPressed(keyCode, scanCode, modifiers);
-        }
-
-        if (keyCode == 256) { // ESC - close without saving
+        if (!getCurrentTab().isRecordingKey() && keyCode == 256) { // ESC - close without saving
             cancelAndClose();
             return true;
         }
@@ -297,45 +253,23 @@ public class ModernSettingsScreen extends Screen {
         return getCurrentTab().charTyped(codePoint, modifiers);
     }
 
-    /**
-     * Get the current active tab
-     */
     private SettingsTab getCurrentTab() {
         return tabs.get(currentTabIndex);
     }
 
-    /**
-     * Save all changes and close the screen
-     */
     private void saveAndClose() {
-        for (SettingsTab tab : tabs) {
-            tab.save();
-        }
-        ConfigManager.getInstance().saveConfig(ConfigManager.getInstance().getConfig());
+        ConfigManager.getInstance().saveConfig();
         closeScreen();
     }
 
-    /**
-     * Close without saving changes
-     */
     private void cancelAndClose() {
-        // Reload config to discard changes
         ConfigManager.getInstance().reloadConfig();
         closeScreen();
     }
 
-    /**
-     * Close the screen and reset cursor
-     */
     private void closeScreen() {
         WidgetUtils.setDefaultCursor();
         this.minecraft.setScreen(previousScreen);
-    }
-
-    @Override
-    public void onClose() {
-        // Default close behavior - close without saving (same as ESC)
-        cancelAndClose();
     }
 
     @Override

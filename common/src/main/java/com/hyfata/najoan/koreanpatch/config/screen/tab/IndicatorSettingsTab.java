@@ -20,23 +20,20 @@ public class IndicatorSettingsTab extends SettingsTab {
     private CategoryIndicator config;
     private int scrollOffset = 0;
     private static final int SCROLL_STEP = 15;
-    private static final int SECTION_SPACING = 25;  // Space after section title (title height + gap to first item)
-    private static final int SECTION_GAP = 15;      // Gap between sections (after last item of previous section)
+    private static final int SECTION_SPACING = 25;
+    private static final int SECTION_GAP = 15;
     private static final int ITEM_HEIGHT = 22;
     private static final int CONTENT_WIDTH = 350;
     private static final int WIDGET_OFFSET_X = 200;
 
-    // Track clickable widgets
     private final List<ClickableWidget> clickableWidgets = new ArrayList<>();
     private ClickableWidget draggingSlider = null;
 
-    // Scrollbar drag state
     private boolean isDraggingScrollbar = false;
     private int scrollbarX, scrollbarY, scrollbarHeight;
 
     private static final Minecraft client = Minecraft.getInstance();
 
-    // Clickable widget information
     private record ClickableWidget(int x, int y, int width, int height, WidgetType type, Runnable onClick, SliderHandler sliderHandler) {
         boolean contains(double mx, double my) {
             return mx >= x && mx < x + width && my >= y && my < y + height;
@@ -62,18 +59,16 @@ public class IndicatorSettingsTab extends SettingsTab {
 
     @Override
     public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
-        // Clear widget list every frame
         clickableWidgets.clear();
 
         int padding = 15;
-        int contentX = (contentWidth - CONTENT_WIDTH) / 2; // Center content
+        int contentX = (contentWidth - CONTENT_WIDTH) / 2;
         int y = contentStartY + padding - scrollOffset;
 
         // General settings section
         drawSection(guiGraphics, contentX, y, Component.translatable("koreanpatch.config.indicator.general").getString(), CONTENT_WIDTH);
         y += SECTION_SPACING;
 
-        // Show indicator toggle
         drawToggleSetting(guiGraphics, contentX, y,
                 Component.translatable("koreanpatch.config.indicator.general.show").getString(),
                 config.isShowIndicator(),
@@ -204,51 +199,31 @@ public class IndicatorSettingsTab extends SettingsTab {
         }
     }
 
-    /**
-     * Calculate total content height
-     */
     private int getContentHeight() {
         int height = 15;
-        // General settings: section + 1 toggle + section gap
         height += SECTION_SPACING + (ITEM_HEIGHT + 8) + SECTION_GAP;
-        // Outline settings: section + 5 items + section gap
         height += SECTION_SPACING + (ITEM_HEIGHT + 8) * 5 + SECTION_GAP;
-        // Background settings: section + 3 items + section gap
         height += SECTION_SPACING + (ITEM_HEIGHT + 8) * 3 + SECTION_GAP;
-        // Text settings: section + 3 items + section gap
         height += SECTION_SPACING + (ITEM_HEIGHT + 8) * 3 + SECTION_GAP;
-        // Animation settings: section + 3 items (no gap after last section)
         height += SECTION_SPACING + (ITEM_HEIGHT + 8) * 3;
         return height;
     }
 
-    /**
-     * Render section title
-     */
     private void drawSection(GuiGraphics guiGraphics, int x, int y, String title, int width) {
         WidgetUtils.drawSectionTitle(guiGraphics, x, y, title);
         guiGraphics.fill(x, y + 14, x + width, y + 15, WidgetUtils.COLOR_BORDER);
     }
 
-    /**
-     * Render toggle setting item
-     */
     private void drawToggleSetting(GuiGraphics guiGraphics, int x, int y, String label, boolean value, Runnable onClick) {
-        // Draw label with vertical centering
         int labelY = y + (WidgetUtils.STANDARD_TOGGLE_HEIGHT - client.font.lineHeight) / 2;
         guiGraphics.drawString(client.font, label, x, labelY, WidgetUtils.COLOR_TEXT, false);
 
         int toggleX = x + WIDGET_OFFSET_X;
         WidgetUtils.drawToggle(guiGraphics, toggleX, y, value);
-        // Register widget
         clickableWidgets.add(new ClickableWidget(toggleX, y, WidgetUtils.STANDARD_TOGGLE_WIDTH, WidgetUtils.STANDARD_TOGGLE_HEIGHT, WidgetType.TOGGLE, onClick, null));
     }
 
-    /**
-     * Render enum setting item
-     */
     private void drawEnumSetting(GuiGraphics guiGraphics, int x, int y, String label, String value, Runnable onClick) {
-        // Draw label with vertical centering
         int labelY = y + (20 - client.font.lineHeight) / 2;
         guiGraphics.drawString(client.font, label, x, labelY, WidgetUtils.COLOR_TEXT, false);
 
@@ -258,23 +233,15 @@ public class IndicatorSettingsTab extends SettingsTab {
 
         int textY = y + (20 - client.font.lineHeight) / 2;
         guiGraphics.drawString(client.font, value, enumX + 8, textY, WidgetUtils.COLOR_TEXT_SECONDARY, false);
-        // Register widget
         clickableWidgets.add(new ClickableWidget(enumX, y, enumWidth, 20, WidgetType.ENUM, onClick, null));
     }
 
-    /**
-     * Render color setting item
-     */
     private void drawColorSetting(GuiGraphics guiGraphics, int x, int y, String label, int color) {
         int labelY = y + (20 - client.font.lineHeight) / 2;
         guiGraphics.drawString(client.font, label, x, labelY, WidgetUtils.COLOR_TEXT, false);
         WidgetUtils.drawColorBox(guiGraphics, x + WIDGET_OFFSET_X, y, 20, color);
-        // Color picker will be implemented later (currently no click event)
     }
 
-    /**
-     * Render slider setting item
-     */
     private void drawSliderSetting(GuiGraphics guiGraphics, int x, int y, String label, float value, SliderHandler handler) {
         int labelY = y + (WidgetUtils.STANDARD_SLIDER_HEIGHT - client.font.lineHeight) / 2;
         guiGraphics.drawString(client.font, label, x, labelY, WidgetUtils.COLOR_TEXT, false);
@@ -286,7 +253,6 @@ public class IndicatorSettingsTab extends SettingsTab {
 
         String percentText = String.format("%.0f%%", value * 100);
         guiGraphics.drawString(client.font, percentText, sliderX + WidgetUtils.STANDARD_SLIDER_WIDTH + 8, labelY, WidgetUtils.COLOR_TEXT_SECONDARY, false);
-        // Register widget
         clickableWidgets.add(new ClickableWidget(sliderX, sliderY, WidgetUtils.STANDARD_SLIDER_WIDTH, WidgetUtils.STANDARD_SLIDER_HEIGHT, WidgetType.SLIDER, null, handler));
     }
 
@@ -294,7 +260,6 @@ public class IndicatorSettingsTab extends SettingsTab {
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
         if (button != 0) return false;
 
-        // Check scrollbar click
         int totalContentHeight = getContentHeight();
         float visibleRatio = (float)(contentHeight - contentStartY) / totalContentHeight;
         if (visibleRatio < 1.0f) {
@@ -311,7 +276,6 @@ public class IndicatorSettingsTab extends SettingsTab {
         for (ClickableWidget widget : clickableWidgets) {
             if (widget.contains(mouseX, mouseY)) {
                 if (widget.type == WidgetType.SLIDER && widget.sliderHandler != null) {
-                    // Start slider drag
                     draggingSlider = widget;
                     float value = (float) Math.max(0, Math.min(1, (mouseX - widget.x) / widget.width));
                     widget.sliderHandler.onDrag(value);
@@ -365,10 +329,5 @@ public class IndicatorSettingsTab extends SettingsTab {
         maxScroll = Math.max(0, maxScroll);
         this.scrollOffset = (int) Math.max(0, Math.min(maxScroll, this.scrollOffset - scrollY * SCROLL_STEP));
         return true;
-    }
-
-    @Override
-    public void save() {
-        // Settings are saved in real-time or by parent
     }
 }

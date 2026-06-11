@@ -3,17 +3,23 @@ package com.hyfata.najoan.koreanpatch.config;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.hyfata.najoan.koreanpatch.client.Constants;
+import com.hyfata.najoan.koreanpatch.config.category.CategoryKeyBindings;
 import com.hyfata.najoan.koreanpatch.config.gson.JsonCommentProcessor;
 import com.hyfata.najoan.koreanpatch.config.gson.adapter.ColorAdapter;
 import com.hyfata.najoan.koreanpatch.config.gson.adapter.EasingFunctionsAdapter;
 import com.hyfata.najoan.koreanpatch.config.gson.adapter.OutlineTypeAdapter;
+import com.hyfata.najoan.koreanpatch.keybinding.KeyIdentifier;
+import com.sun.jna.Platform;
 import net.minecraft.client.Minecraft;
+import org.lwjgl.glfw.GLFW;
 
 import java.awt.*;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ConfigManager {
     private static ConfigManager instance;
@@ -49,7 +55,31 @@ public class ConfigManager {
         if (CONFIG_FILE.exists()) {
             loadFromFile();
         }
-        saveConfig(config);
+        initializeKeyBindingDefaults();
+        saveConfig();
+    }
+
+    private void initializeKeyBindingDefaults() {
+        CategoryKeyBindings keyBindings = config.getCategoryKeyBindings();
+
+        if (keyBindings.getLangTypeKeys().isEmpty()) {
+            List<KeyIdentifier> defaultLangKey = new ArrayList<>();
+            if (Platform.isWindows()) {
+                defaultLangKey.add(KeyIdentifier.fromKeyCode(GLFW.GLFW_KEY_RIGHT_ALT));
+            } else if (Platform.isMac()) {
+                defaultLangKey.add(KeyIdentifier.fromKeyCode(GLFW.GLFW_KEY_CAPS_LOCK));
+            } else {
+                defaultLangKey.add(KeyIdentifier.fromKeyCode(GLFW.GLFW_KEY_LEFT_CONTROL));
+            }
+            keyBindings.addLangTypeKey(defaultLangKey);
+        }
+
+        if (keyBindings.getImeKeys().isEmpty()) {
+            List<KeyIdentifier> defaultImeKey = new ArrayList<>();
+            defaultImeKey.add(KeyIdentifier.fromKeyCode(GLFW.GLFW_KEY_LEFT_CONTROL));
+            defaultImeKey.add(KeyIdentifier.fromKeyCode(GLFW.GLFW_KEY_I));
+            keyBindings.addImeKey(defaultImeKey);
+        }
     }
 
     private void loadFromFile() {
@@ -74,12 +104,10 @@ public class ConfigManager {
         return config;
     }
 
-    public void saveConfig(ModConfig config) {
-        this.config = config;
-
+    public void saveConfig() {
         try (FileWriter writer = new FileWriter(CONFIG_FILE)) {
             JsonCommentProcessor commentedWriter = new JsonCommentProcessor(createGson());
-            commentedWriter.writeWithComments(config, writer);
+            commentedWriter.writeWithComments(this.config, writer);
         } catch (IOException e) {
             Constants.LOG.error("Failed to write config file: {}", CONFIG_FILE.toString(), e);
         }

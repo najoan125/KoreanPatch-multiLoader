@@ -19,22 +19,19 @@ public class InputSettingsTab extends SettingsTab {
     private CategoryInput config;
     private int scrollOffset = 0;
     private static final int SCROLL_STEP = 15;
-    private static final int SECTION_SPACING = 25;  // Space after section title (title height + gap to first item)
-    private static final int SECTION_GAP = 15;      // Gap between sections (after last item of previous section)
+    private static final int SECTION_SPACING = 25;
+    private static final int SECTION_GAP = 15;
     private static final int ITEM_HEIGHT = 22;
     private static final int CONTENT_WIDTH = 350;
     private static final int WIDGET_OFFSET_X = 200;
 
-    // Track clickable widgets
     private final List<ClickableWidget> clickableWidgets = new ArrayList<>();
 
-    // Scrollbar drag state
     private boolean isDraggingScrollbar = false;
     private int scrollbarX, scrollbarY, scrollbarHeight;
 
     private static final Minecraft client = Minecraft.getInstance();
 
-    // Clickable widget information
     private record ClickableWidget(int x, int y, int width, int height, Runnable onClick) {
         boolean contains(double mx, double my) {
             return mx >= x && mx < x + width && my >= y && my < y + height;
@@ -53,18 +50,16 @@ public class InputSettingsTab extends SettingsTab {
 
     @Override
     public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
-        // Clear widget list every frame
         clickableWidgets.clear();
 
         int padding = 15;
-        int contentX = (contentWidth - CONTENT_WIDTH) / 2; // Center content
+        int contentX = (contentWidth - CONTENT_WIDTH) / 2;
         int y = contentStartY + padding - scrollOffset;
 
         // General settings section
         drawSection(guiGraphics, contentX, y, Component.translatable("koreanpatch.config.input.general").getString(), CONTENT_WIDTH);
         y += SECTION_SPACING;
 
-        // Auto language mode
         drawEnumSetting(guiGraphics, contentX, y,
                 Component.translatable("koreanpatch.config.input.general.auto_lang_type_mode").getString(),
                 getAutoLangTypeModeName(config.getAutoLangTypeMode()),
@@ -75,7 +70,6 @@ public class InputSettingsTab extends SettingsTab {
                 });
         y += ITEM_HEIGHT + 8;
 
-        // Remember language state per screen
         drawToggleSetting(guiGraphics, contentX, y,
                 Component.translatable("koreanpatch.config.input.general.memory_lang_type").getString(),
                 config.isMemoryLangTypePerScreen(),
@@ -88,21 +82,18 @@ public class InputSettingsTab extends SettingsTab {
         drawSection(guiGraphics, contentX, y, Component.translatable("koreanpatch.config.input.ime").getString(), CONTENT_WIDTH);
         y += SECTION_SPACING;
 
-        // Disable IME while playing
         drawToggleSetting(guiGraphics, contentX, y,
                 Component.translatable("koreanpatch.config.input.ime.disable_ime_playing").getString(),
                 config.isDisableImeWhenPlaying(),
                 () -> config.setDisableImeWhenPlaying(!config.isDisableImeWhenPlaying()));
         y += ITEM_HEIGHT + 8;
 
-        // Auto IME switch
         drawToggleSetting(guiGraphics, contentX, y,
                 Component.translatable("koreanpatch.config.input.ime.auto_ime_switch").getString(),
                 config.isAutoImeSwitch(),
                 () -> config.setAutoImeSwitch(!config.isAutoImeSwitch()));
         y += ITEM_HEIGHT + 8;
 
-        // Always enable IME
         drawToggleSetting(guiGraphics, contentX, y,
                 Component.translatable("koreanpatch.config.input.ime.always_ime_enabled").getString(),
                 config.isAlwaysImeEnabled(),
@@ -136,9 +127,6 @@ public class InputSettingsTab extends SettingsTab {
         }
     }
 
-    /**
-     * Get translated name for AutoLangTypeMode
-     */
     private String getAutoLangTypeModeName(AutoLangTypeMode mode) {
         return switch (mode) {
             case AUTO -> Component.translatable("koreanpatch.config.input.mode.auto").getString();
@@ -148,47 +136,29 @@ public class InputSettingsTab extends SettingsTab {
         };
     }
 
-    /**
-     * Calculate total content height
-     */
     private int getContentHeight() {
         int height = 15;
-        // General settings: section + 2 items + section gap
         height += SECTION_SPACING + (ITEM_HEIGHT + 8) * 2 + SECTION_GAP;
-        // IME settings: section + 3 toggles + section gap
         height += SECTION_SPACING + (ITEM_HEIGHT + 8) * 3 + SECTION_GAP;
-        // Information: section + text (no gap after last section)
         height += SECTION_SPACING + ITEM_HEIGHT;
         return height;
     }
 
-    /**
-     * Render section title
-     */
     private void drawSection(GuiGraphics guiGraphics, int x, int y, String title, int width) {
         WidgetUtils.drawSectionTitle(guiGraphics, x, y, title);
         guiGraphics.fill(x, y + 14, x + width, y + 15, WidgetUtils.COLOR_BORDER);
     }
 
-    /**
-     * Render toggle setting item
-     */
     private void drawToggleSetting(GuiGraphics guiGraphics, int x, int y, String label, boolean value, Runnable onClick) {
-        // Draw label with vertical centering
         int labelY = y + (WidgetUtils.STANDARD_TOGGLE_HEIGHT - client.font.lineHeight) / 2;
         guiGraphics.drawString(client.font, label, x, labelY, WidgetUtils.COLOR_TEXT, false);
 
         int toggleX = x + WIDGET_OFFSET_X;
         WidgetUtils.drawToggle(guiGraphics, toggleX, y, value);
-        // Register widget
         clickableWidgets.add(new ClickableWidget(toggleX, y, WidgetUtils.STANDARD_TOGGLE_WIDTH, WidgetUtils.STANDARD_TOGGLE_HEIGHT, onClick));
     }
 
-    /**
-     * Render enum setting item
-     */
     private void drawEnumSetting(GuiGraphics guiGraphics, int x, int y, String label, String value, Runnable onClick) {
-        // Draw label with vertical centering
         int labelY = y + (20 - client.font.lineHeight) / 2;
         guiGraphics.drawString(client.font, label, x, labelY, WidgetUtils.COLOR_TEXT, false);
 
@@ -198,7 +168,6 @@ public class InputSettingsTab extends SettingsTab {
 
         int textY = y + (20 - client.font.lineHeight) / 2;
         guiGraphics.drawString(client.font, value, enumX + 8, textY, WidgetUtils.COLOR_TEXT_SECONDARY, false);
-        // Register widget
         clickableWidgets.add(new ClickableWidget(enumX, y, enumWidth, 20, onClick));
     }
 
@@ -206,7 +175,6 @@ public class InputSettingsTab extends SettingsTab {
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
         if (button != 0) return false;
 
-        // Check scrollbar click
         int totalContentHeight = getContentHeight();
         float visibleRatio = (float)(contentHeight - contentStartY) / totalContentHeight;
         if (visibleRatio < 1.0f) {
@@ -260,10 +228,5 @@ public class InputSettingsTab extends SettingsTab {
         maxScroll = Math.max(0, maxScroll);
         this.scrollOffset = (int) Math.max(0, Math.min(maxScroll, this.scrollOffset - scrollY * SCROLL_STEP));
         return true;
-    }
-
-    @Override
-    public void save() {
-        // Settings are saved in real-time or by parent
     }
 }
