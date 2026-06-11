@@ -11,6 +11,10 @@ import net.minecraft.network.chat.Component;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 텍스트 입력 및 IME 동작 설정 탭.
+ * Text input and IME behavior settings tab.
+ */
 public class InputSettingsTab extends SettingsTab {
     private CategoryInput config;
     private final List<TabRenderHelper.ClickableWidget> clickableWidgets = new ArrayList<>();

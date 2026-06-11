@@ -10,6 +10,10 @@ import net.minecraft.network.chat.Component;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 언어 표시기(Indicator) 외형 및 동작 설정 탭.
+ * Appearance and behavior settings for the on-screen language indicator.
+ */
 public class IndicatorSettingsTab extends SettingsTab {
     private CategoryIndicator config;
     private final List<TabRenderHelper.ClickableWidget> clickableWidgets = new ArrayList<>();
@@ -154,6 +158,8 @@ public class IndicatorSettingsTab extends SettingsTab {
                 v -> config.getAnimationSettings().setSpeed((int) (v * 100)),
                 clickableWidgets);
 
+        // render()가 그린 실제 콘텐츠 높이를 역산 → 스크롤바 크기 결정
+        // Derive actual content height from the final Y to drive scrollbar sizing.
         lastContentHeight = y + scroll.getScrollOffset() - (contentStartY + 15);
         scroll.renderScrollbar(guiGraphics, lastContentHeight);
     }

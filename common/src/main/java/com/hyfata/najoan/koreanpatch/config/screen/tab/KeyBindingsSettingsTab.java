@@ -15,6 +15,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * 키바인딩 설정 탭. 사용자가 키를 누를 때까지 대기하는 "녹화" 방식으로 입력받습니다.
+ * Key bindings settings tab. Uses a "recording" flow that waits for the user to press keys.
+ *
+ * <p>녹화 상태 머신: idle → startKeyRecording() → keyPressed/keyReleased → completeKeyRecording() → idle
+ * Recording state machine: idle → startKeyRecording() → keyPressed/keyReleased → completeKeyRecording() → idle</p>
+ */
 public class KeyBindingsSettingsTab extends SettingsTab {
     private CategoryKeyBindings config;
     private TabScrollHandler scroll;
@@ -28,8 +35,13 @@ public class KeyBindingsSettingsTab extends SettingsTab {
     private static final int SECTION_SPACING = 25;
     private static final int SECTION_GAP = 15;
 
+    // 녹화 중인 슬롯. -1이면 대기 상태.
+    // Index of the slot being recorded; -1 means idle.
     private int recordingKeyIndex = -1;
+
+    // 0 = langTypeKey, 1 = imeKey
     private int recordingType = -1;
+
     private final Map<Integer, KeyIdentifier> pressedKeys = new HashMap<>();
     private final List<KeyIdentifier> recordedKeyCombo = new ArrayList<>();
     private long recordingStartTime = 0;
@@ -171,6 +183,8 @@ public class KeyBindingsSettingsTab extends SettingsTab {
             return true;
         }
 
+        // y는 스크롤이 적용된 렌더 좌표이므로, 클릭 판정에 동일한 좌표계를 사용합니다.
+        // y is in scrolled render coordinates; use the same space for hit testing.
         int x = (contentWidth - CONTENT_WIDTH) / 2;
         int y = contentStartY + 15 - scroll.getScrollOffset();
         y += SECTION_SPACING;

@@ -3,12 +3,18 @@ package com.hyfata.najoan.koreanpatch.config.screen.tab;
 import com.hyfata.najoan.koreanpatch.config.screen.widget.WidgetUtils;
 import net.minecraft.client.gui.GuiGraphics;
 
+/**
+ * 설정 탭 내의 스크롤 동작을 캡슐화합니다.
+ * Encapsulates scrolling behavior inside a settings tab.
+ */
 public class TabScrollHandler {
     private int scrollOffset = 0;
     private boolean isDraggingScrollbar = false;
+
     private final int contentStartY;
     private final int contentHeight;
     private final int contentWidth;
+
     private static final int SCROLL_STEP = 15;
 
     public TabScrollHandler(int contentWidth, int contentStartY, int contentHeight) {
@@ -53,6 +59,8 @@ public class TabScrollHandler {
             int thumbHeight = Math.max(20, (int) (scrollbarHeight * visibleRatio));
             int maxScroll = Math.max(0, totalContentHeight - (contentHeight - contentStartY));
 
+            // thumb 중심이 마우스를 따라가도록 비율로 변환
+            // Convert mouse position to a ratio so the thumb center follows the cursor.
             float progress = (float) (mouseY - contentStartY - thumbHeight / 2) / (scrollbarHeight - thumbHeight);
             progress = Math.max(0, Math.min(1, progress));
             scrollOffset = (int) (progress * maxScroll);

@@ -5,7 +5,11 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 
 /**
- * Base class for settings screen tabs
+ * ModernSettingsScreen의 개별 탭 추상 클래스.
+ * Abstract base class for each tab inside ModernSettingsScreen.
+ *
+ * <p>탭은 init() → render() → 입력 이벤트 순서로 동작합니다.
+ * Tabs follow the lifecycle: init() → render() → input events.</p>
  */
 public abstract class SettingsTab {
     protected Screen screen;
@@ -55,7 +59,15 @@ public abstract class SettingsTab {
         return false;
     }
 
+    /**
+     * true일 때 ModernSettingsScreen은 ESC를 화면 닫기가 아닌 녹화 취소로 해석합니다.
+     * When true, ModernSettingsScreen interprets ESC as cancelling key recording rather than closing.
+     */
     public boolean isRecordingKey() {
         return false;
+    }
+
+    public void save() {
+        // Override if a tab needs explicit save logic.
     }
 }

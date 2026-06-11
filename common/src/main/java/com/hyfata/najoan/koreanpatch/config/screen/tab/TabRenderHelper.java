@@ -7,6 +7,13 @@ import net.minecraft.client.gui.GuiGraphics;
 import java.util.List;
 import java.util.function.Consumer;
 
+/**
+ * 설정 탭의 공통 UI 렌더링 유틸리티.
+ * Shared UI rendering utilities for settings tabs.
+ *
+ * <p>모든 draw* 메서드는 렌더링 후 <b>다음 Y 위치</b>를 반환합니다.
+ * All draw* methods return the <b>next Y position</b> after rendering.</p>
+ */
 public class TabRenderHelper {
     private static final Minecraft CLIENT = Minecraft.getInstance();
     public static final int SECTION_SPACING = 25;
@@ -16,6 +23,10 @@ public class TabRenderHelper {
     public static final int WIDGET_OFFSET_X = 200;
     public static final int ITEM_GAP = 8;
 
+    /**
+     * 클릭 가능한 위젯 영역. 매 프레임 render()에서 clear 후 재구축됨.
+     * Clickable widget bounds. Rebuilt from scratch every render() frame.
+     */
     public record ClickableWidget(int x, int y, int width, int height, WidgetType type, Runnable onClick, SliderHandler sliderHandler) {
         public boolean contains(double mx, double my) {
             return mx >= x && mx < x + width && my >= y && my < y + height;
@@ -88,6 +99,10 @@ public class TabRenderHelper {
         return y + ITEM_HEIGHT + ITEM_GAP;
     }
 
+    /**
+     * 클릭한 위젯을 찾아 상호작용을 실행합니다. slider인 경우 onSliderDragStart 콜백도 호출됩니다.
+     * Finds the clicked widget and runs its interaction. For sliders, onSliderDragStart is also invoked.
+     */
     public static boolean handleWidgetClick(List<ClickableWidget> widgets, double mouseX, double mouseY, Consumer<ClickableWidget> onSliderDragStart) {
         for (ClickableWidget widget : widgets) {
             if (widget.contains(mouseX, mouseY)) {
