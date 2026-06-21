@@ -5,7 +5,8 @@
   "refmap": "${mod_id}.refmap.json",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
-    "mods.axiom.EditorUIMixin"
+    "mods.axiom.EditorUIMixin",
+    "mods.ftb.library.TextBoxMixin"
   ],
   "client": [
     "mods.bettercommand.AbstractBetterCommandBlockScreenMixin",
