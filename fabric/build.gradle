@@ -46,6 +46,7 @@ dependencies {
     modCompileOnly "maven.modrinth:xaeros-minimap:${project.xaeros_minimap_fabric}"
     modCompileOnly "maven.modrinth:xaeros-world-map:${project.xaeros_world_map_fabric}"
     modCompileOnly "maven.modrinth:rei:${project.rei_fabric}"
+    modCompileOnly "dev.ftb.mods:ftb-quests-fabric:${project.ftbquests_fabric}"
 }
 
 loom {

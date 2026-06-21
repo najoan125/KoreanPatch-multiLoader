@@ -58,6 +58,17 @@ repositories {
         name = 'Xander Maven'
         url = 'https://maven.isxander.dev/releases'
     }
+    exclusiveContent {
+        forRepository {
+            maven {
+                name = "FTB Maven"
+                url = "https://maven.ftb.dev/releases"
+            }
+        }
+        filter {
+            includeGroupAndSubgroups "dev.ftb"
+        }
+    }
 }
 
 // Declare capabilities on the outgoing configurations.

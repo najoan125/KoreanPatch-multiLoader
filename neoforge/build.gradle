@@ -45,6 +45,7 @@ dependencies {
     compileOnly "maven.modrinth:xaeros-minimap:${project.xaeros_minimap_neo}"
     compileOnly "maven.modrinth:xaeros-world-map:${project.xaeros_world_map_neo}"
     compileOnly "maven.modrinth:rei:${project.rei_neo}"
+    compileOnly "dev.ftb.mods:ftb-quests-neoforge:${project.ftbquests_neoforge}"
 }
 
 tasks.withType(JavaCompile).configureEach {
