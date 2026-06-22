@@ -1,6 +1,7 @@
 package com.hyfata.najoan.koreanpatch.client;
 
 import com.hyfata.najoan.koreanpatch.config.ConfigManager;
+import com.hyfata.najoan.koreanpatch.config.screen.ModernSettingsScreen;
 import com.hyfata.najoan.koreanpatch.process.LangTypeManager;
 import com.hyfata.najoan.koreanpatch.config.category.CategoryInput;
 import com.hyfata.najoan.koreanpatch.config.category.input.AutoLangTypeMode;
@@ -53,7 +54,9 @@ public class EventListener {
                 BrewingStandScreen.class,
                 LoomScreen.class,
                 StonecutterScreen.class,
-                MerchantScreen.class
+                MerchantScreen.class,
+
+                ModernSettingsScreen.class // Embedded settings screen in this mod
         };
 
         patchedScreenClazz = getExistingClasses(imeDisabledScreens);
