@@ -87,7 +87,7 @@ public class WrapperTextFieldHelper implements InterfaceIMEWrapper {
 
     public void deleteCharsFromCursor(CallbackInfo ci) {
         Minecraft client = Minecraft.getInstance();
-        if (client.screen != null && GUIStatus.getInstance().shouldApplyInjection()) {
+        if (client.gui.screen() != null && GUIStatus.getInstance().shouldApplyInjection()) {
             if (onBackspaceKeyPressed()) {
                 ci.cancel();
             }
@@ -95,7 +95,7 @@ public class WrapperTextFieldHelper implements InterfaceIMEWrapper {
     }
 
     public void insertChar(char chr, CallbackInfoReturnable<Boolean> cir) {
-        if (this.client.screen != null && LangTypeManager.getInstance().isKorean()) {
+        if (this.client.gui.screen() != null && LangTypeManager.getInstance().isKorean()) {
             cir.setReturnValue(Boolean.TRUE);
             if (chr == ' ') {
                 this.writeText(String.valueOf(chr));
@@ -123,7 +123,7 @@ public class WrapperTextFieldHelper implements InterfaceIMEWrapper {
         boolean colored = false;
 
         for (char chr : string.toCharArray()) {
-            if (this.client.screen == null || !LangTypeManager.getInstance().isKorean()) continue;
+            if (this.client.gui.screen() == null || !LangTypeManager.getInstance().isKorean()) continue;
             ci.cancel();
             if (chr == ' ' || chr == '\n') {
                 this.writeText(String.valueOf(chr));

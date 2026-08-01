@@ -1,7 +1,7 @@
 package com.hyfata.najoan.koreanpatch.mixin.indicator;
 
 import com.hyfata.najoan.koreanpatch.indicator.IndicatorHandler;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.AnvilScreen;
@@ -22,8 +22,8 @@ public class AnvilScreenMixin extends Screen {
         super(title);
     }
 
-    @Inject(at = {@At(value = "TAIL")}, method = {"renderBg"})
-    private void customLabel(GuiGraphics guiGraphics, float partialTick, int mouseX, int mouseY, CallbackInfo ci) {
+    @Inject(at = {@At(value = "TAIL")}, method = {"extractBackground"})
+    private void customLabel(GuiGraphicsExtractor guiGraphics, int mouseX, int mouseY, float partialTick, CallbackInfo ci) {
         float x = name.getX() + name.getWidth() - IndicatorHandler.getIndicatorWidth();
         float y = name.getY() - IndicatorHandler.getIndicatorHeight() - 6;
 

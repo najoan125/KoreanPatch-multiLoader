@@ -2,7 +2,7 @@ package com.hyfata.najoan.koreanpatch.mixin.indicator;
 
 import com.hyfata.najoan.koreanpatch.helper.BookScreenVar;
 import com.hyfata.najoan.koreanpatch.indicator.IndicatorHandler;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.BookSignScreen;
 import net.minecraft.network.chat.Component;
@@ -17,8 +17,8 @@ public abstract class BookSignScreenMixin extends Screen {
         super(title);
     }
 
-    @Inject(at = @At("TAIL"), method = "render")
-    public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick, CallbackInfo ci) {
+    @Inject(at = @At("TAIL"), method = "extractRenderState")
+    public void render(GuiGraphicsExtractor guiGraphics, int mouseX, int mouseY, float partialTick, CallbackInfo ci) {
         float x = (this.width - 192) / 2f;
         float y = 50 + 4.5f;
 

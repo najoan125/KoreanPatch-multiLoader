@@ -58,7 +58,7 @@ public class WrapperMultilineTextField implements InterfaceIMEWrapper {
 
     private boolean validateKeyPressed(KeyEvent keyEvent) {
         Minecraft client = Minecraft.getInstance();
-        if (client.screen != null &&
+        if (client.gui.screen() != null &&
                 GUIStatus.getInstance().shouldApplyInjection() &&
                 keyEvent.key() == GLFW.GLFW_KEY_BACKSPACE) {
             return onBackspaceKeyPressed();
@@ -82,7 +82,7 @@ public class WrapperMultilineTextField implements InterfaceIMEWrapper {
 
     private boolean validateCharTyped(CharacterEvent event, boolean visible, boolean focused) {
         char chr = (char) event.codepoint();
-        return Minecraft.getInstance().screen != null &&
+        return Minecraft.getInstance().gui.screen() != null &&
                 GUIStatus.getInstance().shouldApplyInjection() &&
                 LangTypeManager.getInstance().isKorean() &&
                 visible && focused &&
@@ -92,7 +92,7 @@ public class WrapperMultilineTextField implements InterfaceIMEWrapper {
 
     public boolean charTyped(CharacterEvent charEvent, boolean visible, boolean focused, Callable<Boolean> callable) {
         char chr = (char) charEvent.codepoint();
-        int modifiers = charEvent.modifiers();
+        int modifiers = HangulUtil.currentShiftModifier();
 
         if (!validateCharTyped(charEvent, visible, focused)) {
             return returnCallable(callable);
@@ -116,7 +116,7 @@ public class WrapperMultilineTextField implements InterfaceIMEWrapper {
 
     public void charTyped(CharacterEvent event, CallbackInfoReturnable<Boolean> cir, boolean visible, boolean focused) {
         char chr = (char) event.codepoint();
-        int modifiers = event.modifiers();
+        int modifiers = HangulUtil.currentShiftModifier();
 
         if (!validateCharTyped(event, visible, focused)) {
             return;

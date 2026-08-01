@@ -3,8 +3,23 @@ package com.hyfata.najoan.koreanpatch.util;
 import com.hyfata.najoan.koreanpatch.process.HangulProcessor;
 import com.hyfata.najoan.koreanpatch.process.keyboard.KeyboardLayout;
 import com.hyfata.najoan.koreanpatch.process.keyboard.QwertyLayout;
+import com.mojang.blaze3d.platform.InputConstants;
+import com.mojang.blaze3d.platform.Window;
+import net.minecraft.client.Minecraft;
+import org.lwjgl.glfw.GLFW;
 
 public class HangulUtil {
+    /**
+     * CharacterEvent no longer carries modifiers, so the shift state is read
+     * straight from the window the way vanilla's old hasShiftDown() did.
+     */
+    public static int currentShiftModifier() {
+        Window window = Minecraft.getInstance().getWindow();
+        boolean shift = InputConstants.isKeyDown(window, GLFW.GLFW_KEY_LEFT_SHIFT)
+                || InputConstants.isKeyDown(window, GLFW.GLFW_KEY_RIGHT_SHIFT);
+        return shift ? GLFW.GLFW_MOD_SHIFT : 0;
+    }
+
     public static char getFixedHangulChar(int modifiers, char org, char hangul) {
         //Caps Lock/한글 상태면 쌍자음으로 입력되는 문제 수정
         if (HangulProcessor.isHangulCharacter(hangul)) {

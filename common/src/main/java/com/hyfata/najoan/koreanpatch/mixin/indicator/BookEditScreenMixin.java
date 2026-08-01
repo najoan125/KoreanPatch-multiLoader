@@ -4,7 +4,7 @@ import com.hyfata.najoan.koreanpatch.helper.BookScreenVar;
 import com.hyfata.najoan.koreanpatch.mixin.accessor.MultilineEditBoxAccessor;
 import com.hyfata.najoan.koreanpatch.indicator.AnimationHandler;
 import com.hyfata.najoan.koreanpatch.indicator.IndicatorHandler;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.MultiLineEditBox;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.BookEditScreen;
@@ -33,8 +33,8 @@ public abstract class BookEditScreenMixin extends Screen {
         BookScreenVar.animationHandler = new AnimationHandler();
     }
 
-    @Inject(at = {@At(value = "RETURN")}, method = {"render"})
-    private void addCustomLabel(GuiGraphics guiGraphics, int mouseX, int mouseY, float delta, CallbackInfo ci) {
+    @Inject(at = {@At(value = "RETURN")}, method = {"extractRenderState"})
+    private void addCustomLabel(GuiGraphicsExtractor guiGraphics, int mouseX, int mouseY, float delta, CallbackInfo ci) {
         MultilineEditBoxAccessor accessor = (MultilineEditBoxAccessor) this.page;
         float x = (this.width - 192) / 2f; // int i = (this.width - 192) / 2; in render() method
 

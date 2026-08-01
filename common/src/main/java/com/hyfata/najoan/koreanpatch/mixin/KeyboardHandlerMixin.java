@@ -46,7 +46,7 @@ public class KeyboardHandlerMixin {
                     !categoryInput.isAlwaysImeEnabled()) {
                 InputManager.getController().toggleFocus();
                 if (categoryInput.isMemoryLangTypePerScreen())
-                    InputStatusStorage.getInstance().add(minecraft.screen);
+                    InputStatusStorage.getInstance().add(minecraft.gui.screen());
             }
 
             // lang key
@@ -54,7 +54,7 @@ public class KeyboardHandlerMixin {
                     (!Platform.isMac() || modifiers != 1 && modifiers != 2)) {
                 LangTypeManager.getInstance().toggleCurrentType();
                 if (categoryInput.isMemoryLangTypePerScreen())
-                    InputStatusStorage.getInstance().add(minecraft.screen);
+                    InputStatusStorage.getInstance().add(minecraft.gui.screen());
             }
 
             // fix mac capslock

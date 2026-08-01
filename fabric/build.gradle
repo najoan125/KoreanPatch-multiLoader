@@ -1,6 +1,6 @@
 plugins {
     id 'multiloader-loader'
-    id 'fabric-loom'
+    id 'net.fabricmc.fabric-loom'
 }
 
 repositories {
@@ -11,50 +11,37 @@ repositories {
 }
 
 dependencies {
+    // 26.x ships deobfuscated, so no mappings are declared and mod dependencies
+    // use the plain configurations instead of the remapping ones.
     minecraft "com.mojang:minecraft:${minecraft_version}"
-    mappings loom.layered {
-        officialMojangMappings()
-        parchment("org.parchmentmc.data:parchment-${parchment_minecraft}:${parchment_version}@zip")
-    }
 
-    modImplementation "net.fabricmc:fabric-loader:${fabric_loader_version}"
-//    modImplementation "net.fabricmc.fabric-api:fabric-api:${fabric_version}" //debug
+    implementation "net.fabricmc:fabric-loader:${fabric_loader_version}"
 
     def addEmbeddedFabricModule = { String name ->
         def module = fabricApi.module(name, fabric_version)
-        modImplementation module
+        implementation module
         include module
     }
     addEmbeddedFabricModule "fabric-api-base"
-    addEmbeddedFabricModule "fabric-key-binding-api-v1"
+    addEmbeddedFabricModule "fabric-key-mapping-api-v1"
     addEmbeddedFabricModule "fabric-lifecycle-events-v1"
     addEmbeddedFabricModule "fabric-resource-loader-v0"
     addEmbeddedFabricModule "fabric-resource-loader-v1"
     addEmbeddedFabricModule "fabric-screen-api-v1"
 
-    modApi("me.shedaniel.cloth:cloth-config-fabric:${cloth_config}") {
+    api("me.shedaniel.cloth:cloth-config-fabric:${cloth_config}") {
         exclude group: 'net.fabricmc', module: 'fabric-loader'
         exclude group: 'net.fabricmc.fabric-api', module: 'fabric-api'
     }
-    modCompileOnly "dev.isxander:yet-another-config-lib:${project.yacl_version}-fabric" // To test modImplementation
+    compileOnly "dev.isxander:yet-another-config-lib:${project.yacl_version}-fabric"
 
-    modCompileOnly "com.terraformersmc:modmenu:${project.modmenu_version}"
-    modCompileOnly "maven.modrinth:command-block-ide:${project.command_block_ide_version}"
-    modCompileOnly "maven.modrinth:bettercommandblockui:${project.better_command_block_ui_version}"
-    modCompileOnly "maven.modrinth:easy-anvils:${project.easy_anvils_version_fabric}"
-    modCompileOnly "maven.modrinth:axiom:${project.axiom_version}"
-    modCompileOnly "maven.modrinth:xaeros-minimap:${project.xaeros_minimap_fabric}"
-    modCompileOnly "maven.modrinth:xaeros-world-map:${project.xaeros_world_map_fabric}"
-    modCompileOnly "maven.modrinth:rei:${project.rei_fabric}"
+    compileOnly "com.terraformersmc:modmenu:${project.modmenu_version}"
 }
 
 loom {
     def aw = project(':common').file("src/main/resources/${mod_id}.accesswidener")
     if (aw.exists()) {
         accessWidenerPath.set(aw)
-    }
-    mixin {
-        defaultRefmapName.set("${mod_id}.refmap.json")
     }
     runs {
         client {

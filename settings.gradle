@@ -10,8 +10,7 @@ pluginManagement {
                 }
             }
             filter {
-                includeGroup('net.fabricmc')
-                includeGroup('net.fabricmc.unpick')
+                includeGroupAndSubgroups('net.fabricmc')
                 includeGroup('fabric-loom')
             }
         }
@@ -50,4 +49,3 @@ plugins {
 rootProject.name = 'KoreanPatch-multiLoader'
 include('common')
 include('fabric')
-include('neoforge')

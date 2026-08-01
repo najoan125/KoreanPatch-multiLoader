@@ -3,7 +3,7 @@ package com.hyfata.najoan.koreanpatch.mixin.indicator;
 import com.hyfata.najoan.koreanpatch.indicator.AnimationHandler;
 import com.hyfata.najoan.koreanpatch.indicator.IndicatorHandler;
 import com.hyfata.najoan.koreanpatch.util.minecraft.EditBoxUtil;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.ManageServerScreen;
 import net.minecraft.client.gui.screens.Screen;
@@ -39,8 +39,8 @@ public class ManageServerScreenMixin extends Screen {
     @Unique
     private final AnimationHandler koreanPatch$animationHandler = new AnimationHandler();
 
-    @Inject(at = {@At(value = "TAIL")}, method = {"render"})
-    private void addCustomLabel(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick, CallbackInfo ci) {
+    @Inject(at = {@At(value = "TAIL")}, method = {"extractRenderState"})
+    private void addCustomLabel(GuiGraphicsExtractor guiGraphics, int mouseX, int mouseY, float partialTick, CallbackInfo ci) {
         float x;
         float y;
         int textX = this.width / 2 - 100 + 1;

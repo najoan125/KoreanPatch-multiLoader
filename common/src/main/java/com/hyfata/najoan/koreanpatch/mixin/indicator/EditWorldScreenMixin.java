@@ -3,7 +3,7 @@ package com.hyfata.najoan.koreanpatch.mixin.indicator;
 import com.hyfata.najoan.koreanpatch.indicator.AnimationHandler;
 import com.hyfata.najoan.koreanpatch.indicator.IndicatorHandler;
 import com.hyfata.najoan.koreanpatch.util.minecraft.EditBoxUtil;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.worldselection.EditWorldScreen;
@@ -32,8 +32,8 @@ public class EditWorldScreenMixin extends Screen {
     @Unique
     private final AnimationHandler koreanPatch$animationHandler = new AnimationHandler();
 
-    @Inject(at = {@At(value = "TAIL")}, method = {"render"})
-    public void addCustomLabel(GuiGraphics guiGraphics, int mouseX, int mouseY, float delta, CallbackInfo ci) {
+    @Inject(at = {@At(value = "TAIL")}, method = {"extractRenderState"})
+    public void addCustomLabel(GuiGraphicsExtractor guiGraphics, int mouseX, int mouseY, float delta, CallbackInfo ci) {
         float x = EditBoxUtil.getCursorXWithText(nameEdit, NAME_LABEL, nameEdit.getX()) + 4;
         float y = EditBoxUtil.calculateIndicatorY(nameEdit);
 
