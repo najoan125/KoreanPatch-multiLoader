@@ -3,7 +3,7 @@ package com.hyfata.najoan.koreanpatch.mixin.indicator;
 import com.hyfata.najoan.koreanpatch.util.minecraft.EditBoxUtil;
 import com.hyfata.najoan.koreanpatch.indicator.AnimationHandler;
 import com.hyfata.najoan.koreanpatch.indicator.IndicatorHandler;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.DirectJoinServerScreen;
 import net.minecraft.client.gui.screens.Screen;
@@ -27,8 +27,8 @@ public class DirectJoinServerScreenMixin extends Screen {
         super(title);
     }
 
-    @Inject(at = {@At(value = "TAIL")}, method = {"render"})
-    private void addCustomLabel(GuiGraphics guiGraphics, int mouseX, int mouseY, float delta, CallbackInfo ci) {
+    @Inject(at = {@At(value = "TAIL")}, method = {"extractRenderState"})
+    private void addCustomLabel(GuiGraphicsExtractor guiGraphics, int mouseX, int mouseY, float delta, CallbackInfo ci) {
         float x = EditBoxUtil.getCursorX(ipEdit) + 4;
         float y = EditBoxUtil.calculateIndicatorY(ipEdit);
 

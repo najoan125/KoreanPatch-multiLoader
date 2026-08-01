@@ -4,7 +4,7 @@ import com.hyfata.najoan.koreanpatch.util.minecraft.EditBoxUtil;
 import com.hyfata.najoan.koreanpatch.indicator.IndicatorHandler;
 import com.hyfata.najoan.koreanpatch.indicator.AnimationHandler;
 import com.terraformersmc.modmenu.gui.ModsScreen;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.EditBox;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -21,8 +21,8 @@ public class ModMenuScreenMixin {
     @Unique
     private final AnimationHandler animationHandler = new AnimationHandler();
 
-    @Inject(at = @At("TAIL"), method = "render")
-    private void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick, CallbackInfo ci) {
+    @Inject(at = @At("TAIL"), method = "extractRenderState")
+    private void render(GuiGraphicsExtractor guiGraphics, int mouseX, int mouseY, float partialTick, CallbackInfo ci) {
         float cursorX = EditBoxUtil.getCursorX(searchBox) + 4;
         float y = EditBoxUtil.calculateIndicatorY(searchBox);
 

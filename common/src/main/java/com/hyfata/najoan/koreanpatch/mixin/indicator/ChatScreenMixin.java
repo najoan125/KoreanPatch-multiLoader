@@ -5,7 +5,7 @@ import com.hyfata.najoan.koreanpatch.indicator.AnimationHandler;
 import com.hyfata.najoan.koreanpatch.indicator.IndicatorHandler;
 import com.hyfata.najoan.koreanpatch.util.minecraft.EditBoxUtil;
 import com.mojang.brigadier.suggestion.Suggestions;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.CommandSuggestions;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.ChatScreen;
@@ -34,8 +34,8 @@ public abstract class ChatScreenMixin extends Screen {
     private final AnimationHandler koreanPatch$animationHandler = new AnimationHandler();
 
 
-    @Inject(at = {@At(value = "TAIL")}, method = {"render"})
-    private void addCustomLabel(GuiGraphics guiGraphics, int mouseX, int mouseY, float delta, CallbackInfo ci) {
+    @Inject(at = {@At(value = "TAIL")}, method = {"extractRenderState"})
+    private void addCustomLabel(GuiGraphicsExtractor guiGraphics, int mouseX, int mouseY, float delta, CallbackInfo ci) {
         CommandSuggestionsAccessor accessor = (CommandSuggestionsAccessor) commandSuggestions;
         int suggestorHeight = 0;
         int messagesY = 0;

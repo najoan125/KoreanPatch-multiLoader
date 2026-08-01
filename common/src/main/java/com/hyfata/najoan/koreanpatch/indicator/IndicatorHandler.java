@@ -8,14 +8,14 @@ import com.hyfata.najoan.koreanpatch.driver.InputManager;
 import com.hyfata.najoan.koreanpatch.util.minecraft.RenderUtil;
 import com.hyfata.najoan.koreanpatch.process.LangTypeManager;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 
 public class IndicatorHandler {
     private static final Minecraft client = Minecraft.getInstance();
     private static final float frame = 1f;
     private static final float margin = 1f;
 
-    public static void showIndicator(GuiGraphics guiGraphics, float x, float y) {
+    public static void showIndicator(GuiGraphicsExtractor guiGraphics, float x, float y) {
         CategoryIndicator categoryIndicator = ConfigManager.getInstance().getConfig().getCategoryIndicator();
 
         if (!categoryIndicator.isShowIndicator()) {
@@ -36,17 +36,17 @@ public class IndicatorHandler {
         );
     }
 
-    public static void showIndicator(GuiGraphics guiGraphics, int x, int y) {
+    public static void showIndicator(GuiGraphicsExtractor guiGraphics, int x, int y) {
         showIndicator(guiGraphics, (float) x, (float) y);
     }
 
-    public static void showCenteredIndicator(GuiGraphics guiGraphics, float x, float y) {
+    public static void showCenteredIndicator(GuiGraphicsExtractor guiGraphics, float x, float y) {
         x -= getIndicatorWidth() / 2f;
         y -= getIndicatorHeight() / 2f;
         showIndicator(guiGraphics, x, y);
     }
 
-    public static void showCenteredIndicator(GuiGraphics guiGraphics, int x, int y) {
+    public static void showCenteredIndicator(GuiGraphicsExtractor guiGraphics, int x, int y) {
         showCenteredIndicator(guiGraphics, (float) x, (float) y);
     }
 
@@ -68,7 +68,7 @@ public class IndicatorHandler {
         return ((outlineOpacity & 0xFF) << 24) | (outlineRGB & 0x00ffffff); // ARGB
     }
 
-    private static void renderBox(GuiGraphics guiGraphics, float x1, float y1, float x2, float y2, int frameColor, int backgroundColor) {
+    private static void renderBox(GuiGraphicsExtractor guiGraphics, float x1, float y1, float x2, float y2, int frameColor, int backgroundColor) {
         OutlineConfig outlineConfig = ConfigManager.getInstance().getConfig().getCategoryIndicator().getOutlineSettings();
 
         float radius = 3.5f;

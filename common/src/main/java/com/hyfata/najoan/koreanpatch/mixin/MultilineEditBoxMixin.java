@@ -28,7 +28,8 @@ public abstract class MultilineEditBoxMixin extends AbstractTextAreaWidget {
     private WrapperMultilineTextField koreanPatch$wrapper;
 
     public MultilineEditBoxMixin(int x, int y, int width, int height, Component message) {
-        super(x, y, width, height, message);
+        // Never invoked - only present so the mixin compiles against the superclass.
+        super(x, y, width, height, message, null);
     }
 
     @Inject(at = {@At(value = "TAIL")}, method = {"<init>"})

@@ -6,10 +6,10 @@ import com.hyfata.najoan.koreanpatch.mixin.accessor.TabNavigationBarAccessor;
 import com.hyfata.najoan.koreanpatch.util.minecraft.EditBoxUtil;
 import com.hyfata.najoan.koreanpatch.indicator.AnimationHandler;
 import com.hyfata.najoan.koreanpatch.indicator.IndicatorHandler;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.EditBox;
+import net.minecraft.client.gui.components.tabs.MenuTabBar;
 import net.minecraft.client.gui.components.tabs.Tab;
-import net.minecraft.client.gui.components.tabs.TabNavigationBar;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.worldselection.CreateWorldScreen;
 import net.minecraft.network.chat.Component;
@@ -26,14 +26,16 @@ public class CreateWorldScreenMixin extends Screen {
         super(title);
     }
 
+    // 26.2 narrowed this field to MenuTabBar; the accessor still targets the
+    // TabNavigationBar superclass that owns tabManager.
     @Shadow
-    private TabNavigationBar tabNavigationBar;
+    private MenuTabBar tabNavigationBar;
 
     @Unique
     private final AnimationHandler koreanPatch$animationHandler = new AnimationHandler();
 
-    @Inject(at = {@At(value = "RETURN")}, method = {"render"})
-    private void addCustomLabel(GuiGraphics guiGraphics, int mouseX, int mouseY, float delta, CallbackInfo ci) {
+    @Inject(at = {@At(value = "RETURN")}, method = {"extractRenderState"})
+    private void addCustomLabel(GuiGraphicsExtractor guiGraphics, int mouseX, int mouseY, float delta, CallbackInfo ci) {
         TabNavigationBarAccessor tabInvoker = (TabNavigationBarAccessor) tabNavigationBar;
         Tab currentTab = tabInvoker.getTabManager().getCurrentTab();
 

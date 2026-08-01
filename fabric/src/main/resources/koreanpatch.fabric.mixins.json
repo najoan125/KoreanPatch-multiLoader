@@ -2,26 +2,13 @@
   "required": true,
   "minVersion": "0.8",
   "package": "com.hyfata.najoan.koreanpatch.mixin",
-  "refmap": "${mod_id}.refmap.json",
-  "compatibilityLevel": "JAVA_21",
-  "mixins": [
-    "mods.axiom.EditorUIMixin"
-  ],
+  "compatibilityLevel": "JAVA_25",
+  "mixins": [],
   "client": [
-    "mods.bettercommand.AbstractBetterCommandBlockScreenMixin",
-    "mods.bettercommand.MultiLineEditBoxMixin",
-    "mods.commandblockide.MultilineEditBoxMixin",
-    "mods.commandblockide.indicator.CommandBlockEditorMixin",
-    "mods.commandblockide.indicator.CommandEditorMixin",
-    "mods.easy_anvils.FormattableEditBoxMixin",
-    "mods.easy_anvils.NameTagEditScreenMixin",
-    "mods.modmenu.ModMenuScreenMixin",
-    "mods.rei.OverlaySearchFieldMixin",
-    "mods.xaeros.minimap.GuiAddWaypointMixin"
+    "mods.modmenu.ModMenuScreenMixin"
   ],
   "server": [],
   "injectors": {
     "defaultRequire": 1
   }
 }
-  
